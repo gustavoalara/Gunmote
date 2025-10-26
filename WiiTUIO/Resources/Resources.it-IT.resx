@@ -396,14 +396,17 @@
   <data name="insText2" xml:space="preserve">
     <value>punta ai bersagli e premi A o B per calibrare                                                                                       </value>
   </data>
-  <data name="AimButtomRight" xml:space="preserve">
+  <data name="AimBottomRight" xml:space="preserve">
     <value>Punta all'angolo INFERIORE DESTRO e premi A o B per calibrare                                                                       </value>
   </data>
   <data name="AimCenter" xml:space="preserve">
-    <value>Punta al bersaglio CENTRALE e premi A o B per calibrare                                                                             </value>
+    <value>Punta al bersaglio CENTRALE  e premi A o B per calibrare                                                                    
+</value>
   </data>
   <data name="AimTargets" xml:space="preserve">
-    <value>punta ai bersagli e premi A o B per calibrare                                                                                       </value>
+    <value>Mira ai bersagli e premi A o B per calibrare.
+Premi A o B per avviare la calibrazione.
+Dovrai sparare più volte a ogni bersaglio.</value>
   </data>
   <data name="AimTopCenter" xml:space="preserve">
     <value>Punta al bersaglio CENTRALE SUPERIORE e premi A o B per calibrare                                                                   </value>
@@ -411,11 +414,11 @@
   <data name="AimTopLeft" xml:space="preserve">
     <value>Punta all'angolo SUPERIORE SINISTRO e premi A o B per calibrare                                                                     </value>
   </data>
-  <data name="AimButtomCenter" xml:space="preserve">
+  <data name="AimBottomCenter" xml:space="preserve">
     <value>Punta al bersaglio CENTRALE INFERIORE e premi A o B per calibrare                                                                   </value>
   </data>
   <data name="AimConfirm" xml:space="preserve">
-    <value>Premi A per confermare la calibrazione, premi B per resettare la calibrazione                                                       </value>
+    <value>Premi A per confermare la calibrazione, premi - per resettare la calibrazione                                                       </value>
   </data>
   <data name="AimLeftCenter" xml:space="preserve">
     <value>Punta al bersaglio CENTRALE SINISTRO e premi A o B per calibrare                                                                    </value>
@@ -437,9 +440,6 @@
   </data>
   <data name="SensorMode" xml:space="preserve">
     <value>Modalità sensore                                                                                                                    </value>
-  </data>
-  <data name="2IRCentered" xml:space="preserve">
-    <value>2IR: Centrato                                                                                                                       </value>
   </data>
   <data name="2IRTop" xml:space="preserve">
     <value>2IR: Alto                                                                                                                           </value>
@@ -1043,5 +1043,21 @@
   </data>
   <data name="Restart_Message" xml:space="preserve">
     <value>La lingua è stata modificata. L'applicazione verrà riavviata per applicare le modifiche.</value>
+  </data>
+  <data name="AimTopRight" xml:space="preserve">
+    <value>Punta all'angolo SUPERIORE DESTRO e premi A o B per calibrare                                                                     </value>
+  </data>
+  <data name="AimBottomLeft" xml:space="preserve">
+    <value>Punta all'angolo INFERIORE SINISTRO e premi A o B per calibrare                                                                       
+</value>
+  </data>
+  <data name="shoot" xml:space="preserve">
+    <value>Colpo</value>
+  </data>
+  <data name="of" xml:space="preserve">
+    <value>di</value>
+  </data>
+  <data name="ShootsPerTarget" xml:space="preserve">
+    <value>Colpi per Bersaglio</value>
   </data>
 </root>

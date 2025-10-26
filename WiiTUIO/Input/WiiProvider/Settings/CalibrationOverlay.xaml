@@ -18,9 +18,9 @@
             </TextBlock>
         </Border>
         <Canvas Name="CalibrationPoint" Height="100" Width="100" ClipToBounds="False" Canvas.Top="0" Canvas.Left="0" Panel.ZIndex="999">
-            <Ellipse Name="elipse" Stroke="Black" Fill="White" Height="50" Width="50" Canvas.Top="25" Canvas.Left="25"/>
-            <Line Name="lineX" Stroke="Black" StrokeThickness="2" X1="0" Y1="50" X2="100" Y2="50"/>
-            <Line Name="lineY" Stroke="Black" StrokeThickness="2" X1="50" Y1="0" X2="50" Y2="100"/>
+            <Ellipse Name="elipse" Stroke="Black" Fill="White" Height="80" Width="80" Canvas.Top="10" Canvas.Left="10"/>
+            <Line Name="lineX" Stroke="Black" StrokeThickness="5" X1="0" Y1="50" X2="100" Y2="50"/>
+            <Line Name="lineY" Stroke="Black" StrokeThickness="5" X1="50" Y1="0" X2="50" Y2="100"/>
         </Canvas>
 
         <!-- Líneas de cuadrícula para los modos "none" o "square" -->

@@ -177,6 +177,17 @@
                         <TextBox Grid.Column="1" Text="{Binding defaultContinousDeadzone, StringFormat={}{0:F3}, UpdateSourceTrigger=PropertyChanged}" Width="50" HorizontalAlignment="Right" PreviewTextInput="DoubleTextBox_PreviewTextInput"
                                  Style="{DynamicResource MahApps.Metro.Styles.TextBox}"/>
                     </Grid>
+                    <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Column="0" Content="{loc:Localization ShootsPerTarget}"/>
+                        <Slider Grid.Column="1" Value="{Binding ShootsPerTarget, UpdateSourceTrigger=PropertyChanged}" Minimum="0.0" Maximum="10" SmallChange="1" LargeChange="1" TickPlacement="BottomRight" IsSnapToTickEnabled="False"
+                                 Style="{DynamicResource MahApps.Metro.Styles.Slider}"/>
+                        <TextBox Grid.Column="1" Text="{Binding ShootsPerTarget, StringFormat={}{0:F3}, UpdateSourceTrigger=PropertyChanged}" Width="50" HorizontalAlignment="Right" PreviewTextInput="DoubleTextBox_PreviewTextInput"
+                                Style="{DynamicResource MahApps.Metro.Styles.TextBox}"/>
+                    </Grid>
                 </StackPanel>
             </GroupBox>
 

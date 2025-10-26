@@ -36,7 +36,10 @@ namespace WiiTUIO.Provider
         private System.Windows.Forms.Screen primaryScreen;
         private IntPtr previousForegroundWindow = IntPtr.Zero;
 
+        private Timer buttonTimer;
+
         private bool hidden = true;
+        private bool timerElapsed = false;
 
         private int step = 0; // Current calibration step
 
@@ -59,28 +62,18 @@ namespace WiiTUIO.Provider
         // Constant for the side length of the triangle
         private const double TRIANGLE_SIDE_LENGTH = 20.0;
 
-        private double captWidth = 0.0;
-        private double captHeight = 0.0;
-        private double captRight = 0.0;
-        private double captBottom = 0.0;
-        private double captLeft = 0.0;
-        private double captTop = 0.0;
+        private float captWidth = 0.0f;
+        private float captHeight = 0.0f;
+        private float captRight = 0.0f;
+        private float captBottom = 0.0f;
+        private float captLeft = 0.0f;
+        private float captTop = 0.0f;
         private List<PointF> lastCapturedRawLeds;
 
-        private int SHOTS_PER_TARGET = Settings.Default.ShootsPerTarget;
-        private int currentShotCount = 0;
 
-        private struct ShotData
-        {
-            public double RelativeX;
-            public double RelativeY;
-            public float PitchOffsetY;
-            public double Width; 
-            public double Height; 
-        }
-
-        private List<ShotData> currentTargetShots = new List<ShotData>();
-
+        /// <summary>
+        /// An event that fires once calibration has finished.
+        /// </summary>
         public event Action OnCalibrationFinished;
 
         public static CalibrationOverlay Current
@@ -105,6 +98,11 @@ namespace WiiTUIO.Provider
             SystemEvents.DisplaySettingsChanged += SystemEvents_DisplaySettingsChanged;
 
             this.CalibrationCanvas.Visibility = Visibility.Hidden;
+
+            buttonTimer = new Timer();
+            buttonTimer.Interval = 1000;
+            buttonTimer.AutoReset = true;
+            buttonTimer.Elapsed += buttonTimer_Elapsed;
 
             // Compensate for DPI settings
             Loaded += (o, e) =>
@@ -392,6 +390,7 @@ namespace WiiTUIO.Provider
                 this.keyMapper.SwitchToCalibration();
                 this.keyMapper.OnButtonDown += keyMapper_OnButtonDown;
                 this.keyMapper.OnButtonUp += keyMapper_OnButtonUp;
+                buttonTimer.Elapsed += buttonTimer_Elapsed;
 
                 previousForegroundWindow = UIHelpers.GetForegroundWindow();
                 if (previousForegroundWindow == null)
@@ -502,21 +501,12 @@ namespace WiiTUIO.Provider
             {
                 DebugVisualizer.HideAll();
                 this.hidden = true;
-
-                //this.timerElapsed = false;
-
-                this.keyMapper.OnButtonUp -= keyMapper_OnButtonUp;
-                this.keyMapper.OnButtonDown -= keyMapper_OnButtonDown;
-                this.keyMapper.SwitchToFallback();
-
-                this.currentShotCount = 0;
-                this.currentTargetShots.Clear();
+                this.timerElapsed = false;
 
                 this.keyMapper.OnButtonUp -= keyMapper_OnButtonUp;
                 this.keyMapper.OnButtonDown -= keyMapper_OnButtonDown;
                 this.keyMapper.SwitchToFallback();
-
-                //buttonTimer.Elapsed -= buttonTimer_Elapsed;
+                buttonTimer.Elapsed -= buttonTimer_Elapsed;
 
                 Dispatcher.BeginInvoke(new Action(delegate ()
                 {
@@ -587,10 +577,6 @@ namespace WiiTUIO.Provider
 
             this.keyMapper.settings.SaveCalibrationData(); // Saves restored values
 
-
-            this.currentShotCount = 0;
-            this.currentTargetShots.Clear();
-
             this.HideOverlay();
             // Ensure lines and triangles are hidden after calibration is canceled
             UpdateCalibrationLinesAndTrianglesVisibility();
@@ -601,6 +587,8 @@ namespace WiiTUIO.Provider
             e.Button = e.Button.Replace("OffScreen.", "");
             if (e.Button.ToLower().Equals("a") || e.Button.ToLower().Equals("b"))
             {
+                this.buttonTimer.Stop();
+
                 if (step == -1)
                 {
                     // Logic moved from StartCalibration to here. This shows the FIRST target.
@@ -630,6 +618,187 @@ namespace WiiTUIO.Provider
                         step = 0; // Step 0 for center
                     }
                     return;
+                }
+
+                if (this.timerElapsed)
+                {
+                    this.timerElapsed = false;
+                    // --- CALIBRATION STEP ADVANCE LOGIC WITH NESTED IF BY MODE ---
+                    switch (step)
+                    {
+                        case 0:
+                            if (Settings.Default.pointer_4IRMode == "square")
+                            {
+                                Dispatcher.BeginInvoke(new Action(delegate ()
+                                {
+                                    this.movePoint(1 - marginXBackup, 1 - marginYBackup); // Bottom Right Corner
+                                    this.CalibrationPoint.Visibility = Visibility.Visible;
+                                    this.insText2.Text = AimBottomRight;
+                                    this.TextBorder.UpdateLayout();
+                                    this.TextBorder.SetValue(Canvas.LeftProperty, 0.5 * this.ActualWidth - (this.TextBorder.ActualWidth / 2));
+                                    this.TextBorder.SetValue(Canvas.TopProperty, 0.25 * this.ActualHeight - (this.TextBorder.ActualHeight / 2));
+                                }), null);
+                                step = 1;
+                            }
+                            else if (Settings.Default.pointer_4IRMode == "diamond")
+                            {
+                                Dispatcher.BeginInvoke(new Action(delegate ()
+                                {
+                                    this.movePoint(0.5, marginYBackup); // Top-Center
+                                    this.CalibrationPoint.Visibility = Visibility.Visible;
+                                    this.insText2.Text = AimTopCenter;
+                                    this.TextBorder.UpdateLayout();
+                                    this.TextBorder.SetValue(Canvas.LeftProperty, 0.5 * this.ActualWidth - (this.TextBorder.ActualWidth / 2));
+                                    this.TextBorder.SetValue(Canvas.TopProperty, 0.25 * this.ActualHeight - (this.TextBorder.ActualHeight / 2));
+                                }), null);
+                                step = 1;
+                            }
+                            break;
+                        case 1:
+                            if (Settings.Default.pointer_4IRMode == "none")
+                            {
+                                Dispatcher.BeginInvoke(new Action(delegate ()
+                                {
+                                    this.movePoint(marginXBackup, marginYBackup);
+                                    this.CalibrationPoint.Visibility = Visibility.Visible;
+                                    this.insText2.Text = AimTopLeft;
+                                    this.TextBorder.UpdateLayout();
+                                    this.TextBorder.SetValue(Canvas.LeftProperty, 0.5 * this.ActualWidth - (this.TextBorder.ActualWidth / 2));
+                                    this.TextBorder.SetValue(Canvas.TopProperty, 0.25 * this.ActualHeight - (this.TextBorder.ActualHeight / 2));
+                                }), null);
+                                step = 2;
+                            }
+                            if (Settings.Default.pointer_4IRMode == "square")
+                            {
+                                Dispatcher.BeginInvoke(new Action(delegate ()
+                                {
+                                    this.movePoint(marginXBackup, marginYBackup);
+                                    this.CalibrationPoint.Visibility = Visibility.Visible;
+                                    this.insText2.Text = AimTopLeft;
+                                    this.TextBorder.UpdateLayout();
+                                    this.TextBorder.SetValue(Canvas.LeftProperty, 0.5 * this.ActualWidth - (this.TextBorder.ActualWidth / 2));
+                                    this.TextBorder.SetValue(Canvas.TopProperty, 0.25 * this.ActualHeight - (this.TextBorder.ActualHeight / 2));
+                                }), null);
+                                step = 2;
+                            }
+                            else if (Settings.Default.pointer_4IRMode == "diamond")
+                            {
+                                Dispatcher.BeginInvoke(new Action(delegate ()
+                                {
+                                    this.movePoint(0.5, 1 - marginYBackup); // Bottom-Center
+                                    this.CalibrationPoint.Visibility = Visibility.Visible;
+                                    this.insText2.Text = AimBottomCenter;
+                                    this.TextBorder.UpdateLayout();
+                                    this.TextBorder.SetValue(Canvas.LeftProperty, 0.5 * this.ActualWidth - (this.TextBorder.ActualWidth / 2));
+                                    this.TextBorder.SetValue(Canvas.TopProperty, 0.25 * this.ActualHeight - (this.TextBorder.ActualHeight / 2));
+                                }), null);
+                                step = 2;
+                            }
+                            break;
+                        case 2:
+                            // This is the last calibration point for "none"
+                            if (Settings.Default.pointer_4IRMode == "none")
+                            {
+                                Dispatcher.BeginInvoke(new Action(delegate ()
+                                {
+                                    this.CalibrationPoint.Visibility = Visibility.Hidden; // Hide target
+                                    this.wiimoteNo.Text = null;
+                                    this.insText2.Text = AimConfirm;
+                                    this.TextBorder.UpdateLayout();
+                                    this.TextBorder.SetValue(Canvas.LeftProperty, 0.5 * this.ActualWidth - (this.TextBorder.ActualWidth / 2));
+                                    this.TextBorder.SetValue(Canvas.TopProperty, 0.25 * this.ActualHeight - (this.TextBorder.ActualHeight / 2));
+                                }), null);
+                                step = 5; // Go directly to unified confirmation step
+                            }
+                            else if (Settings.Default.pointer_4IRMode == "square")
+                            {
+                                Dispatcher.BeginInvoke(new Action(delegate ()
+                                {
+                                    this.movePoint(1 - marginXBackup, marginYBackup); // Top-Right
+                                    this.CalibrationPoint.Visibility = Visibility.Visible;
+                                    this.insText2.Text = AimTopRight;
+                                    this.TextBorder.UpdateLayout();
+                                    this.TextBorder.SetValue(Canvas.LeftProperty, 0.5 * this.ActualWidth - (this.TextBorder.ActualWidth / 2));
+                                    this.TextBorder.SetValue(Canvas.TopProperty, 0.25 * this.ActualHeight - (this.TextBorder.ActualHeight / 2));
+                                }), null);
+                                step = 3;
+                            }
+                            else if (Settings.Default.pointer_4IRMode == "diamond")
+                            {
+                                Dispatcher.BeginInvoke(new Action(delegate ()
+                                {
+                                    this.movePoint(marginXBackup, 0.5); // Left-Center
+                                    this.CalibrationPoint.Visibility = Visibility.Visible;
+                                    this.insText2.Text = AimLeftCenter;
+                                    this.TextBorder.UpdateLayout();
+                                    this.TextBorder.SetValue(Canvas.LeftProperty, 0.5 * this.ActualWidth - (this.TextBorder.ActualWidth / 2));
+                                    this.TextBorder.SetValue(Canvas.TopProperty, 0.25 * this.ActualHeight - (this.TextBorder.ActualHeight / 2));
+                                }), null);
+                                step = 3;
+                            }
+                            break;
+                        case 3:
+                            if (Settings.Default.pointer_4IRMode == "diamond")
+                            {
+                                Dispatcher.BeginInvoke(new Action(delegate ()
+                                {
+                                    this.movePoint(1 - marginXBackup, 0.5); // Right-Center
+                                    this.CalibrationPoint.Visibility = Visibility.Visible;
+                                    this.insText2.Text = AimRightCenter;
+                                    this.TextBorder.UpdateLayout();
+                                    this.TextBorder.SetValue(Canvas.LeftProperty, 0.5 * this.ActualWidth - (this.TextBorder.ActualWidth / 2));
+                                    this.TextBorder.SetValue(Canvas.TopProperty, 0.25 * this.ActualHeight - (this.TextBorder.ActualHeight / 2));
+                                }), null);
+                                step = 4;
+                            }
+                            else if (Settings.Default.pointer_4IRMode == "square")
+                            {
+                                Dispatcher.BeginInvoke(new Action(delegate ()
+                                {
+                                    this.movePoint(marginXBackup, 1 - marginYBackup); // Bottom-Left
+                                    this.CalibrationPoint.Visibility = Visibility.Visible;
+                                    this.insText2.Text = AimBottomLeft;
+                                    this.TextBorder.UpdateLayout();
+                                    this.TextBorder.SetValue(Canvas.LeftProperty, 0.5 * this.ActualWidth - (this.TextBorder.ActualWidth / 2));
+                                    this.TextBorder.SetValue(Canvas.TopProperty, 0.25 * this.ActualHeight - (this.TextBorder.ActualHeight / 2));
+                                }), null);
+                                step = 4;
+                            }
+                            break;
+                        case 4:
+
+                            if (Settings.Default.pointer_4IRMode == "diamond")
+                            {
+                                Dispatcher.BeginInvoke(new Action(delegate ()
+                                {
+                                    this.CalibrationPoint.Visibility = Visibility.Hidden; // Hide target
+                                    this.wiimoteNo.Text = null;
+                                    this.insText2.Text = AimConfirm;
+                                    this.TextBorder.UpdateLayout();
+                                    this.TextBorder.SetValue(Canvas.LeftProperty, 0.5 * this.ActualWidth - (this.TextBorder.ActualWidth / 2));
+                                    this.TextBorder.SetValue(Canvas.TopProperty, 0.25 * this.ActualHeight - (this.TextBorder.ActualHeight / 2));
+                                }), null);
+
+                                step = 5; // Go directly to unified confirmation step
+                            }
+                            else if (Settings.Default.pointer_4IRMode == "square")
+                            {
+
+                                Dispatcher.BeginInvoke(new Action(delegate ()
+                                {
+                                    this.CalibrationPoint.Visibility = Visibility.Hidden; // Hide target
+                                    this.wiimoteNo.Text = null;
+                                    this.insText2.Text = AimConfirm;
+                                    this.TextBorder.UpdateLayout();
+                                    this.TextBorder.SetValue(Canvas.LeftProperty, 0.5 * this.ActualWidth - (this.TextBorder.ActualWidth / 2));
+                                    this.TextBorder.SetValue(Canvas.TopProperty, 0.25 * this.ActualHeight - (this.TextBorder.ActualHeight / 2));
+                                }), null);
+
+                                step = 5; // Go directly to unified confirmation step
+                            }
+                            break;
+                        default: break;
+                    }
                 }
             }
         }
@@ -674,59 +843,25 @@ namespace WiiTUIO.Provider
                         }), null);
                         step = 0;
                     }
-                    this.currentShotCount = 0;
-                    this.currentTargetShots.Clear();
                 }
             }
-            else if (step >= 0 && (e.Button.ToLower().Equals("a") || e.Button.ToLower().Equals("b")))
+            // Logic to start capturing a calibration point
+            else if (e.Button.ToLower().Equals("a") || e.Button.ToLower().Equals("b"))
             {
                 IRState irState = keyMapper.CurrentWiimoteState.IRState;
-                AccelState accelState = keyMapper.CurrentWiimoteState.AccelState;
 
-                // Contamos cuántos sensores están activos
+
+                // Contamos cuántos sensores están activos usando LINQ (más limpio)
                 int foundSensors = irState.IRSensors.Count(sensor => sensor.Found);
 
-                if (foundSensors < 3)
+                if (foundSensors >= 3)
                 {
-                    // No hay suficientes sensores, mostrar error y no contar el disparo
+
+                    this.buttonTimer.Start();
                     Dispatcher.BeginInvoke(new Action(delegate ()
                     {
                         this.wiimoteNo.Text = null;
-                        this.insText2.Text = NoSensors; 
-
-                        this.TextBorder.UpdateLayout();
-                        this.TextBorder.SetValue(Canvas.LeftProperty, 0.5 * this.ActualWidth - (this.TextBorder.ActualWidth / 2));
-                        this.TextBorder.SetValue(Canvas.TopProperty, 0.25 * this.ActualHeight - (this.TextBorder.ActualHeight / 2));
-                    }), null);
-                    return; 
-                }
-
-                // --- Capturar datos del disparo ---
-                double Pitch = Math.Atan2(accelState.Values.Y, accelState.Values.Z);
-                const float k_pitchCorrectionFactor = 0.02f;
-                float pitchOffsetY = k_pitchCorrectionFactor * (float)Math.Tan(Pitch);
-
-                // Añadir datos del disparo a la lista (incluyendo Width y Height)
-                currentTargetShots.Add(new ShotData
-                {
-                    RelativeX = this.keyMapper.cursorPos.RelativeX,
-                    RelativeY = this.keyMapper.cursorPos.RelativeY,
-                    PitchOffsetY = pitchOffsetY,
-                    Width = this.keyMapper.cursorPos.Width, 
-                    Height = this.keyMapper.cursorPos.Height 
-                });
-
-                currentShotCount++;
-
-                // --- Comprobar si hemos terminado con este objetivo ---
-                if (currentShotCount < SHOTS_PER_TARGET)
-                {
-                    // Aún se necesitan más disparos para este objetivo
-                    Dispatcher.BeginInvoke(new Action(delegate ()
-                    {
-                        this.wiimoteNo.Text = null;
-                        
-                        this.insText2.Text = $"¨{shoot} {currentShotCount} {of} {SHOTS_PER_TARGET}";
+                        this.insText2.Text = HoldDown;
 
                         this.TextBorder.UpdateLayout();
                         this.TextBorder.SetValue(Canvas.LeftProperty, 0.5 * this.ActualWidth - (this.TextBorder.ActualWidth / 2));
@@ -735,134 +870,149 @@ namespace WiiTUIO.Provider
                 }
                 else
                 {
-                    
-                    // Llamamos al nuevo método para procesar las medias y guardar los parámetros
-                    ProcessAverageAndAdvance();
+                    Dispatcher.BeginInvoke(new Action(delegate ()
+                    {
+                        this.wiimoteNo.Text = null;
+                        this.insText2.Text = NoSensors;
 
-                    // Reiniciamos contadores para el PRÓXIMO objetivo
-                    currentShotCount = 0;
-                    currentTargetShots.Clear();
+                        this.TextBorder.UpdateLayout();
+                        this.TextBorder.SetValue(Canvas.LeftProperty, 0.5 * this.ActualWidth - (this.TextBorder.ActualWidth / 2));
+                        this.TextBorder.SetValue(Canvas.TopProperty, 0.25 * this.ActualHeight - (this.TextBorder.ActualHeight / 2));
+                    }), null);
                 }
             }
-            
         }
 
-        private void ProcessAverageAndAdvance()
+        void buttonTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            // --- 1. CALCULAR PROMEDIOS ---
-            if (currentTargetShots.Count == 0) return; // Comprobación de seguridad
-
-            // Usamos LINQ para calcular el promedio de todos los disparos
-            double avgRelativeX = currentTargetShots.Average(s => s.RelativeX);
-            double avgRelativeY = currentTargetShots.Average(s => s.RelativeY);
-            float avgPitchOffsetY = currentTargetShots.Average(s => s.PitchOffsetY);
-            double avgWidth = currentTargetShots.Average(s => s.Width); 
-            double avgHeight = currentTargetShots.Average(s => s.Height); 
+            this.buttonTimer.Stop();
+            this.timerElapsed = true;
 
 
-            // --- 2. APLICAR DATOS DE CALIBRACIÓN 
+            IRState irState = keyMapper.CurrentWiimoteState.IRState;
+            AccelState accelState = keyMapper.CurrentWiimoteState.AccelState;
+            double Pitch = Math.Atan2(accelState.Values.Y, accelState.Values.Z);
 
-            // Capturamos el ancho/alto en el paso 0 (usando promedios), 
-            // ya que se usa en los cálculos del paso 4
-            if (step == 0)
+            const float k_pitchCorrectionFactor = 0.02f; 
+            float pitchOffsetY = k_pitchCorrectionFactor * (float)Math.Tan(Pitch);
+
+            Dispatcher.BeginInvoke(new Action(delegate ()
             {
-                captWidth = (float)avgWidth;  // Usamos el promedio
-                captHeight = (float)avgHeight; // Usamos el promedio
+                this.wiimoteNo.Text = null;
+                this.insText2.Text = ReleaseText;
 
-                // Guardamos los LEDs raw (si aún es necesario)
-                var irState = keyMapper.CurrentWiimoteState.IRState;
-                lastCapturedRawLeds = irState.IRSensors
-                                     .Where(s => s.Found)
-                                     .Select(s => new PointF { X = s.RawPosition.X, Y = s.RawPosition.Y })
-                                     .ToList();
-            }
+                this.TextBorder.UpdateLayout();
+                this.TextBorder.SetValue(Canvas.LeftProperty, 0.5 * this.ActualWidth - (this.TextBorder.ActualWidth / 2));
+                this.TextBorder.SetValue(Canvas.TopProperty, 0.25 * this.ActualHeight - (this.TextBorder.ActualHeight / 2));
+            }), null);
 
+            var visiblePoints = irState.IRSensors
+                         .Where(s => s.Found)
+                         .Select(s => new PointF { X = s.RawPosition.X, Y = s.RawPosition.Y })
+                         .ToList();
+
+            // --- CAPTURE IR COORDINATES BASED ON STEP AND MODE WITH NESTED IF ---
 
             switch (step)
             {
                 case 0: // Center Capture (Square, Diamond)
                     if (Settings.Default.pointer_4IRMode == "square" || Settings.Default.pointer_4IRMode == "diamond")
                     {
-                        // Usamos los promedios
-                        this.keyMapper.settings.CenterX = (float)avgRelativeX;
-                        this.keyMapper.settings.CenterY = (float)avgRelativeY - avgPitchOffsetY;
+
+
+                        lastCapturedRawLeds = visiblePoints;
+
+
+                        // --- FIN DE LA NUEVA LÓGICA ---
+                        Console.WriteLine($"DEBUG: Comienzo Debug Calibrado-----------");
+                        Console.WriteLine($"DEBUG: LEDs Visibles = {visiblePoints.Count}");
+
+                        captWidth = (float)this.keyMapper.cursorPos.Width;
+                        captHeight = (float)this.keyMapper.cursorPos.Height;
 
                         Console.WriteLine($"DEBUG: Mostrando Width = {captWidth}");
                         Console.WriteLine($"DEBUG: Mostrando Height = {captHeight}");
+
+
+                        this.keyMapper.settings.CenterX = (float)this.keyMapper.cursorPos.RelativeX;
+                        this.keyMapper.settings.CenterY = (float)this.keyMapper.cursorPos.RelativeY - pitchOffsetY;
+
                         Console.WriteLine($"DEBUG: Mostrando CenterX = {this.keyMapper.settings.CenterX}");
-                        Console.WriteLine($"DEBUG: Mostrando CenterY = {this.keyMapper.settings.CenterY}");
+                        Console.WriteLine($"DEBUG: Mostrando CenterY = {this.keyMapper.settings.CenterY - pitchOffsetY}");
+
+
+                        // --- FIN DE LA NUEVA LÓGICA ---
+
                     }
                     break;
                 case 1:
                     if (Settings.Default.pointer_4IRMode == "none") //BOTTOM-RIGHT
                     {
-                        this.keyMapper.settings.Bottom = (float)avgRelativeY;
-                        this.keyMapper.settings.Right = 1.0f - (float)avgRelativeX;
+                        this.keyMapper.settings.Bottom = (float)this.keyMapper.cursorPos.RelativeY;
+                        this.keyMapper.settings.Right = 1.0f - (float)this.keyMapper.cursorPos.RelativeX;
                     }
                     else if (Settings.Default.pointer_4IRMode == "square") //BOTTOM-RIGHT
                     {
-                        captRight = 1.0 - avgRelativeX;
-                        captBottom = avgRelativeY - avgPitchOffsetY;
+                        captRight = 1.0f - (float)this.keyMapper.cursorPos.RelativeX;
+                        captBottom = (float)this.keyMapper.cursorPos.RelativeY - pitchOffsetY;
                         Console.WriteLine($"DEBUG: Mostrando Right = {captRight}");
                         Console.WriteLine($"DEBUG: Mostrando Bottom = {captBottom}");
                     }
                     else if (Settings.Default.pointer_4IRMode == "diamond") // TOP
                     {
-                        captTop = avgRelativeY - avgPitchOffsetY;
+                        captTop = (float)this.keyMapper.cursorPos.RelativeY - pitchOffsetY;
                     }
                     break;
                 case 2:
                     if (Settings.Default.pointer_4IRMode == "none") //TOP-LEFT
                     {
-                        this.keyMapper.settings.Top = (float)avgRelativeY - avgPitchOffsetY;
-                        this.keyMapper.settings.Left = (float)avgRelativeX;
+                        this.keyMapper.settings.Top = (float)this.keyMapper.cursorPos.RelativeY - pitchOffsetY;
+                        this.keyMapper.settings.Left = (float)this.keyMapper.cursorPos.RelativeX;
                     }
                     else if (Settings.Default.pointer_4IRMode == "square") //TOP-LEFT
                     {
-                        captLeft = 1.0 - avgRelativeX;
-                        captTop = avgRelativeY - avgPitchOffsetY;
+                        captLeft = 1.0f - (float)this.keyMapper.cursorPos.RelativeX;
+                        captTop = (float)this.keyMapper.cursorPos.RelativeY - pitchOffsetY;
                     }
                     else if (Settings.Default.pointer_4IRMode == "diamond") //BOTTOM
                     {
-                        captBottom = avgRelativeY - avgPitchOffsetY;
+                        captBottom = (float)this.keyMapper.cursorPos.RelativeY - pitchOffsetY;
                     }
                     break;
                 case 3:
                     if (Settings.Default.pointer_4IRMode == "diamond") // LEFT
                     {
-                        captLeft = 1.0 - avgRelativeX;
+                        captLeft = 1.0f - (float)this.keyMapper.cursorPos.RelativeX;
                     }
                     else if (Settings.Default.pointer_4IRMode == "square") //TOP-RIGHT
                     {
-                        // La lógica de promediar los promedios se mantiene
-                        captRight = ((captRight + (1.0 - avgRelativeX))) / 2;
-                        captTop = ((captTop + avgRelativeY - avgPitchOffsetY)) / 2;
+                        captRight = ((captRight + (1.0f - (float)this.keyMapper.cursorPos.RelativeX))) / 2;
+                        captTop = ((captTop + (float)this.keyMapper.cursorPos.RelativeY - pitchOffsetY)) / 2;
                     }
                     break;
                 case 4:
                     if (Settings.Default.pointer_4IRMode == "diamond") // RIGHT
                     {
-                        captRight = 1.0 - avgRelativeX;
+                        captRight = 1.0f - (float)this.keyMapper.cursorPos.RelativeX;
                     }
                     else if (Settings.Default.pointer_4IRMode == "square") //Bottom-Left
                     {
-                        captLeft = ((captLeft + (1.0 - avgRelativeX))) / 2;
-                        captBottom = ((captBottom + avgRelativeY - avgPitchOffsetY)) / 2;
+                        captLeft = ((captLeft + (1.0f - (float)this.keyMapper.cursorPos.RelativeX))) / 2;
+                        captBottom = ((captBottom + (float)this.keyMapper.cursorPos.RelativeY - pitchOffsetY)) / 2;
                     }
+                    float scaleX = ((1.0f - (float)marginXBackup) - (float)marginXBackup) / (captRight - captLeft);
+                    float scaleY = ((1.0f - (float)marginYBackup) - (float)marginYBackup) / (captBottom - captTop);
 
-                    // --- Cálculos finales (esta lógica es idéntica a la anterior, pero usa valores promediados) ---
-                    double scaleX = ((1.0 - marginXBackup) - marginXBackup) / (captRight - captLeft);
-                    double scaleY = ((1.0 - marginYBackup) - marginYBackup) / (captBottom - captTop);
+                    // 3. Mapeo de las dimensiones
+                    float NormalizedScreenWidth = captWidth * Math.Abs(scaleX);
+                    float NormalizedScreenHeight = captHeight * Math.Abs(scaleY);
 
-                    double NormalizedScreenWidth = captWidth * Math.Abs(scaleX);
-                    double NormalizedScreenHeight = captHeight * Math.Abs(scaleY);
+                    var TLled = this.keyMapper.settings.CenterX - (NormalizedScreenWidth / 2.0f);
+                    var TRled = this.keyMapper.settings.CenterX + (NormalizedScreenWidth / 2.0f);
+                    var OffsetYTop = this.keyMapper.settings.CenterY - (NormalizedScreenHeight / 2.0f);
+                    var OffsetYBottom = this.keyMapper.settings.CenterY + (NormalizedScreenHeight / 2.0f);
 
-                    var TLled = this.keyMapper.settings.CenterX - (NormalizedScreenWidth / 2.0);
-                    var TRled = this.keyMapper.settings.CenterX + (NormalizedScreenWidth / 2.0);
-                    var OffsetYTop = this.keyMapper.settings.CenterY - (NormalizedScreenHeight / 2.0);
-                    var OffsetYBottom = this.keyMapper.settings.CenterY + (NormalizedScreenHeight / 2.0);
-
-                    // ... (todos los Console.WriteLine de debug) ...
+                    // 4. Mostrar en Debug
                     Console.WriteLine($"DEBUG: Ancho Normalizado en Pantalla = {NormalizedScreenWidth}");
                     Console.WriteLine($"DEBUG: Alto Normalizado en Pantalla = {NormalizedScreenHeight}");
                     Console.WriteLine($"DEBUG: Escala X Calculada = {scaleX}");
@@ -877,183 +1027,24 @@ namespace WiiTUIO.Provider
                     Console.WriteLine($"DEBUG: Mostrando OffsetYBottom = {OffsetYBottom}");
                     if (Settings.Default.pointer_4IRMode == "diamond") // RIGHT
                     {
-                        this.keyMapper.settings.Top = (float)OffsetYTop;
-                        this.keyMapper.settings.Bottom = (float)OffsetYBottom;
-                        this.keyMapper.settings.Left = (float)TLled;
-                        this.keyMapper.settings.Right = (float)TRled;
+                        this.keyMapper.settings.Top = OffsetYTop;
+                        this.keyMapper.settings.Bottom = OffsetYBottom;
+                        this.keyMapper.settings.Left = TLled;
+                        this.keyMapper.settings.Right = TRled;
                     }
                     else if (Settings.Default.pointer_4IRMode == "square")
                     {
-                        this.keyMapper.settings.TLled = (float)TLled;
-                        this.keyMapper.settings.TRled = (float)TRled;
-                        this.keyMapper.settings.OffsetYTop = (float)OffsetYTop;
-                        this.keyMapper.settings.OffsetYBottom = (float)OffsetYBottom;
+                        this.keyMapper.settings.TLled = TLled;
+                        this.keyMapper.settings.TRled = TRled;
+                        this.keyMapper.settings.OffsetYTop = OffsetYTop;
+                        this.keyMapper.settings.OffsetYBottom = OffsetYBottom;
                     }
                     this.keyMapper.loadKeyMap("Calibration_Preview.json");
                     break;
                 default: break;
             }
-
-            // --- 3. AVANZAR AL SIGUIENTE PASO 
-            // Una vez procesados los datos, movemos el objetivo y cambiamos el paso
-            switch (step)
-            {
-                case 0: // Acabamos de procesar el Centro
-                    if (Settings.Default.pointer_4IRMode == "square")
-                    {
-                        Dispatcher.BeginInvoke(new Action(delegate ()
-                        {
-                            this.movePoint(1 - marginXBackup, 1 - marginYBackup); // Bottom Right Corner
-                            this.CalibrationPoint.Visibility = Visibility.Visible;
-                            this.insText2.Text = AimBottomRight;
-                            this.TextBorder.UpdateLayout();
-                            this.TextBorder.SetValue(Canvas.LeftProperty, 0.5 * this.ActualWidth - (this.TextBorder.ActualWidth / 2));
-                            this.TextBorder.SetValue(Canvas.TopProperty, 0.25 * this.ActualHeight - (this.TextBorder.ActualHeight / 2));
-                        }), null);
-                        step = 1;
-                    }
-                    else if (Settings.Default.pointer_4IRMode == "diamond")
-                    {
-                        Dispatcher.BeginInvoke(new Action(delegate ()
-                        {
-                            this.movePoint(0.5, marginYBackup); // Top-Center
-                            this.CalibrationPoint.Visibility = Visibility.Visible;
-                            this.insText2.Text = AimTopCenter;
-                            this.TextBorder.UpdateLayout();
-                            this.TextBorder.SetValue(Canvas.LeftProperty, 0.5 * this.ActualWidth - (this.TextBorder.ActualWidth / 2));
-                            this.TextBorder.SetValue(Canvas.TopProperty, 0.25 * this.ActualHeight - (this.TextBorder.ActualHeight / 2));
-                        }), null);
-                        step = 1;
-                    }
-                    break;
-                case 1: // Acabamos de procesar BR o Top-Center
-                    if (Settings.Default.pointer_4IRMode == "none")
-                    {
-                        Dispatcher.BeginInvoke(new Action(delegate ()
-                        {
-                            this.movePoint(marginXBackup, marginYBackup);
-                            this.CalibrationPoint.Visibility = Visibility.Visible;
-                            this.insText2.Text = AimTopLeft;
-                            this.TextBorder.UpdateLayout();
-                            this.TextBorder.SetValue(Canvas.LeftProperty, 0.5 * this.ActualWidth - (this.TextBorder.ActualWidth / 2));
-                            this.TextBorder.SetValue(Canvas.TopProperty, 0.25 * this.ActualHeight - (this.TextBorder.ActualHeight / 2));
-                        }), null);
-                        step = 2;
-                    }
-                    if (Settings.Default.pointer_4IRMode == "square")
-                    {
-                        Dispatcher.BeginInvoke(new Action(delegate ()
-                        {
-                            this.movePoint(marginXBackup, marginYBackup);
-                            this.CalibrationPoint.Visibility = Visibility.Visible;
-                            this.insText2.Text = AimTopLeft;
-                            this.TextBorder.UpdateLayout();
-                            this.TextBorder.SetValue(Canvas.LeftProperty, 0.5 * this.ActualWidth - (this.TextBorder.ActualWidth / 2));
-                            this.TextBorder.SetValue(Canvas.TopProperty, 0.25 * this.ActualHeight - (this.TextBorder.ActualHeight / 2));
-                        }), null);
-                        step = 2;
-                    }
-                    else if (Settings.Default.pointer_4IRMode == "diamond")
-                    {
-                        Dispatcher.BeginInvoke(new Action(delegate ()
-                        {
-                            this.movePoint(0.5, 1 - marginYBackup); // Bottom-Center
-                            this.CalibrationPoint.Visibility = Visibility.Visible;
-                            this.insText2.Text = AimBottomCenter;
-                            this.TextBorder.UpdateLayout();
-                            this.TextBorder.SetValue(Canvas.LeftProperty, 0.5 * this.ActualWidth - (this.TextBorder.ActualWidth / 2));
-                            this.TextBorder.SetValue(Canvas.TopProperty, 0.25 * this.ActualHeight - (this.TextBorder.ActualHeight / 2));
-                        }), null);
-                        step = 2;
-                    }
-                    break;
-                case 2: // Acabamos de procesar TL o Bottom-Center
-                    if (Settings.Default.pointer_4IRMode == "none")
-                    {
-                        Dispatcher.BeginInvoke(new Action(delegate ()
-                        {
-                            this.CalibrationPoint.Visibility = Visibility.Hidden; // Hide target
-                            this.wiimoteNo.Text = null;
-                            this.insText2.Text = AimConfirm;
-                            this.TextBorder.UpdateLayout();
-                            this.TextBorder.SetValue(Canvas.LeftProperty, 0.5 * this.ActualWidth - (this.TextBorder.ActualWidth / 2));
-                            this.TextBorder.SetValue(Canvas.TopProperty, 0.25 * this.ActualHeight - (this.TextBorder.ActualHeight / 2));
-                        }), null);
-                        step = 5; // Go directly to unified confirmation step
-                    }
-                    else if (Settings.Default.pointer_4IRMode == "square")
-                    {
-                        Dispatcher.BeginInvoke(new Action(delegate ()
-                        {
-                            this.movePoint(1 - marginXBackup, marginYBackup); // Top-Right
-                            this.CalibrationPoint.Visibility = Visibility.Visible;
-                            this.insText2.Text = AimTopRight;
-                            this.TextBorder.UpdateLayout();
-                            this.TextBorder.SetValue(Canvas.LeftProperty, 0.5 * this.ActualWidth - (this.TextBorder.ActualWidth / 2));
-                            this.TextBorder.SetValue(Canvas.TopProperty, 0.25 * this.ActualHeight - (this.TextBorder.ActualHeight / 2));
-                        }), null);
-                        step = 3;
-                    }
-                    else if (Settings.Default.pointer_4IRMode == "diamond")
-                    {
-                        Dispatcher.BeginInvoke(new Action(delegate ()
-                        {
-                            this.movePoint(marginXBackup, 0.5); // Left-Center
-                            this.CalibrationPoint.Visibility = Visibility.Visible;
-                            this.insText2.Text = AimLeftCenter;
-                            this.TextBorder.UpdateLayout();
-                            this.TextBorder.SetValue(Canvas.LeftProperty, 0.5 * this.ActualWidth - (this.TextBorder.ActualWidth / 2));
-                            this.TextBorder.SetValue(Canvas.TopProperty, 0.25 * this.ActualHeight - (this.TextBorder.ActualHeight / 2));
-                        }), null);
-                        step = 3;
-                    }
-                    break;
-                case 3: // Acabamos de procesar TR o Left-Center
-                    if (Settings.Default.pointer_4IRMode == "diamond")
-                    {
-                        Dispatcher.BeginInvoke(new Action(delegate ()
-                        {
-                            this.movePoint(1 - marginXBackup, 0.5); // Right-Center
-                            this.CalibrationPoint.Visibility = Visibility.Visible;
-                            this.insText2.Text = AimRightCenter;
-                            this.TextBorder.UpdateLayout();
-                            this.TextBorder.SetValue(Canvas.LeftProperty, 0.5 * this.ActualWidth - (this.TextBorder.ActualWidth / 2));
-                            this.TextBorder.SetValue(Canvas.TopProperty, 0.25 * this.ActualHeight - (this.TextBorder.ActualHeight / 2));
-                        }), null);
-                        step = 4;
-                    }
-                    else if (Settings.Default.pointer_4IRMode == "square")
-                    {
-                        Dispatcher.BeginInvoke(new Action(delegate ()
-                        {
-                            this.movePoint(marginXBackup, 1 - marginYBackup); // Bottom-Left
-                            this.CalibrationPoint.Visibility = Visibility.Visible;
-                            this.insText2.Text = AimBottomLeft;
-                            this.TextBorder.UpdateLayout();
-                            this.TextBorder.SetValue(Canvas.LeftProperty, 0.5 * this.ActualWidth - (this.TextBorder.ActualWidth / 2));
-                            this.TextBorder.SetValue(Canvas.TopProperty, 0.25 * this.ActualHeight - (this.TextBorder.ActualHeight / 2));
-                        }), null);
-                        step = 4;
-                    }
-                    break;
-                case 4: // Acabamos de procesar BL o Right-Center (ÚLTIMO PUNTO)
-                    if (Settings.Default.pointer_4IRMode == "diamond" || Settings.Default.pointer_4IRMode == "square")
-                    {
-                        Dispatcher.BeginInvoke(new Action(delegate ()
-                        {
-                            this.CalibrationPoint.Visibility = Visibility.Hidden; // Hide target
-                            this.wiimoteNo.Text = null;
-                            this.insText2.Text = AimConfirm;
-                            this.TextBorder.UpdateLayout();
-                            this.TextBorder.SetValue(Canvas.LeftProperty, 0.5 * this.ActualWidth - (this.TextBorder.ActualWidth / 2));
-                            this.TextBorder.SetValue(Canvas.TopProperty, 0.25 * this.ActualHeight - (this.TextBorder.ActualHeight / 2));
-                        }), null);
-                        step = 5; // Go directly to unified confirmation step
-                    }
-                    break;
-                default: break;
-            }
         }
+
         private System.Windows.Point movePoint(double fNormalX, double fNormalY)
         {
             System.Windows.Point tPoint = new System.Windows.Point(fNormalX * this.ActualWidth, fNormalY * this.ActualHeight);

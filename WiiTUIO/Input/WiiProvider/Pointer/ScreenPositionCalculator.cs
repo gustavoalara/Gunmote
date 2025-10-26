@@ -61,7 +61,6 @@ namespace WiiTUIO.Provider
         private double boundsX;
         private double boundsY;
 
-        // Use 0.0 to mean use full mapped range
         private double targetAspectRatio = 0.0;
 
         private double smoothedX, smoothedZ;
@@ -83,16 +82,35 @@ namespace WiiTUIO.Provider
 
         public CalibrationSettings settings;
 
-        private float angleTR, angleBR, angleBL, angleTL;
-        private float offsetTR, offsetBR, offsetBL, offsetTL;
-        private float DistTR, DistBR, DistBL, DistTL;
-        private int yMin, yMax, xMin, xMax;
+        // Variables para la geometría del Rombo (Diamond)
+        private float DistTR, DistBR, DistBL, DistTL; // Distancias
+        private float offsetTR, offsetBR, offsetBL, offsetTL; // Offsets de ángulo
+        private float angleTR, angleBR, angleBL, angleTL; // Ángulos de los lados
+        private bool hasIdealGeometry = false;
+
+        private float DistTB, DistRL;                 // Distancias de las diagonales
+
+        // Ángulos
+        private float idealAngleAtTop, idealAngleAtRight, idealAngleAtBottom, idealAngleAtLeft;
+
+        // Puntos de referencia
+        private PointF[] idealPoints = new PointF[4];
+
+
+        private float NormalizeAngle(float angle)
+        {
+            while (angle > MathF.PI) angle -= 2 * MathF.PI;
+            while (angle < -MathF.PI) angle += 2 * MathF.PI;
+            return angle;
+        }
 
         public ScreenPositionCalculator(int id, CalibrationSettings settings)
         {
             this.wiimoteId = id;
             this.settings = settings;
+
             this.pWarper = new Warper(this.settings);
+
             this.primaryScreen = DeviceUtils.DeviceUtil.GetScreen(Settings.Default.primaryMonitor);
             this.recalculateScreenBounds(this.primaryScreen);
 
@@ -114,6 +132,7 @@ namespace WiiTUIO.Provider
                 Console.WriteLine("Setting primary monitor for screen position calculator to " + this.primaryScreen.Bounds);
                 this.recalculateScreenBounds(this.primaryScreen);
             }
+            
             else if (e.PropertyName == "Left" || e.PropertyName == "Right" || e.PropertyName == "Top" || e.PropertyName == "Bottom")
             {
                 trueTopLeftPt.X = topLeftPt.X = this.settings.Left;
@@ -150,11 +169,53 @@ namespace WiiTUIO.Provider
             midMarginY = Settings.Default.pointer_marginsTopBottom * 0.5;
             marginBoundsX = 1 / (1 - Settings.Default.pointer_marginsLeftRight);
             marginBoundsY = 1 / (1 - Settings.Default.pointer_marginsTopBottom);
-
+            
             trueTopLeftPt.X = topLeftPt.X = this.settings.Left;
             trueTopLeftPt.Y = topLeftPt.Y = this.settings.Top;
             trueBottomRightPt.X = bottomRightPt.X = this.settings.Right;
             trueBottomRightPt.Y = bottomRightPt.Y = this.settings.Bottom;
+            
+            if (Settings.Default.pointer_4IRMode == "diamond")
+            {
+                // 1. Vértices del rombo ideal en coordenadas normalizadas (0.0 a 1.0)
+                PointF pTop = new PointF { X = 0.5f, Y = this.settings.Top };
+                PointF pRight = new PointF { X = this.settings.Right, Y = 0.5f };
+                PointF pBottom = new PointF { X = 0.5f, Y = this.settings.Bottom };
+                PointF pLeft = new PointF { X = this.settings.Left, Y = 0.5f };
+
+                // 2. Guardamos las 4 posiciones "perfectas"
+                idealPoints[0] = pTop;
+                idealPoints[1] = pRight;
+                idealPoints[2] = pBottom;
+                idealPoints[3] = pLeft;
+
+                // 3. Calculamos y guardamos las distancias ideales de lados y diagonales
+                DistTR = MathF.Hypot(pTop.Y - pRight.Y, pTop.X - pRight.X);
+                DistBR = MathF.Hypot(pRight.Y - pBottom.Y, pRight.X - pBottom.X);
+                DistBL = MathF.Hypot(pBottom.Y - pLeft.Y, pLeft.X - pBottom.X);
+                DistTL = MathF.Hypot(pLeft.Y - pTop.Y, pLeft.X - pTop.X);
+                DistTB = MathF.Hypot(pTop.Y - pBottom.Y, pTop.X - pBottom.X);
+                DistRL = MathF.Hypot(pRight.Y - pLeft.Y, pRight.X - pLeft.X);
+
+                // 4. Pre-calculamos y normalizamos los ángulos internos del rombo ideal
+                float vec_TL_angle = MathF.Atan2(pLeft.Y - pTop.Y, pLeft.X - pTop.X);
+                float vec_TR_angle = MathF.Atan2(pRight.Y - pTop.Y, pRight.X - pTop.X);
+                idealAngleAtTop = NormalizeAngle(vec_TR_angle - vec_TL_angle);
+
+                float vec_RT_angle = MathF.Atan2(pTop.Y - pRight.Y, pTop.X - pRight.X);
+                float vec_RB_angle = MathF.Atan2(pBottom.Y - pRight.Y, pBottom.X - pRight.X);
+                idealAngleAtRight = NormalizeAngle(vec_RB_angle - vec_RT_angle);
+
+                float vec_BL_angle = MathF.Atan2(pLeft.Y - pBottom.Y, pLeft.X - pBottom.X);
+                float vec_BR_angle = MathF.Atan2(pRight.Y - pBottom.Y, pRight.X - pBottom.X);
+                idealAngleAtBottom = NormalizeAngle(vec_BL_angle - vec_BR_angle);
+
+                float vec_LT_angle = MathF.Atan2(pTop.Y - pLeft.Y, pTop.X - pLeft.X);
+                float vec_LB_angle = MathF.Atan2(pBottom.Y - pLeft.Y, pBottom.X - pLeft.X);
+                idealAngleAtLeft = NormalizeAngle(vec_LT_angle - vec_LB_angle);
+
+                hasIdealGeometry = true;
+            } 
 
             if (targetAspectRatio == 0.0)
             {
@@ -168,12 +229,27 @@ namespace WiiTUIO.Provider
 
         private void recalculateLightgunCoordBounds()
         {
-            boundsX = (1 - Settings.Default.CalibrationMarginX * 2) / (bottomRightPt.X - topLeftPt.X);
-            boundsY = (1 - Settings.Default.CalibrationMarginY * 2) / (bottomRightPt.Y - topLeftPt.Y);
+            
+            if (Settings.Default.pointer_4IRMode == "diamond")
+            {
+                double calibratedWidth = Math.Abs(this.settings.Right - this.settings.Left);
+                double calibratedHeight = Math.Abs(this.settings.Bottom - this.settings.Top);
+
+                boundsX = (Math.Abs(this.settings.Right - this.settings.Left) > double.Epsilon) ? 1.0 / (this.settings.Right - this.settings.Left) : 0;
+                boundsY = (Math.Abs(this.settings.Bottom - this.settings.Top) > double.Epsilon) ? 1.0 / (this.settings.Bottom - this.settings.Top) : 0;
+
+
+            }
+            else // Para square y none
+            {
+                boundsX = (1 - Settings.Default.CalibrationMarginX * 2) / (bottomRightPt.X - topLeftPt.X);
+                boundsY = (1 - Settings.Default.CalibrationMarginY * 2) / (bottomRightPt.Y - topLeftPt.Y);
+            } 
         }
 
         public CursorPos CalculateCursorPos(WiimoteState wiimoteState)
         {
+            bool reconstructionSuccess = false;
             int x = 0;
             int y = 0;
             double marginX, marginY = 0.0;
@@ -272,6 +348,7 @@ namespace WiiTUIO.Provider
 
                     angle = Math.Atan2(dy, dx);
 
+                    
                     median.X = median.X - 0.5F;
                     median.Y = median.Y - 0.5F;
 
@@ -279,7 +356,7 @@ namespace WiiTUIO.Provider
 
                     median.X = median.X + 0.5F;
                     median.Y = median.Y + 0.5F;
-
+                    
                     lastIrPoint1 = irPoint1;
                     lastIrPoint2 = irPoint2;
                 }
@@ -294,7 +371,7 @@ namespace WiiTUIO.Provider
 
                     return err;
                 }
-
+                
                 if (Properties.Settings.Default.pointer_sensorBarPos == "top")
                 {
                     offsetY = -SBPositionOffset;
@@ -305,143 +382,326 @@ namespace WiiTUIO.Provider
                     offsetY = SBPositionOffset;
                     marginOffsetY = -CalcMarginOffsetY;
                 }
-
+                
                 resultPos = median;
             }
             else if (Settings.Default.pointer_4IRMode == "diamond")
             {
                 byte seenFlags = 0;
-                double Roll = Math.Atan2(wiimoteState.AccelState.Values.X, wiimoteState.AccelState.Values.Z);
+                int foundCount = 0;
+                var visiblePoints = new List<PointF>();
 
-                PointF[] position = new PointF[4];
-
+                // --- FASE 1: IDENTIFICACIÓN DE PUNTOS ---
                 for (int i = 0; i < 4; i++)
                 {
                     if (irState.IRSensors[i].Found)
                     {
-                        position[i] = irState.IRSensors[i].Position;
-                        see[i] = (see[i] << 1) | 1;
-                        seenFlags |= (byte)(1 << i);
+                        visiblePoints.Add(irState.IRSensors[i].Position);
+                        foundCount++;
+                    }
+                }
+
+                if (foundCount >= 3)
+                {
+                    double Roll = Math.Atan2(wiimoteState.AccelState.Values.X, wiimoteState.AccelState.Values.Z);
+
+                    median = new PointF();
+                    foreach (var p in visiblePoints) { median.X += p.X; median.Y += p.Y; }
+                    median.X /= foundCount;
+                    median.Y /= foundCount;
+                    foreach (var p in visiblePoints)
+                    {
+                        double point_angle = Math.Atan2(p.Y - median.Y, p.X - median.X) - Roll;
+                        point_angle += (MathF.PI / 4);
+                        if (point_angle < 0) point_angle += 2 * MathF.PI;
+                        if (point_angle > 2 * MathF.PI) point_angle -= 2 * MathF.PI;
+                        int index = (int)(point_angle / (MathF.PI / 2));
+                        int finalIndex = 0;
+                        switch (index)
+                        {
+                            case 0: finalIndex = 1; break; // Right
+                            case 1: finalIndex = 2; break; // Bottom
+                            case 2: finalIndex = 3; break; // Left
+                            case 3: finalIndex = 0; break; // Top
+                        }
+                        finalPos[finalIndex] = p;
+                        seenFlags |= (byte)(1 << finalIndex);
+                    }
+                }
+                else if (foundCount == 2)
+                {
+                    // --- Identificación Stateful (CON MEMORIA) usando el último fotograma conocido ---
+                    if (lastPos.OnScreenPoints != null && (lastPos.OnScreenPoints[0].X != 0 || lastPos.OnScreenPoints[0].Y != 0))
+                    {
+                        PointF p1 = visiblePoints[0];
+                        PointF p2 = visiblePoints[1];
+
+                        // Buscamos cuál de los 4 puntos ANTERIORES está más cerca de p1
+                        int bestIdx_p1 = -1;
+                        float minDist_p1 = float.MaxValue;
+                        for (int i = 0; i < 4; i++)
+                        {
+                            float dist = MathF.Hypot(p1.Y - lastPos.OnScreenPoints[i].Y, p1.X - lastPos.OnScreenPoints[i].X);
+                            if (dist < minDist_p1)
+                            {
+                                minDist_p1 = dist;
+                                bestIdx_p1 = i;
+                            }
+                        }
+
+                        // Buscamos cuál de los 4 puntos ANTERIORES está más cerca de p2
+                        int bestIdx_p2 = -1;
+                        float minDist_p2 = float.MaxValue;
+                        for (int i = 0; i < 4; i++)
+                        {
+                            // Nos aseguramos de no asignar el mismo punto anterior a ambos puntos actuales
+                            if (i == bestIdx_p1) continue;
+                            float dist = MathF.Hypot(p2.Y - lastPos.OnScreenPoints[i].Y, p2.X - lastPos.OnScreenPoints[i].X);
+                            if (dist < minDist_p2)
+                            {
+                                minDist_p2 = dist;
+                                bestIdx_p2 = i;
+                            }
+                        }
+
+                        // Si hemos encontrado una correspondencia válida, la usamos
+                        if (bestIdx_p1 != -1 && bestIdx_p2 != -1)
+                        {
+                            // Limpiamos finalPos para no arrastrar datos viejos
+                            Array.Clear(finalPos, 0, finalPos.Length);
+
+                            // Asignamos los puntos visibles a sus posiciones correctas en finalPos
+                            finalPos[bestIdx_p1] = p1;
+                            finalPos[bestIdx_p2] = p2;
+                            seenFlags = (byte)((1 << bestIdx_p1) | (1 << bestIdx_p2));
+                        }
                     }
                     else
                     {
-                        see[i] = 0;
+                        // Si no hay fotograma anterior, nos la jugamos con la identificación stateless original como último recurso.
+                        // (Este bloque es el código que estás eliminando, pegado aquí como fallback)
+                        PointF p1 = visiblePoints[0];
+                        PointF p2 = visiblePoints[1];
+                        int bestIdx_p1 = -1, bestIdx_p2 = -1;
+                        float minDist_p1 = float.MaxValue, minDist_p2 = float.MaxValue;
+                        for (int i = 0; i < 4; i++) { float dist = MathF.Hypot(p1.Y - idealPoints[i].Y, p1.X - idealPoints[i].X); if (dist < minDist_p1) { minDist_p1 = dist; bestIdx_p1 = i; } }
+                        for (int i = 0; i < 4; i++) { if (i == bestIdx_p1) continue; float dist = MathF.Hypot(p2.Y - idealPoints[i].Y, p2.X - idealPoints[i].X); if (dist < minDist_p2) { minDist_p2 = dist; bestIdx_p2 = i; } }
+                        if (bestIdx_p1 != -1 && bestIdx_p2 != -1) { finalPos[bestIdx_p1] = p1; finalPos[bestIdx_p2] = p2; seenFlags = (byte)((1 << bestIdx_p1) | (1 << bestIdx_p2)); }
                     }
                 }
 
-                yMin = yMax = xMin = xMax = -1;
-                for (int i = 0; i < 4; i++)
+                // --- FASE 2: RECONSTRUCCIÓN ---
+                if (hasIdealGeometry && (foundCount == 3 || (foundCount == 2 && seenFlags != 0)))
                 {
-                    if ((seenFlags & (1 << i)) == 0) continue;
-                    if (yMin == -1 || position[i].Y < position[yMin].Y) yMin = i;
-                    if (yMax == -1 || position[i].Y > position[yMax].Y) yMax = i;
-                    if (xMin == -1 || position[i].X < position[xMin].X) xMin = i;
-                    if (xMax == -1 || position[i].X > position[xMax].X) xMax = i;
+                    if (foundCount == 3)
+                    {
+                        // Tu lógica perfecta para 3 puntos
+                        int missingIdx = -1;
+                        for (int i = 0; i < 4; i++) { if ((seenFlags & (1 << i)) == 0) { missingIdx = i; break; } }
+                        int prevIdx = (missingIdx + 3) % 4;
+                        int nextIdx = (missingIdx + 1) % 4;
+                        int oppositeIdx = (missingIdx + 2) % 4;
+                        PointF center = new PointF { X = (finalPos[prevIdx].X + finalPos[nextIdx].X) / 2, Y = (finalPos[prevIdx].Y + finalPos[nextIdx].Y) / 2 };
+                        finalPos[missingIdx] = new PointF { X = 2 * center.X - finalPos[oppositeIdx].X, Y = 2 * center.Y - finalPos[oppositeIdx].Y };
+
+                        seenFlags = 0x0F;
+                    }
+                    else if (foundCount == 2)
+                    {
+                        // Lógica de vectores escalados (la que mantiene la forma correcta)
+                        int idx1 = -1, idx2 = -1;
+                        for (int i = 0; i < 4; i++) { if ((seenFlags & (1 << i)) != 0) { if (idx1 == -1) idx1 = i; else idx2 = i; } }
+
+                        bool isAdjacent = ((idx1 + 1) % 4 == idx2 || (idx2 + 1) % 4 == idx1);
+                        if (isAdjacent)
+                        {
+                            // --- PASO A: Reconstrucción por Vectores (Tu código, no cambia) ---
+                            if (seenFlags == 3)
+                            { // Vemos Arriba(0) y Derecha(1)
+                                PointF pTop = finalPos[0], pRight = finalPos[1];
+                                float current_DistTR = MathF.Hypot(pRight.Y - pTop.Y, pRight.X - pTop.X);
+                                float scale = (DistTR > 0) ? current_DistTR / DistTR : 1.0f;
+                                float angle_vec_TR = MathF.Atan2(pRight.Y - pTop.Y, pRight.X - pTop.X);
+                                float angle_vec_TL = NormalizeAngle(angle_vec_TR - idealAngleAtTop);
+                                PointF pLeft = new PointF { X = pTop.X + (DistTL * scale) * MathF.Cos(angle_vec_TL), Y = pTop.Y + (DistTL * scale) * MathF.Sin(angle_vec_TL) };
+                                PointF vec_TL = new PointF { X = pLeft.X - pTop.X, Y = pLeft.Y - pTop.Y };
+                                finalPos[3] = pLeft;
+                                finalPos[2] = new PointF { X = pRight.X + vec_TL.X, Y = pRight.Y + vec_TL.Y };
+                            }
+                            else if (seenFlags == 6)
+                            { // Vemos Derecha(1) y Abajo(2)
+                                PointF pRight = finalPos[1], pBottom = finalPos[2];
+                                float current_DistRB = MathF.Hypot(pBottom.Y - pRight.Y, pBottom.X - pRight.X);
+                                float scale = (DistBR > 0) ? current_DistRB / DistBR : 1.0f;
+                                float angle_vec_RB = MathF.Atan2(pBottom.Y - pRight.Y, pBottom.X - pRight.X);
+                                float angle_vec_RT = NormalizeAngle(angle_vec_RB - idealAngleAtRight);
+                                PointF pTop = new PointF { X = pRight.X + (DistTR * scale) * MathF.Cos(angle_vec_RT), Y = pRight.Y + (DistTR * scale) * MathF.Sin(angle_vec_RT) };
+                                PointF vec_RT = new PointF { X = pTop.X - pRight.X, Y = pTop.Y - pRight.Y };
+                                finalPos[0] = pTop;
+                                finalPos[3] = new PointF { X = pBottom.X + vec_RT.X, Y = pBottom.Y + vec_RT.Y };
+                            }
+                            else if (seenFlags == 12)
+                            { // Vemos Abajo(2) e Izquierda(3)
+                                PointF pBottom = finalPos[2], pLeft = finalPos[3];
+                                float current_DistBL = MathF.Hypot(pLeft.Y - pBottom.Y, pLeft.X - pBottom.X);
+                                float scale = (DistBL > 0) ? current_DistBL / DistBL : 1.0f;
+                                float angle_vec_BL = MathF.Atan2(pLeft.Y - pBottom.Y, pLeft.X - pBottom.X);
+                                float angle_vec_BR = NormalizeAngle(angle_vec_BL - idealAngleAtBottom);
+                                PointF pRight = new PointF { X = pBottom.X + (DistBR * scale) * MathF.Cos(angle_vec_BR), Y = pBottom.Y + (DistBR * scale) * MathF.Sin(angle_vec_BR) };
+                                PointF vec_BR = new PointF { X = pRight.X - pBottom.X, Y = pRight.Y - pBottom.Y };
+                                finalPos[1] = pRight;
+                                finalPos[0] = new PointF { X = pLeft.X + vec_BR.X, Y = pLeft.Y + vec_BR.Y };
+                            }
+                            else if (seenFlags == 9)
+                            { // Vemos Izquierda(3) y Arriba(0)
+                                PointF pLeft = finalPos[3], pTop = finalPos[0];
+                                float current_DistLT = MathF.Hypot(pTop.Y - pLeft.Y, pTop.X - pLeft.X);
+                                float scale = (DistTL > 0) ? current_DistLT / DistTL : 1.0f;
+                                float angle_vec_LT = MathF.Atan2(pTop.Y - pLeft.Y, pTop.X - pLeft.X);
+                                float angle_vec_LB = NormalizeAngle(angle_vec_LT - idealAngleAtLeft);
+                                PointF pBottom = new PointF { X = pLeft.X + (DistBL * scale) * MathF.Cos(angle_vec_LB), Y = pLeft.Y + (DistBL * scale) * MathF.Sin(angle_vec_LB) };
+                                PointF vec_LB = new PointF { X = pBottom.X - pLeft.X, Y = pBottom.Y - pLeft.Y };
+                                finalPos[2] = pBottom;
+                                finalPos[1] = new PointF { X = pTop.X + vec_LB.X, Y = pTop.Y + vec_LB.Y };
+                            }
+
+                            // --- PASO B: Corrección de Posición por Extrapolación (ARREGLO FINAL) ---
+                            // Solo si tenemos una referencia válida del fotograma anterior.
+                            if (lastPos.OnScreenPoints != null && (lastPos.OnScreenPoints[0].X != 0 || lastPos.OnScreenPoints[0].Y != 0))
+                            {
+                                // 1. Calculamos el centro del rombo del fotograma anterior.
+                                PointF previousCenter = new PointF { X = (lastPos.OnScreenPoints[0].X + lastPos.OnScreenPoints[2].X) / 2f, Y = (lastPos.OnScreenPoints[0].Y + lastPos.OnScreenPoints[2].Y) / 2f };
+
+                                // 2. Calculamos cómo se ha movido el centro de los dos puntos que SÍ vemos.
+                                PointF p1_visible = finalPos[idx1];
+                                PointF p2_visible = finalPos[idx2];
+                                PointF last_p1_visible = lastPos.OnScreenPoints[idx1];
+                                PointF last_p2_visible = lastPos.OnScreenPoints[idx2];
+
+                                PointF currentMidpoint = new PointF { X = (p1_visible.X + p2_visible.X) / 2f, Y = (p1_visible.Y + p2_visible.Y) / 2f };
+                                PointF previousMidpoint = new PointF { X = (last_p1_visible.X + last_p2_visible.X) / 2f, Y = (last_p1_visible.Y + last_p2_visible.Y) / 2f };
+
+                                PointF delta = new PointF { X = currentMidpoint.X - previousMidpoint.X, Y = currentMidpoint.Y - previousMidpoint.Y };
+
+                                // 3. Extrapolamos la nueva posición del centro del rombo completo.
+                                PointF predictedCenter = new PointF { X = previousCenter.X + delta.X, Y = previousCenter.Y + delta.Y };
+
+                                // 4. Calculamos el "empujón" necesario para alinear el rombo reconstruido con el centro extrapolado.
+                                PointF reconstructedCenter = new PointF { X = (finalPos[0].X + finalPos[2].X) / 2f, Y = (finalPos[0].Y + finalPos[2].Y) / 2f };
+                                PointF nudge = new PointF { X = predictedCenter.X - reconstructedCenter.X, Y = predictedCenter.Y - reconstructedCenter.Y };
+
+                                // 5. Aplicamos el empujón a los 4 puntos para eliminar el salto y el anclaje.
+                                for (int i = 0; i < 4; i++)
+                                {
+                                    finalPos[i].X += nudge.X;
+                                    finalPos[i].Y += nudge.Y;
+                                }
+                            }
+                            seenFlags = 0x0F;
+                        }
+                    }
                 }
-
-                if (yMin >= 0) finalPos[0] = position[yMin];
-                if (xMax >= 0) finalPos[1] = position[xMax];
-                if (yMax >= 0) finalPos[2] = position[yMax];
-                if (xMin >= 0) finalPos[3] = position[xMin];
-
-                if ((seenFlags & 0x0F) == 0x0F)
+                // 3. APRENDIZAJE CONTINUO (Lógica OpenFIRE)
+                if (hasIdealGeometry && seenFlags != 0)
                 {
-                    median.X = (finalPos[0].X + finalPos[1].X + finalPos[2].X + finalPos[3].X) / 4f;
-                    median.Y = (finalPos[0].Y + finalPos[1].Y + finalPos[2].Y + finalPos[3].Y) / 4f;
-
-                    float height2 = finalPos[2].Y - finalPos[0].Y;
-                    float width2 = finalPos[1].X - finalPos[3].X;
-                    height = MathF.Hypot(finalPos[0].Y - finalPos[2].Y, finalPos[0].X - finalPos[2].X);
-                    width = MathF.Hypot(finalPos[1].Y - finalPos[3].Y, finalPos[1].X - finalPos[3].X);
-                    float angle2 = MathF.Atan2(finalPos[3].Y - finalPos[1].Y, finalPos[1].X - finalPos[3].X);
-
-                    offsetTR = angleTR - angle2;
-                    offsetBR = angleBR - angle2;
-                    offsetBL = angleBL - angle2;
-                    offsetTL = angleTL - angle2;
-                }
-                else
-                {
-                    if ((1 << 5 & see[0] & see[1]) != 0)
+                    const uint STABILITY_CHECK = (1 << 5);
+                    for (int i = 0; i < 4; i++)
+                    {
+                        if ((seenFlags & (1 << i)) != 0) { see[i] = (see[i] << 1) | 1; }
+                        else { see[i] = 0; }
+                    }
+                    if ((seenFlags & 0x0F) == 0x0F)
                     {
                         angleTR = MathF.Atan2(finalPos[0].Y - finalPos[1].Y, finalPos[1].X - finalPos[0].X);
-                        DistTR = MathF.Hypot(finalPos[0].Y - finalPos[1].Y, finalPos[0].X - finalPos[1].X);
-                        angle = offsetTR - angleTR;
-                    }
-                    if ((1 << 5 & see[1] & see[2]) != 0)
-                    {
                         angleBR = MathF.Atan2(finalPos[1].Y - finalPos[2].Y, finalPos[2].X - finalPos[1].X);
-                        DistBR = MathF.Hypot(finalPos[1].Y - finalPos[2].Y, finalPos[1].X - finalPos[2].X);
-                        angle = offsetBR - angleBR;
-                    }
-                    if ((1 << 5 & see[2] & see[3]) != 0)
-                    {
                         angleBL = MathF.Atan2(finalPos[2].Y - finalPos[3].Y, finalPos[3].X - finalPos[2].X);
-                        DistBL = MathF.Hypot(finalPos[2].Y - finalPos[3].Y, finalPos[2].X - finalPos[3].X);
-                        angle = offsetBL - angleBL;
-                    }
-                    if ((1 << 5 & see[3] & see[0]) != 0)
-                    {
                         angleTL = MathF.Atan2(finalPos[3].Y - finalPos[0].Y, finalPos[0].X - finalPos[3].X);
-                        DistTL = MathF.Hypot(finalPos[3].Y - finalPos[0].Y, finalPos[3].X - finalPos[0].X);
-                        angle = offsetTL - angleTL;
+                        double current_global_angle = MathF.Atan2(finalPos[3].Y - finalPos[1].Y, finalPos[1].X - finalPos[3].X);
+                        offsetTR = NormalizeAngle(angleTR - (float)current_global_angle);
+                        offsetBR = NormalizeAngle(angleBR - (float)current_global_angle);
+                        offsetBL = NormalizeAngle(angleBL - (float)current_global_angle);
+                        offsetTL = NormalizeAngle(angleTL - (float)current_global_angle);
                     }
-                }
-
-                for (int i = 0; i < 4; i++)
-                {
-                    if ((seenFlags & (1 << i)) == 0)
+                    if ((see[0] & see[1] & STABILITY_CHECK) == STABILITY_CHECK)
                     {
-                        float f = (float)angle;
-                        float offset = 0;
-                        float dist = 0;
-                        int refIndex = -1;
-
-                        switch (i)
-                        {
-                            case 0: offset = offsetTL; dist = DistTL; refIndex = 3; break;
-                            case 1: offset = offsetTR; dist = DistTR; refIndex = 0; break;
-                            case 2: offset = offsetBR; dist = DistBR; refIndex = 1; break;
-                            case 3: offset = offsetBL; dist = DistBL; refIndex = 2; break;
-                        }
-
-                        if ((seenFlags & (1 << refIndex)) != 0)
-                        {
-                            finalPos[i].X = finalPos[refIndex].X + dist * MathF.Cos(offset - f);
-                            finalPos[i].Y = finalPos[refIndex].Y + dist * -MathF.Sin(offset - f);
-                        }
+                        angle = MathF.Atan2(finalPos[0].Y - finalPos[1].Y, finalPos[1].X - finalPos[0].X) - offsetTR;
+                    }
+                    else if ((see[1] & see[2] & STABILITY_CHECK) == STABILITY_CHECK)
+                    {
+                        angle = MathF.Atan2(finalPos[1].Y - finalPos[2].Y, finalPos[2].X - finalPos[1].X) - offsetBR;
+                    }
+                    else if ((see[2] & see[3] & STABILITY_CHECK) == STABILITY_CHECK)
+                    {
+                        angle = MathF.Atan2(finalPos[2].Y - finalPos[3].Y, finalPos[3].X - finalPos[2].X) - offsetBL;
+                    }
+                    else if ((see[3] & see[0] & STABILITY_CHECK) == STABILITY_CHECK)
+                    {
+                        angle = MathF.Atan2(finalPos[3].Y - finalPos[0].Y, finalPos[0].X - finalPos[3].X) - offsetTL;
                     }
                 }
+                // --- FASE 3: WARPER Y SALIDA ---
+                if ((seenFlags & 0x0F) == 0x0F)
+                {
+                    reconstructionSuccess = true;
 
-                pWarper.setSource(
-                        finalPos[1].X, finalPos[1].Y, // Right
-                        finalPos[2].X, finalPos[2].Y, // Bottom
-                        finalPos[3].X, finalPos[3].Y, // Left
-                        finalPos[0].X, finalPos[0].Y  // Top
-                    );
+                    if (Settings.Default.Debug)
+                    {
+                        PointF[] debugDisplayPos = new PointF[4];
+                        var sensorPointsDict = new Dictionary<int, WiimoteLib.PointF>();
 
-                float[] fWarped = pWarper.warp();
-                resultPos.X = Math.Min(Math.Max(fWarped[0], 0), 1);
-                resultPos.Y = Math.Min(Math.Max(fWarped[1], 0), 1);
+                        // 2. Copiar los datos invirtiendo el eje X.
+                        for (int i = 0; i < 4; i++)
+                        {
+                            debugDisplayPos[i] = new PointF
+                            {
+                                // Invertimos el eje X (asumiendo coordenadas normalizadas de 0.0 a 1.0)
+                                X = 1.0f - finalPos[i].X,
+                                // El eje Y se mantiene igual.
+                                Y = finalPos[i].Y
+                            };
+                            // Si el punto 'i' ha sido visto o reconstruido en este frame...
+                            if ((seenFlags & (1 << i)) != 0)
+                            {
+                                // ...lo añadimos al diccionario para dibujarlo.
+                                sensorPointsDict.Add(i, finalPos[i]);
+                            }
+                        }
 
-                angle = -(MathF.Atan2(finalPos[0].Y - finalPos[1].Y, finalPos[1].X - finalPos[0].X) +
-                          MathF.Atan2(finalPos[2].Y - finalPos[3].Y, finalPos[3].X - finalPos[2].X)) / 2;
+                        // 3. Dibujar el rombo de debug con la copia invertida.
+                        //DebugVisualizer.DrawRhombus(debugDisplayPos);
+                        DebugVisualizer.DrawSensorView(sensorPointsDict);
+                    }
+                    width = MathF.Hypot(finalPos[1].Y - finalPos[3].Y, finalPos[1].X - finalPos[3].X);
+                    height = MathF.Hypot(finalPos[2].Y - finalPos[0].Y, finalPos[2].X - finalPos[0].X);
 
-                if (angle < 0) angle += MathF.PI * 2;
 
-                if (see.Count(seen => seen == 0) >= 3 || double.IsNaN(resultPos.X) || double.IsNaN(resultPos.Y))
+                    pWarper.setSource(finalPos[1].X, finalPos[1].Y, finalPos[2].X, finalPos[2].Y, finalPos[3].X, finalPos[3].Y, finalPos[0].X, finalPos[0].Y);
+                    float[] fWarped = pWarper.warp();
+                    resultPos.X = fWarped[0];
+                    resultPos.Y = fWarped[1];
+                    if (double.IsNaN(resultPos.X) || double.IsNaN(resultPos.Y))
+                    {
+                        CursorPos err = lastPos;
+                        err.OutOfReach = true;
+                        err.OffScreen = true;
+
+                        return err;
+                    } 
+                }
+                else
                 {
                     CursorPos err = lastPos;
                     err.OutOfReach = true;
                     err.OffScreen = true;
+
                     return err;
                 }
             }
-
             else if (Settings.Default.pointer_4IRMode == "square")
             {
                 byte seenFlags = 0;
                 double Roll = Math.Atan2(wiimoteState.AccelState.Values.X, wiimoteState.AccelState.Values.Z);
+
                 for (int i = 0; i < 4; i++)
                 {
                     if (irState.IRSensors[i].Found)
@@ -458,7 +718,20 @@ namespace WiiTUIO.Provider
                     else
                         see[i] = 0;
                 }
-
+                if (Settings.Default.Debug)
+                {
+                    var sensorPointsDict = new Dictionary<int, WiimoteLib.PointF>();
+                    for (int i = 0; i < 4; i++)
+                    {
+                        // Si el punto 'i' ha sido visto o reconstruido en este frame...
+                        if ((seenFlags & (1 << i)) != 0)
+                        {
+                            // ...lo añadimos al diccionario para dibujarlo.
+                            sensorPointsDict.Add(i, finalPos[i]);
+                        }
+                    }
+                    DebugVisualizer.DrawSensorView(sensorPointsDict);
+                }
                 while ((seenFlags & 15) != 0 && (seenFlags & 15) != 15)
                 {
                     for (int i = 0; i < 4; i++)
@@ -533,13 +806,14 @@ namespace WiiTUIO.Provider
                         }
                     }
                     if ((seenFlags & 15) == 15) break;
+
                 }
 
                 pWarper.setSource(finalPos[0].X, finalPos[0].Y, finalPos[1].X, finalPos[1].Y, finalPos[2].X, finalPos[2].Y, finalPos[3].X, finalPos[3].Y);
                 float[] fWarped = pWarper.warp();
                 resultPos.X = fWarped[0];
                 resultPos.Y = fWarped[1];
-
+                
                 if (irState.IRSensors[0].Found == true && irState.IRSensors[1].Found == true && irState.IRSensors[2].Found == true && irState.IRSensors[3].Found == true)
                 {
                     median.Y = (irState.IRSensors[0].Position.Y + irState.IRSensors[1].Position.Y + irState.IRSensors[2].Position.Y + irState.IRSensors[3].Position.Y + 0.002f) / 4;
@@ -587,6 +861,7 @@ namespace WiiTUIO.Provider
                     xDistBottom = MathF.Hypot((finalPos[1].Y - finalPos[0].Y), (finalPos[1].X - finalPos[0].X));
                 }
 
+
                 // Add tilt correction
                 angle = -(MathF.Atan2(finalPos[0].Y - finalPos[1].Y, finalPos[1].X - finalPos[0].X) + MathF.Atan2(finalPos[2].Y - finalPos[3].Y, finalPos[3].X - finalPos[2].X)) / 2;
                 if (angle < 0) angle += MathF.PI * 2;
@@ -600,44 +875,45 @@ namespace WiiTUIO.Provider
                     return err;
                 }
             }
-
-            x = Convert.ToInt32((float)maxWidth * (1 - median.X) + minXPos);
-            y = Convert.ToInt32((float)maxHeight * median.Y + minYPos) + offsetY;
-
-            marginX = Math.Min(1.0, Math.Max(0.0, (1 - median.X - midMarginX) * marginBoundsX));
-            marginY = Math.Min(1.0, Math.Max(0.0, (median.Y - (marginOffsetY + midMarginX)) * marginBoundsY));
-
-            lightbarX = (resultPos.X - topLeftPt.X) * boundsX + Settings.Default.CalibrationMarginX;
-            lightbarY = (resultPos.Y - topLeftPt.Y) * boundsY + Settings.Default.CalibrationMarginY;
-
-            if (x <= 0)
+            
+            if (Settings.Default.pointer_4IRMode == "diamond")
             {
-                x = 0;
+                x = Convert.ToInt32((float)maxWidth * (resultPos.X) + minXPos);
+                y = Convert.ToInt32((float)maxHeight * resultPos.Y + minYPos) + offsetY;
             }
-            else if (x >= primaryScreen.Bounds.Width)
+            else
             {
-                x = primaryScreen.Bounds.Width - 1;
+                x = Convert.ToInt32((float)maxWidth * (1 - resultPos.X) + minXPos);
+                y = Convert.ToInt32((float)maxHeight * resultPos.Y + minYPos) + offsetY;
             }
-            if (y <= 0)
-            {
-                y = 0;
-            }
-            else if (y >= primaryScreen.Bounds.Height)
-            {
-                y = primaryScreen.Bounds.Height - 1;
-            }
+            marginX = Math.Min(1.0, Math.Max(0.0, (1 - resultPos.X - midMarginX) * marginBoundsX));
+            marginY = Math.Min(1.0, Math.Max(0.0, (resultPos.Y - (marginOffsetY + midMarginY)) * marginBoundsY));
+
+            double finalMarginX = (Settings.Default.pointer_4IRMode == "diamond") ? 0.0 : Settings.Default.CalibrationMarginX;
+            double finalMarginY = (Settings.Default.pointer_4IRMode == "diamond") ? 0.0 : Settings.Default.CalibrationMarginY;
+
+            lightbarX = (resultPos.X - topLeftPt.X) * boundsX + finalMarginX;
+            lightbarY = (resultPos.Y - topLeftPt.Y) * boundsY + finalMarginY;
+            
+
+            
+            if (x <= 0) { x = 0; }
+            else if (x >= primaryScreen.Bounds.Width) { x = primaryScreen.Bounds.Width - 1; }
+            if (y <= 0) { y = 0; }
+            else if (y >= primaryScreen.Bounds.Height) { y = primaryScreen.Bounds.Height - 1; }
 
             CursorPos result = new CursorPos(x, y, median.X, median.Y, angle,
-                marginX, marginY, lightbarX, lightbarY, width, height);
+                lightbarX, lightbarY, lightbarX, lightbarY, width, height); // Pasamos lightbarX/Y
 
             if (lightbarX < 0.0 || lightbarX > 1.0 || lightbarY < 0.0 || lightbarY > 1.0)
             {
                 result.OffScreen = true;
-                result.LightbarX = Math.Min(1.0,
-                Math.Max(0.0, lightbarX));
-                result.LightbarY = Math.Min(1.0,
-                Math.Max(0.0, lightbarY));
+                result.LightbarX = lightbarX; // Mantenemos el valor sin acotar aquí para posible debug
+                result.LightbarY = lightbarY;
             }
+
+            if (reconstructionSuccess) { result.OnScreenPoints = (PointF[])finalPos.Clone(); }
+            else if (lastPos.OnScreenPoints != null) { result.OnScreenPoints = (PointF[])lastPos.OnScreenPoints.Clone(); }
 
             lastPos = result;
             return result;

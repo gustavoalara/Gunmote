@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WiimoteLib;
 
 namespace WiiTUIO.Provider
 {
@@ -22,6 +23,8 @@ namespace WiiTUIO.Provider
         public double Height;
         public bool OffScreen;
 
+        public PointF[] OnScreenPoints;
+
         public CursorPos(int x, int y, double relativeX, double relativeY, double rotation,
             double marginX = 0.0, double marginY = 0.0, double lightbarX = 0.0, double lightbarY = 0.0, double lightbarWidth = 0.0, double lightbarHeight = 0.0)
         {
@@ -37,6 +40,8 @@ namespace WiiTUIO.Provider
             this.LightbarY = lightbarY;
             this.Width = lightbarWidth;
             this.Height = lightbarHeight;
+
+            this.OnScreenPoints = new PointF[4];
         }
     }
 }

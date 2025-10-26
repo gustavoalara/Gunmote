@@ -37,20 +37,20 @@ namespace WiiTUIO.Provider
             center[0] = (float)this.settings.CenterX;
             center[1] = (float)this.settings.CenterY;
             if (Settings.Default.pointer_4IRMode == "square")
-                setDestination(this.settings.TRled, 1.0f, // Top-Right Led  
-                               this.settings.TLled, 1.0f, // Top-Left Led
-                               this.settings.TLled, 0.0f, // Bottom-Left Led
-                               this.settings.TRled, 0.0f);// Bottom-Right Led
+                setDestination(this.settings.TRled, this.settings.OffsetYBottom,
+                               this.settings.TLled, this.settings.OffsetYBottom,
+                               this.settings.TLled, this.settings.OffsetYTop,
+                               this.settings.TRled, this.settings.OffsetYTop);
             else if (Settings.Default.pointer_4IRMode == "diamond")
-                setDestination(this.settings.DiamondRightX, 0.5f,  //Right-Center Led
-                               0.5f, this.settings.DiamondTopY,  //Bottom-Center Led
-                               this.settings.DiamondLeftX, 0.5f,  //Left-Center Led
-                               0.5f, this.settings.DiamondBottomY); //Top-Center Led 
+                setDestination(this.settings.Right, 0.5f,  //Right-Center 
+                               0.5f, this.settings.Bottom,  //Bottom-Center Led
+                               this.settings.Left, 0.5f,  //Left-Center Led 
+                               0.5f, this.settings.Top); //Top-Center Led 
         }
 
         private void SettingsChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == "Center" || e.PropertyName == "TLled" || e.PropertyName == "TRled")
+            if (e.PropertyName == "Center" || e.PropertyName == "TLled" || e.PropertyName == "TRled" || e.PropertyName == "Top" || e.PropertyName == "Bottom" || e.PropertyName == "Left" || e.PropertyName == "Right")
             {
                 setIdentity();
             }
@@ -261,5 +261,11 @@ namespace WiiTUIO.Provider
             return warpedPos;
 
         }
+        public void setCenter(float x, float y)
+        {
+            center[0] = x;
+            center[1] = y;
+        }
     }
+
 }

@@ -396,14 +396,17 @@
   <data name="insText2" xml:space="preserve">
     <value> apunta a los objetivos y pulsa A o B para calibrar</value>
   </data>
-  <data name="AimButtomRight" xml:space="preserve">
+  <data name="AimBottomRight" xml:space="preserve">
     <value>Apunte a la esquina INFERIOR DERECHA y presione A o B para calibrar</value>
   </data>
   <data name="AimCenter" xml:space="preserve">
-    <value> Apunte al objetivo CENTRAL y presione A o B para calibrar</value>
+    <value>Apunte al objetivo CENTRAL y presione A o B para calibrar
+</value>
   </data>
   <data name="AimTargets" xml:space="preserve">
-    <value> apunte a los objetivos y presione A o B para calibrar</value>
+    <value>Apunte a los objetivos y pulse A o B para calibrar
+Pulse A o B para iniciar la calibración.
+Deberá disparar varias veces a cada objetivo</value>
   </data>
   <data name="AimTopCenter" xml:space="preserve">
     <value>Apunte al objetivo SUPERIOR central y presione A o B para calibrar</value>
@@ -411,11 +414,11 @@
   <data name="AimTopLeft" xml:space="preserve">
     <value>Apunte a la esquina SUPERIOR IZQUIERDA y presione A o B para calibrar</value>
   </data>
-  <data name="AimButtomCenter" xml:space="preserve">
+  <data name="AimBottomCenter" xml:space="preserve">
     <value>Apunte al objetivo INFERIOR central y presione A o B para calibrar</value>
   </data>
   <data name="AimConfirm" xml:space="preserve">
-    <value>Presione A para confirmar la calibración, presione B para reiniciar la calibración</value>
+    <value>Presione  A para confirmar la calibración, o - para reiniciar la calibración</value>
   </data>
   <data name="AimLeftCenter" xml:space="preserve">
     <value>Apunte al objetivo IZQUIERDO central y presione A o B para calibrar</value>
@@ -437,9 +440,6 @@
   </data>
   <data name="SensorMode" xml:space="preserve">
     <value>Modo Sensor</value>
-  </data>
-  <data name="2IRCentered" xml:space="preserve">
-    <value> 2IR: Centrado</value>
   </data>
   <data name="2IRTop" xml:space="preserve">
     <value> 2IR: Arriba</value>
@@ -1043,5 +1043,22 @@
   </data>
   <data name="Restart_Message" xml:space="preserve">
     <value>El idioma ha cambiado. La aplicación se reiniciará para aplicar los cambios.</value>
+  </data>
+  <data name="AimTopRight" xml:space="preserve">
+    <value>Apunte a la esquina SUPERIOR DERECHA y presione A o B para calibrar
+</value>
+  </data>
+  <data name="AimBottomLeft" xml:space="preserve">
+    <value>Apunte a la esquina INFERIOR IZQUIERDA y presione A o B para calibrar
+</value>
+  </data>
+  <data name="shoot" xml:space="preserve">
+    <value>Disparo</value>
+  </data>
+  <data name="of" xml:space="preserve">
+    <value>de</value>
+  </data>
+  <data name="ShootsPerTarget" xml:space="preserve">
+    <value>Disparos por Diana</value>
   </data>
 </root>

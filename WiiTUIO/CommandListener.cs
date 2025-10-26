@@ -33,7 +33,7 @@ namespace WiiTUIO
         {
             while (true)
             {
-                using (NamedPipeServerStream server = new NamedPipeServerStream("Touchmote"))
+                using (NamedPipeServerStream server = new NamedPipeServerStream("Gunmote"))
                 {
                     await server.WaitForConnectionAsync();
 

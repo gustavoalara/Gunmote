@@ -136,7 +136,7 @@ namespace WiiTUIO
         {
             try
             {
-                using (var client = new NamedPipeClientStream(".", "Touchmote", PipeDirection.Out))
+                using (var client = new NamedPipeClientStream(".", "Gunmote", PipeDirection.Out))
                 {
                     client.Connect(500);
                     using (var writer = new StreamWriter(client) { AutoFlush = true })

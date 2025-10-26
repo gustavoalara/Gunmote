@@ -15,9 +15,33 @@ namespace WiiTUIO.Provider
     public class CalibrationSettings : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
+        private float _OffsetYTop = 0.0f;
+        public float OffsetYTop 
+        { 
+            get => _OffsetYTop; 
+            set 
+            { 
+                if (_OffsetYTop == value) return; 
+                _OffsetYTop = value; 
+                UpdateProfileCalibrationValue("OffsetYTop", value); 
+                OnPropertyChanged("OffsetYTop"); 
+            } 
+        }
 
+        private float _OffsetYBottom = 1.0f;
+        public float OffsetYBottom 
+        { 
+            get => _OffsetYBottom; 
+            set 
+            { 
+                if (_OffsetYBottom == value) return; 
+                _OffsetYBottom = value; 
+                UpdateProfileCalibrationValue("OffsetYBottom", value); 
+                OnPropertyChanged("OffsetYBottom"); 
+            } 
+        }
         // Propiedades de calibración específicas de la instancia del Wiimote
-        private float _Top = 0.1f;
+        private float _Top = 0.0f;
         public float Top
         {
             get => _Top;
@@ -30,7 +54,7 @@ namespace WiiTUIO.Provider
             }
         }
 
-        private float _Bottom = 0.9f;
+        private float _Bottom = 1.0f;
         public float Bottom
         {
             get => _Bottom;
@@ -43,7 +67,7 @@ namespace WiiTUIO.Provider
             }
         }
 
-        private float _Left = Settings.Default.pointer_4IRMode != "none" ? 0.1f : 0.9f;
+        private float _Left = Settings.Default.pointer_4IRMode != "none" ? 0.0f : 1.0f;
         public float Left
         {
             get => _Left;
@@ -56,7 +80,7 @@ namespace WiiTUIO.Provider
             }
         }
 
-        private float _Right = Settings.Default.pointer_4IRMode != "none" ? 1f : 0f;
+        private float _Right = Settings.Default.pointer_4IRMode != "none" ? 1.0f : 0.0f;
         public float Right
         {
             get => _Right;
@@ -121,57 +145,6 @@ namespace WiiTUIO.Provider
             }
         }
 
-        private float _DiamondRightX = 1.0f;
-        public float DiamondRightX
-        {
-            get => _DiamondRightX;
-            set
-            {
-                if (_DiamondRightX == value) return;
-                _DiamondRightX = value;
-                UpdateProfileCalibrationValue("DiamondRightX", value);
-                OnPropertyChanged("DiamondRightX");
-            }
-        }
-
-        private float _DiamondBottomY = 0.0f;
-        public float DiamondBottomY
-        {
-            get => _DiamondBottomY;
-            set
-            {
-                if (_DiamondBottomY == value) return;
-                _DiamondBottomY = value;
-                UpdateProfileCalibrationValue("DiamondBottomY", value);
-                OnPropertyChanged("DiamondBottomY");
-            }
-        }
-
-        private float _DiamondLeftX = 0.0f;
-        public float DiamondLeftX
-        {
-            get => _DiamondLeftX;
-            set
-            {
-                if (_DiamondLeftX == value) return;
-                _DiamondLeftX = value;
-                UpdateProfileCalibrationValue("DiamondLeftX", value);
-                OnPropertyChanged("DiamondLeftX");
-            }
-        }
-
-        private float _DiamondTopY = 1.0f;
-        public float DiamondTopY
-        {
-            get => _DiamondTopY;
-            set
-            {
-                if (_DiamondTopY == value) return;
-                _DiamondTopY = value;
-                UpdateProfileCalibrationValue("DiamondTopY", value);
-                OnPropertyChanged("DiamondTopY");
-            }
-        }
 
         private static string CALIBRATION_FILENAME = System.AppDomain.CurrentDomain.BaseDirectory + "CalibrationData.json";
         private static JObject _rootData; // Estático: Contiene "ActiveProfile" y "Profiles"
@@ -355,6 +328,10 @@ namespace WiiTUIO.Provider
                         }
                         // Fusionar los datos migrados en el perfil por defecto de nuestra _rootData base
                         ((JObject)_rootData["Profiles"])["Default Profile"] = defaultProfileData;
+
+                        defaultProfileData["pointer_4IRMode"] = Settings.Default.pointer_4IRMode;
+                        defaultProfileData["pointer_sensorBarPos"] = Settings.Default.pointer_sensorBarPos;
+
                         _rootData["ActiveProfile"] = "Default Profile";
                         needsSaveAfterInit = true;
                     }
@@ -403,6 +380,9 @@ namespace WiiTUIO.Provider
             if (_rootData["Profiles"]["Default Profile"] == null)
             {
                 ((JObject)_rootData["Profiles"])["Default Profile"] = new JObject();
+                ((JObject)_rootData["Profiles"])["Default Profile"]["pointer_4IRMode"] = Settings.Default.pointer_4IRMode;
+                ((JObject)_rootData["Profiles"])["Default Profile"]["pointer_sensorBarPos"] = Settings.Default.pointer_sensorBarPos;
+
                 needsSaveAfterInit = true;
             }
 
@@ -431,6 +411,9 @@ namespace WiiTUIO.Provider
             if (profiles[_staticActiveProfileName] == null) // Usar el nombre de perfil estático
             {
                 profiles[_staticActiveProfileName] = new JObject();
+                profiles[_staticActiveProfileName]["pointer_4IRMode"] = Settings.Default.pointer_4IRMode;
+                profiles[_staticActiveProfileName]["pointer_sensorBarPos"] = Settings.Default.pointer_sensorBarPos;
+
             }
             return (JObject)profiles[_staticActiveProfileName];
         }
@@ -469,8 +452,7 @@ namespace WiiTUIO.Provider
             var propertiesToLoad = new List<string>
             {
                 "Top", "Bottom", "Left", "Right",
-                "CenterX", "CenterY", "TLled", "TRled",
-                "DiamondTopY", "DiamondBottomY", "DiamondLeftX", "DiamondRightX"
+                "CenterX", "CenterY", "TLled", "TRled", "OffsetYTop", "OffsetYBottom"
             };
 
             foreach (var propertyName in propertiesToLoad)
@@ -504,7 +486,7 @@ namespace WiiTUIO.Provider
         }
 
         // Método estático para crear un nuevo perfil
-        public static void CreateNewProfile(string profileName)
+        public static void CreateNewProfile(string profileName, string pointer_4IRMode, string pointer_sensorBarPos)
         {
             Console.WriteLine($"Attempting to create new profile: {profileName}"); // Reverted to non-localized
             if (string.IsNullOrWhiteSpace(profileName))
@@ -524,7 +506,12 @@ namespace WiiTUIO.Provider
             }
 
             // Crear un nuevo perfil vacío por defecto.
-            profiles[profileName] = new JObject();
+            JObject newProfile = new JObject();
+            newProfile["pointer_4IRMode"] = pointer_4IRMode;
+            newProfile["pointer_sensorBarPos"] = pointer_sensorBarPos;
+
+            profiles[profileName] = newProfile;
+
             Console.WriteLine($"Profile '{profileName}' added to in-memory structure. _rootData content before updating ActiveProfile: {_rootData.ToString(Newtonsoft.Json.Formatting.Indented)}"); // Reverted to non-localized
 
             // Actualizar el perfil activo. Esto disparará SaveStaticRootData y OnStaticPropertyChanged.
@@ -573,7 +560,20 @@ namespace WiiTUIO.Provider
                 OnStaticPropertyChanged("AvailableProfiles"); // Notificar a la UI que la lista de perfiles ha cambiado
             }
         }
+        public static (string pointer_4IRMode, string pointer_sensorBarPos) GetLayoutForProfile(string profileName)
+        {
+            if (_rootData?["Profiles"] is JObject profiles && profiles[profileName] is JObject profileData)
+            {
+                // Si el perfil existe pero es antiguo (no tiene las claves), usará los valores por defecto.
+                string mode = profileData["pointer_4IRMode"]?.ToString() ?? "none";
+                string pos = profileData["pointer_sensorBarPos"]?.ToString() ?? "`top";
+                return (mode, pos);
+            }
 
+            // Fallback si el perfil no se encuentra (aunque no debería pasar si la lista está sincronizada)
+            // o si el perfil es antiguo.
+            return ("none", "top");
+        }
         // Dispara el evento PropertyChanged para las propiedades de instancia
         protected void OnPropertyChanged(string name)
         {

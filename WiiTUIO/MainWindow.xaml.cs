@@ -1197,7 +1197,6 @@ namespace WiiTUIO
             showLanguage();
         }
 
-        // Asegúrate de que tu método auxiliar ShowSelectAsync también usa los settings
         public Task<string> ShowSelectAsync(string title, string message, IEnumerable<string> items, MetroDialogSettings settings)
         {
             string availableOptions = string.Join(", ", items);
@@ -1206,19 +1205,9 @@ namespace WiiTUIO
 
         // **Función auxiliar ShowSelectAsync para MahApps.Metro**
         // MahApps no tiene un diálogo de selección directa, así que podemos simularlo.
-        // (Esta es una implementación simplificada. Para una real, se crearía un CustomDialog)
         public Task<string> ShowSelectAsync(string title, string message, IEnumerable<string> items)
         {
-            // Esta implementación es un ejemplo. La forma ideal es con un CustomDialog
-            // Por simplicidad, aquí usaremos el InputDialog, pidiendo al usuario que escriba
-            // o, mejor aún, crear un diálogo personalizado.
-            // Dado que crear un CustomDialog es más complejo, lo más directo es que elijas
-            // la opción que mejor se adapte a tu proyecto.
-            // Si quieres el código para un CustomDialog completo, pídemelo.
-            // Por ahora, para que funcione, podrías hacer un bucle sobre las opciones.
-
-            // Vamos a usar el ShowInputAsync y el usuario debe escribir el nombre.
-            // Es una solución intermedia.
+           
             string availableOptions = string.Join(", ", items);
             return this.ShowInputAsync(title, $"{message}\n\nOpciones: {availableOptions}");
         }

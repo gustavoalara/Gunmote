@@ -24,6 +24,7 @@ namespace WiiTUIO
 
         private string DEFAULT_JSON_FILENAME = "default.json";
         private string CALIBRATION_JSON_FILENAME = "Calibration.json";
+        private string FINISH_CALIBRATION_JSON_FILENAME = "Calibration_Preview.json";
 
         private static KeymapDatabase currentInstance;
         public static KeymapDatabase Current
@@ -192,7 +193,7 @@ namespace WiiTUIO
             allInputs.Add(new KeymapInput(KeymapInputSource.CLASSIC, "ZR", "OffScreen.Classic.ZR", false));
 
             allOutputs = new List<KeymapOutput>();
-            allOutputs.Add(new KeymapOutput(KeymapOutputType.MOUSE, tMouse, "mouse", false, false, true, false));
+            //allOutputs.Add(new KeymapOutput(KeymapOutputType.MOUSE, tMouse, "mouse", false, false, true, false));
             allOutputs.Add(new KeymapOutput(KeymapOutputType.MOUSE, tFPSMouse, "fpsmouse", false, false, true, false));
             allOutputs.Add(new KeymapOutput(KeymapOutputType.MOUSE, tLightgunMouse, "lightgunmouse", false, false, true, false));
             allOutputs.Add(new KeymapOutput(KeymapOutputType.MOUSE, tMouseLeftB, "mouseleft"));
@@ -367,7 +368,7 @@ namespace WiiTUIO
             allOutputs.Add(new KeymapOutput(KeymapOutputType.XINPUT, tBumperL, "360.bumperl"));
             allOutputs.Add(new KeymapOutput(KeymapOutputType.XINPUT, tBumperR, "360.bumperr"));
 
-            allOutputs.Add(new KeymapOutput(KeymapOutputType.CURSOR, "Cursor", "cursor", false, false, true, false));
+            //allOutputs.Add(new KeymapOutput(KeymapOutputType.CURSOR, "Cursor", "cursor", false, false, true, false));
             allOutputs.Add(new KeymapOutput(KeymapOutputType.CURSOR, "Lightgun Cursor", "lightguncursor", false, false, true, false));
             //allOutputs.Add(new KeymapOutput(KeymapOutputType.CURSOR, tPressCursor, "cursorpress"));
 
@@ -449,6 +450,20 @@ namespace WiiTUIO
             foreach (Keymap keymap in list)
             {
                 if (keymap.Filename == settings.getCalibrationKeymap())
+                {
+                    return keymap;
+                }
+            }
+            return null;
+        }
+		public Keymap getFinishCalibrationKeymap()
+        {
+            List<Keymap> list = this.getAllKeymaps();
+            KeymapSettings settings = this.getKeymapSettings();
+
+            foreach (Keymap keymap in list)
+            {
+                if (keymap.Filename == settings.getFinishCalibrationKeymap())
                 {
                     return keymap;
                 }
@@ -574,6 +589,7 @@ namespace WiiTUIO
             this.createDefaultApplicationsJSON();
             this.createDefaultKeymapJSON();
             this.createCalibrationKeymapJSON();
+            this.createFinishCalibrationKeymapJSON();
         }
 
         private static void MergeJSON(JObject receiver, JObject donor)
@@ -604,7 +620,8 @@ namespace WiiTUIO
                     new JProperty("LayoutChooser", layouts),
                     new JProperty("Applications", applications),
                     new JProperty("Default", DEFAULT_JSON_FILENAME),
-                    new JProperty("Calibration", CALIBRATION_JSON_FILENAME)
+                    new JProperty("Calibration", CALIBRATION_JSON_FILENAME),
+                    new JProperty("Calibration_Preview", FINISH_CALIBRATION_JSON_FILENAME)
                 );
 
             JObject union = applicationList;
@@ -727,7 +744,7 @@ namespace WiiTUIO
         {
             JObject buttons = new JObject();
 
-            buttons.Add(new JProperty("Pointer", "lightguncursor"));
+            buttons.Add(new JProperty("Pointer", "disable"));
 
             buttons.Add(new JProperty("A", "disable"));
 
@@ -799,6 +816,84 @@ namespace WiiTUIO
             union.Add(new JProperty("All", screen));
 
             File.WriteAllText(Settings.Default.keymaps_path + CALIBRATION_JSON_FILENAME, union.ToString()); //Prevent user from editing this
+            return union;
+        }
+    private JObject createFinishCalibrationKeymapJSON()
+        {
+            JObject buttons = new JObject();
+
+            buttons.Add(new JProperty("Pointer", "lightguncursor"));
+
+            buttons.Add(new JProperty("A", "disable"));
+
+            buttons.Add(new JProperty("B", "disable"));
+
+            buttons.Add(new JProperty("Home", "disable"));
+
+            buttons.Add(new JProperty("Left", "disable"));
+            buttons.Add(new JProperty("Right", "disable"));
+            buttons.Add(new JProperty("Up", "disable"));
+            buttons.Add(new JProperty("Down", "disable"));
+
+            buttons.Add(new JProperty("Plus", "disable"));
+
+            buttons.Add(new JProperty("Minus", "disable"));
+
+            buttons.Add(new JProperty("One", "disable"));
+
+            buttons.Add(new JProperty("Two", "disable"));
+
+            buttons.Add(new JProperty("AccelX+", "disable"));
+            buttons.Add(new JProperty("AccelX-", "disable"));
+            buttons.Add(new JProperty("AccelY+", "disable"));
+            buttons.Add(new JProperty("AccelY-", "disable"));
+            buttons.Add(new JProperty("AccelZ+", "disable"));
+            buttons.Add(new JProperty("AccelZ-", "disable"));
+
+            buttons.Add(new JProperty("Nunchuk.StickUp", "disable"));
+            buttons.Add(new JProperty("Nunchuk.StickDown", "disable"));
+            buttons.Add(new JProperty("Nunchuk.StickLeft", "disable"));
+            buttons.Add(new JProperty("Nunchuk.StickRight", "disable"));
+            buttons.Add(new JProperty("Nunchuk.C", "disable"));
+            buttons.Add(new JProperty("Nunchuk.Z", "disable"));
+
+            buttons.Add(new JProperty("Classic.Left", "disable"));
+            buttons.Add(new JProperty("Classic.Right", "disable"));
+            buttons.Add(new JProperty("Classic.Up", "disable"));
+            buttons.Add(new JProperty("Classic.Down", "disable"));
+            buttons.Add(new JProperty("Classic.StickLUp", "disable"));
+            buttons.Add(new JProperty("Classic.StickLDown", "disable"));
+            buttons.Add(new JProperty("Classic.StickLLeft", "disable"));
+            buttons.Add(new JProperty("Classic.StickLRight", "disable"));
+            buttons.Add(new JProperty("Classic.StickRUp", "disable"));
+            buttons.Add(new JProperty("Classic.StickRDown", "disable"));
+            buttons.Add(new JProperty("Classic.StickRLeft", "disable"));
+            buttons.Add(new JProperty("Classic.StickRRight", "disable"));
+            buttons.Add(new JProperty("Classic.Minus", "disable"));
+            buttons.Add(new JProperty("Classic.Plus", "disable"));
+            buttons.Add(new JProperty("Classic.Home", "disable"));
+            buttons.Add(new JProperty("Classic.Y", "disable"));
+            buttons.Add(new JProperty("Classic.X", "disable"));
+            buttons.Add(new JProperty("Classic.A", "disable"));
+            buttons.Add(new JProperty("Classic.B", "disable"));
+            buttons.Add(new JProperty("Classic.TriggerL", "disable"));
+            buttons.Add(new JProperty("Classic.TriggerR", "disable"));
+            buttons.Add(new JProperty("Classic.L", "disable"));
+            buttons.Add(new JProperty("Classic.R", "disable"));
+            buttons.Add(new JProperty("Classic.ZL", "disable"));
+            buttons.Add(new JProperty("Classic.ZR", "disable"));
+
+            JObject screen = new JObject();
+
+            screen.Add(new JProperty("OnScreen", buttons));
+
+            JObject union = new JObject();
+
+            union.Add(new JProperty("Title", "Calibration_Preview"));
+
+            union.Add(new JProperty("All", screen));
+
+            File.WriteAllText(Settings.Default.keymaps_path + FINISH_CALIBRATION_JSON_FILENAME, union.ToString()); //Prevent user from editing this
             return union;
         }
     }

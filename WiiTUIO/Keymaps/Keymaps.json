@@ -4,13 +4,10 @@
       "Title": "Default",
       "Keymap": "default.json"
     },
-    {
-      "Title": "Mouse",
-      "Keymap": "mouse.json"
-    },
   ],
   "Applications": [
   ],
   "Default": "default.json",
-  "Calibration": "Calibration.json"
+  "Calibration": "Calibration.json",
+  "Calibration_Preview": "Calibration_Preview.json"
 }

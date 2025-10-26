@@ -105,7 +105,8 @@ namespace WiiTUIO
             this.spLayoutList.Children.Clear();
             foreach (Keymap keymap in allKeymaps)
             {
-                if (keymap.Filename != KeymapDatabase.Current.getKeymapSettings().getCalibrationKeymap()) //Hide calibration keymap from config window
+                if (keymap.Filename != KeymapDatabase.Current.getKeymapSettings().getCalibrationKeymap() &&
+                        keymap.Filename != KeymapDatabase.Current.getKeymapSettings().getFinishCalibrationKeymap()) //Hide calibration keymap from config window
                 {
                     bool active = this.currentKeymap.Filename == keymap.Filename;
                     bool defaultk = keymap.Filename == KeymapDatabase.Current.getKeymapSettings().getDefaultKeymap();

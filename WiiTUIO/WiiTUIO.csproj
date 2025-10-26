@@ -211,6 +211,7 @@
     <Compile Include="ArcadeHook\IniFileHandler.cs" />
     <Compile Include="ArcadeHook\OutputProvider.cs" />
     <Compile Include="Autostart.cs" />
+    <Compile Include="DebugVisualizer.cs" />
     <Compile Include="LanguageSelectorUC.xaml.cs">
       <DependentUpon>LanguageSelectorUC.xaml</DependentUpon>
     </Compile>
@@ -309,6 +310,7 @@
     <Compile Include="SubPanel.cs" />
     <Compile Include="SystemProcessMonitor.cs" />
     <Compile Include="UIHelpers.cs" />
+    <Compile Include="WiiMotePairing.cs" />
     <Compile Include="WiimoteStatus.xaml.cs">
       <DependentUpon>WiimoteStatus.xaml</DependentUpon>
     </Compile>
@@ -430,9 +432,6 @@
     <None Include="app.config" />
     <None Include="app.manifest">
       <SubType>Designer</SubType>
-    </None>
-    <None Include="Keymaps\mouse.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Keymaps\Keymaps.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

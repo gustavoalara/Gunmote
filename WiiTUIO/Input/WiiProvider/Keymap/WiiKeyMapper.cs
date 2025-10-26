@@ -153,6 +153,8 @@ namespace WiiTUIO.Provider
 
         public CalibrationSettings settings;
 
+        public WiiKeyMap ActiveKeyMap => KeyMap;
+
         public WiiKeyMapper(Wiimote wiimote, int wiimoteID, HandlerFactory handlerFactory, string serial = null)
         {
             this.WiimoteID = wiimoteID;
@@ -321,7 +323,6 @@ namespace WiiTUIO.Provider
             this.applicationKeymap = null;
             this.setKeymap(this.calibrationKeymap);
         }
-
         void homeButtonTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
             if (isButtonPressed(ButtonFlag.Minus) && !OverlayWindow.Current.OverlayIsOn()) //Prevent calibration overlay from loading if on keymap overlay

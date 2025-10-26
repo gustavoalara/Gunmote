@@ -9,9 +9,6 @@
         <Label Content="{loc:Localization AimConfig}" FontFamily="Segoe UI Light" FontSize="18" Canvas.Left="73" Canvas.Top="10"/>
         <Label Content="{loc:Localization SensorMode}" FontFamily="Segoe UI Semilight" HorizontalAlignment="Right" Canvas.Left="150" Canvas.Top="53" VerticalAlignment="Center" />
         <ComboBox Name="SBPositionComboBox" HorizontalAlignment="Left" Height="24" VerticalAlignment="Top" Width="110" SelectionChanged="SBPositionComboBox_SelectionChanged" FontFamily="Segoe UI Semilight" Canvas.Left="233" Canvas.Top="53">
-            <ComboBoxItem Name="cbiCenter">
-                <Run Text="{loc:Localization 2IRCentered}"/>
-            </ComboBoxItem>
             <ComboBoxItem Name="cbiTop">
                 <Run Text="{loc:Localization 2IRTop}"/>
             </ComboBoxItem>

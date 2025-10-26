@@ -70,15 +70,6 @@ namespace WiiTUIO.Resources {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a  2IR: Centered.
-        /// </summary>
-        internal static string _2IRCentered {
-            get {
-                return ResourceManager.GetString("2IRCentered", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Busca una cadena traducida similar a  2IR: Top.
         /// </summary>
         internal static string _2IRTop {
@@ -126,23 +117,33 @@ namespace WiiTUIO.Resources {
         /// <summary>
         ///   Busca una cadena traducida similar a Aim at the BOTTOM center target and press A or B to calibrate..
         /// </summary>
-        internal static string AimButtomCenter {
+        internal static string AimBottomCenter {
             get {
-                return ResourceManager.GetString("AimButtomCenter", resourceCulture);
+                return ResourceManager.GetString("AimBottomCenter", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a Point to the LOWER RIGHT corner and press A or B to calibrate..
+        ///   Busca una cadena traducida similar a Aim to the LOWER LEFT corner and press A or B to calibrate..
         /// </summary>
-        internal static string AimButtomRight {
+        internal static string AimBottomLeft {
             get {
-                return ResourceManager.GetString("AimButtomRight", resourceCulture);
+                return ResourceManager.GetString("AimBottomLeft", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a  Aim at the CENTRAL target and press A or B to calibrate..
+        ///   Busca una cadena traducida similar a Aim to the LOWER RIGHT corner and press A or B to calibrate..
+        /// </summary>
+        internal static string AimBottomRight {
+            get {
+                return ResourceManager.GetString("AimBottomRight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Aim at CENTER target and press A or B to calibrate.
+        ///.
         /// </summary>
         internal static string AimCenter {
             get {
@@ -160,7 +161,7 @@ namespace WiiTUIO.Resources {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a Press A to confirm calibration, press B to reset calibration.
+        ///   Busca una cadena traducida similar a Press A to confirm calibration, press - to reset calibration.
         /// </summary>
         internal static string AimConfirm {
             get {
@@ -187,7 +188,9 @@ namespace WiiTUIO.Resources {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a  aim at targets and press A or B to calibrate.
+        ///   Busca una cadena traducida similar a Aim at targets and press A or B to calibrate.
+        ///Press A or B to start calibration.
+        ///You’ll need to shoot each target several times..
         /// </summary>
         internal static string AimTargets {
             get {
@@ -205,11 +208,20 @@ namespace WiiTUIO.Resources {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a Point to the TOP LEFT corner and press A or B to calibrate..
+        ///   Busca una cadena traducida similar a Aim to the TOP LEFT corner and press A or B to calibrate..
         /// </summary>
         internal static string AimTopLeft {
             get {
                 return ResourceManager.GetString("AimTopLeft", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Aim to the TOP RIGHT corner and press A or B to calibrate..
+        /// </summary>
+        internal static string AimTopRight {
+            get {
+                return ResourceManager.GetString("AimTopRight", resourceCulture);
             }
         }
         
@@ -817,6 +829,15 @@ namespace WiiTUIO.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a of.
+        /// </summary>
+        internal static string of {
+            get {
+                return ResourceManager.GetString("of", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a One Wiimote connected.
         /// </summary>
         internal static string OneWiimoteConnected {
@@ -1290,6 +1311,24 @@ namespace WiiTUIO.Resources {
         internal static string ShakeTitle {
             get {
                 return ResourceManager.GetString("ShakeTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Shoot.
+        /// </summary>
+        internal static string shoot {
+            get {
+                return ResourceManager.GetString("shoot", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Shoots Per Target.
+        /// </summary>
+        internal static string ShootsPerTarget {
+            get {
+                return ResourceManager.GetString("ShootsPerTarget", resourceCulture);
             }
         }
         

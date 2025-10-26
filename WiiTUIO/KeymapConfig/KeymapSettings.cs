@@ -36,6 +36,10 @@ namespace WiiTUIO
         {
             return this.jsonObj.GetValue("Calibration").ToString();
         }
+		public string getFinishCalibrationKeymap()
+        {
+            return this.jsonObj.GetValue("Calibration_Preview").ToString();
+        }
 
         public void addToLayoutChooser(Keymap keymap)
         {

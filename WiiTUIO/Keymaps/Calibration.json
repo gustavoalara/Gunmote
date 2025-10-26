@@ -2,7 +2,7 @@
 	"Title": "Calibration",
 	"All": {
 		"OnScreen": {
-			"Pointer": "lightgunmouse",
+			"Pointer": "disable",
 			"A": "disable",
 			"B": "disable",
 			"Home": "disable",

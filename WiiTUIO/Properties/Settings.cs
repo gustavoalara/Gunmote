@@ -749,6 +749,27 @@ namespace WiiTUIO.Properties
                 OnPropertyChanged("DefaultLanguage");
             }
         }
+        private bool _Debug = false;
+        public bool Debug
+        {
+            get { return _Debug; }
+            set
+            {
+                _Debug = value;
+                OnPropertyChanged("Debug");
+            }
+        }
+
+        private int _ShootsPerTarget = 3;
+        public int ShootsPerTarget
+        {
+            get { return _ShootsPerTarget; }
+            set
+            {
+                _ShootsPerTarget = value;
+                OnPropertyChanged("ShootsPerTarget");
+            }
+        }
 
     }
 

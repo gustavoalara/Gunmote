@@ -396,14 +396,16 @@
   <data name="insText2" xml:space="preserve">
     <value>apunteu als objectius i premeu A o B per calibrar</value>
   </data>
-  <data name="AimButtomRight" xml:space="preserve">
+  <data name="AimBottomRight" xml:space="preserve">
     <value>Apunteu a la cantonada INFERIOR DRETA i premeu A o B per calibrar</value>
   </data>
   <data name="AimCenter" xml:space="preserve">
     <value>Apunteu a l'objectiu CENTRAL i premeu A o B per calibrar</value>
   </data>
   <data name="AimTargets" xml:space="preserve">
-    <value>apunteu als objectius i premeu A o B per calibrar</value>
+    <value>Apunta als objectius i prem A o B per calibrar.
+Prem A o B per iniciar la calibració.
+Hauràs de disparar diverses vegades a cada objectiu.</value>
   </data>
   <data name="AimTopCenter" xml:space="preserve">
     <value>Apunteu a l'objectiu SUPERIOR central i premeu A o B per calibrar</value>
@@ -411,11 +413,11 @@
   <data name="AimTopLeft" xml:space="preserve">
     <value>Apunteu a la cantonada SUPERIOR ESQUERRA i premeu A o B per calibrar</value>
   </data>
-  <data name="AimButtomCenter" xml:space="preserve">
+  <data name="AimBottomCenter" xml:space="preserve">
     <value>Apunteu a l'objectiu INFERIOR central i premeu A o B per calibrar</value>
   </data>
   <data name="AimConfirm" xml:space="preserve">
-    <value>Premeu A per confirmar la calibratge, premeu B per reiniciar la calibratge</value>
+    <value>Premeu A per confirmar la calibratge, premeu - per reiniciar la calibratge</value>
   </data>
   <data name="AimLeftCenter" xml:space="preserve">
     <value>Apunteu a l'objectiu ESQUERRÀ central i premeu A o B per calibrar</value>
@@ -437,9 +439,6 @@
   </data>
   <data name="SensorMode" xml:space="preserve">
     <value>Mode Sensor</value>
-  </data>
-  <data name="2IRCentered" xml:space="preserve">
-    <value>2IR: Centrat</value>
   </data>
   <data name="2IRTop" xml:space="preserve">
     <value>2IR: Amunt</value>
@@ -1043,5 +1042,22 @@
   </data>
   <data name="Restart_Message" xml:space="preserve">
     <value>El idioma ha canviat. L'aplicació es reiniciarà per aplicar els canvis.</value>
+  </data>
+  <data name="AimTopRight" xml:space="preserve">
+    <value>Apunteu a la cantonada SUPERIOR DRET i premeu A o B per calibrar
+</value>
+  </data>
+  <data name="AimBottomLeft" xml:space="preserve">
+    <value>Apunteu a la cantonada INFERIOR  ESQUERRÀ i premeu A o B per calibrar
+</value>
+  </data>
+  <data name="shoot" xml:space="preserve">
+    <value>Dispar</value>
+  </data>
+  <data name="of" xml:space="preserve">
+    <value>de</value>
+  </data>
+  <data name="ShootsPerTarget" xml:space="preserve">
+    <value>Dispars per Diana</value>
   </data>
 </root>
