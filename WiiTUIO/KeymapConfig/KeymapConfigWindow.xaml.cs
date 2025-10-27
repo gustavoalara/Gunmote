@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -13,6 +14,8 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using Microsoft.Win32; // +++ AÑADIDO: Necesario para OpenFileDialog
+using System.ComponentModel; // +++ AÑADIDO: Necesario para INotifyPropertyChanged
 
 namespace WiiTUIO
 {
@@ -45,7 +48,35 @@ namespace WiiTUIO
                 return defaultInstance;
             }
         }
+        private void BrowseHookAppEntry_Click(object sender, RoutedEventArgs e)
+        {
+            FrameworkElement element = sender as FrameworkElement;
+            if (element == null) return;
 
+            HookApplicationViewModel.HookAppDataItem item = element.Tag as HookApplicationViewModel.HookAppDataItem;
+            if (item == null) return;
+
+            // Configurar el diálogo para buscar archivos .exe
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Title = "Seleccionar ejecutable"; // Puedes localizar esta cadena si lo deseas
+            openFileDialog.Filter = "Aplicaciones ejecutables (*.exe)|*.exe|Todos los archivos (*.*)|*.*";
+            openFileDialog.FilterIndex = 1;
+            openFileDialog.RestoreDirectory = true;
+
+            // Mostrar el diálogo
+            if (openFileDialog.ShowDialog() == true)
+            {
+                // Obtener solo el nombre del archivo (ej. "mame.exe")
+                string fileName = System.IO.Path.GetFileName(openFileDialog.FileName);
+
+                // Asignar el nombre al SearchString.
+                // La UI se actualizará gracias a INotifyPropertyChanged
+                item.SearchString = fileName;
+
+                // Asegurarse de que el cambio se guarde en la base de datos de keymap
+                hookAppVM.UpdateKeymapDatabase(this.currentKeymap);
+            }
+        }
         public KeymapConfigWindow()
         {
             hookAppVM = new HookApplicationViewModel();
@@ -490,16 +521,25 @@ namespace WiiTUIO
 
     public class HookApplicationViewModel
     {
-        public class HookAppDataItem
+        public class HookAppDataItem : INotifyPropertyChanged
         {
+            public event PropertyChangedEventHandler PropertyChanged;
+            protected void OnPropertyChanged(string name)
+            {
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+            }
             private string searchString;
             public string SearchString
             {
                 get => searchString;
                 set
                 {
+                    // --- MODIFICADO: Añadida comprobación y notificación ---
+                    if (searchString == value) return; // Evitar notificaciones innecesarias
                     searchString = value;
                     Placeholder = false;
+                    OnPropertyChanged("SearchString"); // ¡Notificar a la UI!
+                    // --- FIN DE LA MODIFICACIÓN ---
                 }
             }
 

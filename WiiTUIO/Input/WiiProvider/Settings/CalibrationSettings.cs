@@ -436,6 +436,7 @@ namespace WiiTUIO.Provider
             JObject currentProfile = GetOrCreateCurrentProfileJObject();
             JObject wiimoteData = (JObject)currentProfile[_wiimoteID]; // Intenta obtener los datos del Wiimote específico
 
+            bool needsSave = false;
             // Si no se encuentran datos para el Wiimote específico,
             // se inicializará con los valores por defecto de C# y se creará una nueva entrada en el JSON.
             if (wiimoteData == null)
@@ -443,6 +444,7 @@ namespace WiiTUIO.Provider
                 Console.WriteLine($"Wiimote ID '{_wiimoteID}' not found in active profile '{_staticActiveProfileName}'. Initializing with default C# values.");
                 currentProfile[_wiimoteID] = new JObject(); // Crea un JObject vacío para este Wiimote específico
                 wiimoteData = (JObject)currentProfile[_wiimoteID]; // Apunta wiimoteData al objeto vacío recién creado
+                needsSave = true;
             }
             else
             {
@@ -473,8 +475,14 @@ namespace WiiTUIO.Provider
                         var defaultValue = propertyInfo.GetValue(this);
                         wiimoteData[propertyName] = JToken.FromObject(defaultValue);
                         Console.WriteLine($"Property '{propertyName}' not found for Wiimote ID '{_wiimoteID}'. Using C# default and adding to JSON.");
+                        needsSave = true;
                     }
                 }
+            }
+            if (needsSave)
+            {
+                SaveCalibrationData();
+                Console.WriteLine($"Saving new Wiimote ID '{_wiimoteID}' and/or default values to profile '{_staticActiveProfileName}'.");
             }
         }
 

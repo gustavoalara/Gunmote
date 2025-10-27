@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Windows;
 using System.Windows.Forms;
@@ -240,11 +241,18 @@ namespace WiiTUIO.Provider
 
 
             }
-            else // Para square y none
+            /*else if (Settings.Default.pointer_4IRMode == "none")
             {
                 boundsX = (1 - Settings.Default.CalibrationMarginX * 2) / (bottomRightPt.X - topLeftPt.X);
                 boundsY = (1 - Settings.Default.CalibrationMarginY * 2) / (bottomRightPt.Y - topLeftPt.Y);
-            } 
+            }*/
+            else if (Settings.Default.pointer_4IRMode == "square" || Settings.Default.pointer_4IRMode == "none")
+            {
+                boundsX = 1 / (bottomRightPt.X - topLeftPt.X);
+                boundsY = 1 / (bottomRightPt.Y - topLeftPt.Y);
+                //boundsX = (Math.Abs(bottomRightPt.X - topLeftPt.X) > double.Epsilon) ? 1.0 / (bottomRightPt.X - topLeftPt.X) : 0;
+                //boundsY = (Math.Abs(bottomRightPt.Y - topLeftPt.Y) > double.Epsilon) ? 1.0 / (bottomRightPt.Y - topLeftPt.Y) : 0;
+            }
         }
 
         public CursorPos CalculateCursorPos(WiimoteState wiimoteState)
@@ -348,7 +356,7 @@ namespace WiiTUIO.Provider
 
                     angle = Math.Atan2(dy, dx);
 
-                    
+
                     median.X = median.X - 0.5F;
                     median.Y = median.Y - 0.5F;
 
@@ -356,7 +364,7 @@ namespace WiiTUIO.Provider
 
                     median.X = median.X + 0.5F;
                     median.Y = median.Y + 0.5F;
-                    
+
                     lastIrPoint1 = irPoint1;
                     lastIrPoint2 = irPoint2;
                 }
@@ -371,7 +379,7 @@ namespace WiiTUIO.Provider
 
                     return err;
                 }
-                
+
                 if (Properties.Settings.Default.pointer_sensorBarPos == "top")
                 {
                     offsetY = -SBPositionOffset;
@@ -382,7 +390,31 @@ namespace WiiTUIO.Provider
                     offsetY = SBPositionOffset;
                     marginOffsetY = -CalcMarginOffsetY;
                 }
-                
+                if (Settings.Default.Debug)
+                {
+                    PointF[] debugDisplayPos = new PointF[4];
+                    var sensorPointsDict = new Dictionary<int, WiimoteLib.PointF>();
+
+                    // 2. Copiar los datos invirtiendo el eje X.
+                    for (int i = 0; i < 4; i++)
+                    {
+                        debugDisplayPos[i] = new PointF
+                        {
+                            // Invertimos el eje X (asumiendo coordenadas normalizadas de 0.0 a 1.0)
+                            X = 1.0f - finalPos[i].X,
+                            // El eje Y se mantiene igual.
+                            Y = finalPos[i].Y
+                        };
+                        
+                            // ...lo añadimos al diccionario para dibujarlo.
+                            sensorPointsDict.Add(i, finalPos[i]);
+                        
+                    }
+
+                    // 3. Dibujar el rombo de debug con la copia invertida.
+                    //DebugVisualizer.DrawRhombus(debugDisplayPos);
+                    DebugVisualizer.DrawSensorView(sensorPointsDict);
+                }
                 resultPos = median;
             }
             else if (Settings.Default.pointer_4IRMode == "diamond")
@@ -686,7 +718,7 @@ namespace WiiTUIO.Provider
                         err.OffScreen = true;
 
                         return err;
-                    } 
+                    }
                 }
                 else
                 {
@@ -813,7 +845,7 @@ namespace WiiTUIO.Provider
                 float[] fWarped = pWarper.warp();
                 resultPos.X = fWarped[0];
                 resultPos.Y = fWarped[1];
-                
+
                 if (irState.IRSensors[0].Found == true && irState.IRSensors[1].Found == true && irState.IRSensors[2].Found == true && irState.IRSensors[3].Found == true)
                 {
                     median.Y = (irState.IRSensors[0].Position.Y + irState.IRSensors[1].Position.Y + irState.IRSensors[2].Position.Y + irState.IRSensors[3].Position.Y + 0.002f) / 4;
@@ -875,7 +907,7 @@ namespace WiiTUIO.Provider
                     return err;
                 }
             }
-            
+
             if (Settings.Default.pointer_4IRMode == "diamond")
             {
                 x = Convert.ToInt32((float)maxWidth * (resultPos.X) + minXPos);
@@ -889,11 +921,15 @@ namespace WiiTUIO.Provider
             marginX = Math.Min(1.0, Math.Max(0.0, (1 - resultPos.X - midMarginX) * marginBoundsX));
             marginY = Math.Min(1.0, Math.Max(0.0, (resultPos.Y - (marginOffsetY + midMarginY)) * marginBoundsY));
 
-            double finalMarginX = (Settings.Default.pointer_4IRMode == "diamond") ? 0.0 : Settings.Default.CalibrationMarginX;
-            double finalMarginY = (Settings.Default.pointer_4IRMode == "diamond") ? 0.0 : Settings.Default.CalibrationMarginY;
+            double finalMarginX = 0;
+            double finalMarginY = 0;
+            /*if (Settings.Default.pointer_4IRMode == "none")
+            {       finalMarginX = Settings.Default.CalibrationMarginX;
+                    finalMarginY = Settings.Default.CalibrationMarginY;
+            }*/
 
-            lightbarX = (resultPos.X - topLeftPt.X) * boundsX + finalMarginX;
-            lightbarY = (resultPos.Y - topLeftPt.Y) * boundsY + finalMarginY;
+            lightbarX = (resultPos.X - topLeftPt.X) * boundsX;
+            lightbarY = (resultPos.Y - topLeftPt.Y) * boundsY;
             
 
             

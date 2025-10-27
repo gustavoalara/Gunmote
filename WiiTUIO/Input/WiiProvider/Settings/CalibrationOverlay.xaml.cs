@@ -460,15 +460,14 @@ namespace WiiTUIO.Provider
                 tlBackup = this.keyMapper.settings.TLled;
                 trBackup = this.keyMapper.settings.TRled;
 
-                if (Settings.Default.pointer_4IRMode == "square" || Settings.Default.pointer_4IRMode == "diamond")
-                {
-                    this.keyMapper.settings.Top = 0.0f;
-                    this.keyMapper.settings.Bottom = 1.0f;
-                    this.keyMapper.settings.Left = 0.0f;
-                    this.keyMapper.settings.Right = 1.0f;
-                    this.keyMapper.settings.OffsetYTop = 0.0f;
-                    this.keyMapper.settings.OffsetYBottom = 1.0f;
-                }
+                
+                this.keyMapper.settings.Top = 0.0f;
+                this.keyMapper.settings.Bottom = 1.0f;
+                this.keyMapper.settings.Left = 0.0f;
+                this.keyMapper.settings.Right = 1.0f;
+                this.keyMapper.settings.OffsetYTop = 0.0f;
+                this.keyMapper.settings.OffsetYBottom = 1.0f;
+                
 
                 Dispatcher.BeginInvoke(new Action(delegate ()
                 {
@@ -604,21 +603,7 @@ namespace WiiTUIO.Provider
                 if (step == -1)
                 {
                     // Logic moved from StartCalibration to here. This shows the FIRST target.
-                    if (Settings.Default.pointer_4IRMode == "none")
-                    {
-                        Dispatcher.BeginInvoke(new Action(delegate ()
-                        {
-                            this.movePoint(1 - marginXBackup, 1 - marginYBackup); // Bottom Right Corner
-                            this.insText2.Text = AimBottomRight;
-                            this.TextBorder.UpdateLayout();
-                            this.TextBorder.SetValue(Canvas.LeftProperty, 0.5 * this.ActualWidth - (this.TextBorder.ActualWidth / 2));
-                            this.TextBorder.SetValue(Canvas.TopProperty, 0.25 * this.ActualHeight - (this.TextBorder.ActualHeight / 2));
-                        }), null);
-                        step = 1;
-                    }
-                    else if (Settings.Default.pointer_4IRMode == "square" || Settings.Default.pointer_4IRMode == "diamond")
-                    {
-                        Dispatcher.BeginInvoke(new Action(delegate ()
+                    Dispatcher.BeginInvoke(new Action(delegate ()
                         {
                             this.movePoint(0.5, 0.5); // Center
                             this.CalibrationPoint.Visibility = Visibility.Hidden;
@@ -628,7 +613,6 @@ namespace WiiTUIO.Provider
                             this.TextBorder.SetValue(Canvas.TopProperty, 0.25 * this.ActualHeight - (this.TextBorder.ActualHeight / 2));
                         }), null);
                         step = 0; // Step 0 for center
-                    }
                     return;
                 }
             }
@@ -650,21 +634,7 @@ namespace WiiTUIO.Provider
                 {
                     // Restart calibration based on mode
                     this.keyMapper.SwitchToCalibration();
-                    if (Settings.Default.pointer_4IRMode == "none")
-                    {
-                        Dispatcher.BeginInvoke(new Action(delegate ()
-                        {
-                            this.movePoint(1 - marginXBackup, 1 - marginYBackup); // Return to first point of 'none' mode
-                            this.insText2.Text = AimBottomRight;
-                            this.TextBorder.UpdateLayout();
-                            this.TextBorder.SetValue(Canvas.LeftProperty, 0.5 * this.ActualWidth - (this.TextBorder.ActualWidth / 2));
-                            this.TextBorder.SetValue(Canvas.TopProperty, 0.25 * this.ActualHeight - (this.TextBorder.ActualHeight / 2));
-                        }), null);
-                        step = 1;
-                    }
-                    else if (Settings.Default.pointer_4IRMode == "square" || Settings.Default.pointer_4IRMode == "diamond")
-                    {
-                        Dispatcher.BeginInvoke(new Action(delegate ()
+                    Dispatcher.BeginInvoke(new Action(delegate ()
                         {
                             this.movePoint(0.5, 0.5); // Return to center
                             this.insText2.Text = AimCenter;
@@ -673,7 +643,6 @@ namespace WiiTUIO.Provider
                             this.TextBorder.SetValue(Canvas.TopProperty, 0.25 * this.ActualHeight - (this.TextBorder.ActualHeight / 2));
                         }), null);
                         step = 0;
-                    }
                     this.currentShotCount = 0;
                     this.currentTargetShots.Clear();
                 }
@@ -686,7 +655,7 @@ namespace WiiTUIO.Provider
                 // Contamos cuántos sensores están activos
                 int foundSensors = irState.IRSensors.Count(sensor => sensor.Found);
 
-                if (foundSensors < 3)
+                if ((Settings.Default.pointer_4IRMode != "none" && foundSensors < 3) || Settings.Default.pointer_4IRMode == "none" && foundSensors <2)
                 {
                     // No hay suficientes sensores, mostrar error y no contar el disparo
                     Dispatcher.BeginInvoke(new Action(delegate ()
@@ -780,26 +749,20 @@ namespace WiiTUIO.Provider
 
             switch (step)
             {
-                case 0: // Center Capture (Square, Diamond)
-                    if (Settings.Default.pointer_4IRMode == "square" || Settings.Default.pointer_4IRMode == "diamond")
-                    {
-                        // Usamos los promedios
-                        this.keyMapper.settings.CenterX = (float)avgRelativeX;
-                        this.keyMapper.settings.CenterY = (float)avgRelativeY - avgPitchOffsetY;
+                case 0: // Center Capture 
+                    
+                    // Usamos los promedios
+                    this.keyMapper.settings.CenterX = (float)avgRelativeX;
+                    this.keyMapper.settings.CenterY = (float)avgRelativeY - avgPitchOffsetY;
 
-                        Console.WriteLine($"DEBUG: Mostrando Width = {captWidth}");
-                        Console.WriteLine($"DEBUG: Mostrando Height = {captHeight}");
-                        Console.WriteLine($"DEBUG: Mostrando CenterX = {this.keyMapper.settings.CenterX}");
-                        Console.WriteLine($"DEBUG: Mostrando CenterY = {this.keyMapper.settings.CenterY}");
-                    }
+                    Console.WriteLine($"DEBUG: Mostrando Width = {captWidth}");
+                    Console.WriteLine($"DEBUG: Mostrando Height = {captHeight}");
+                    Console.WriteLine($"DEBUG: Mostrando CenterX = {this.keyMapper.settings.CenterX}");
+                    Console.WriteLine($"DEBUG: Mostrando CenterY = {this.keyMapper.settings.CenterY}");
+                    
                     break;
                 case 1:
-                    if (Settings.Default.pointer_4IRMode == "none") //BOTTOM-RIGHT
-                    {
-                        this.keyMapper.settings.Bottom = (float)avgRelativeY;
-                        this.keyMapper.settings.Right = 1.0f - (float)avgRelativeX;
-                    }
-                    else if (Settings.Default.pointer_4IRMode == "square") //BOTTOM-RIGHT
+                    if (Settings.Default.pointer_4IRMode == "square" || Settings.Default.pointer_4IRMode == "none") //BOTTOM-RIGHT
                     {
                         captRight = 1.0 - avgRelativeX;
                         captBottom = avgRelativeY - avgPitchOffsetY;
@@ -812,12 +775,7 @@ namespace WiiTUIO.Provider
                     }
                     break;
                 case 2:
-                    if (Settings.Default.pointer_4IRMode == "none") //TOP-LEFT
-                    {
-                        this.keyMapper.settings.Top = (float)avgRelativeY - avgPitchOffsetY;
-                        this.keyMapper.settings.Left = (float)avgRelativeX;
-                    }
-                    else if (Settings.Default.pointer_4IRMode == "square") //TOP-LEFT
+                    if (Settings.Default.pointer_4IRMode == "square" || Settings.Default.pointer_4IRMode == "none") //TOP-LEFT
                     {
                         captLeft = 1.0 - avgRelativeX;
                         captTop = avgRelativeY - avgPitchOffsetY;
@@ -832,7 +790,7 @@ namespace WiiTUIO.Provider
                     {
                         captLeft = 1.0 - avgRelativeX;
                     }
-                    else if (Settings.Default.pointer_4IRMode == "square") //TOP-RIGHT
+                    else if (Settings.Default.pointer_4IRMode == "square" || Settings.Default.pointer_4IRMode == "none") //TOP-RIGHT
                     {
                         // La lógica de promediar los promedios se mantiene
                         captRight = ((captRight + (1.0 - avgRelativeX))) / 2;
@@ -844,7 +802,7 @@ namespace WiiTUIO.Provider
                     {
                         captRight = 1.0 - avgRelativeX;
                     }
-                    else if (Settings.Default.pointer_4IRMode == "square") //Bottom-Left
+                    else if (Settings.Default.pointer_4IRMode == "square" || Settings.Default.pointer_4IRMode == "none") //Bottom-Left
                     {
                         captLeft = ((captLeft + (1.0 - avgRelativeX))) / 2;
                         captBottom = ((captBottom + avgRelativeY - avgPitchOffsetY)) / 2;
@@ -889,6 +847,19 @@ namespace WiiTUIO.Provider
                         this.keyMapper.settings.OffsetYTop = (float)OffsetYTop;
                         this.keyMapper.settings.OffsetYBottom = (float)OffsetYBottom;
                     }
+                    else if (Settings.Default.pointer_4IRMode == "none")
+                    {
+                        this.keyMapper.settings.TLled = (float)(this.keyMapper.settings.CenterX - (captWidth / 2.0));
+                        this.keyMapper.settings.TRled = (float)(this.keyMapper.settings.CenterX + (captWidth / 2.0));
+                        this.keyMapper.settings.OffsetYTop = (float)OffsetYTop;
+                        this.keyMapper.settings.OffsetYBottom = (float)OffsetYBottom;
+                        this.keyMapper.settings.Top = (float)captTop;
+                        this.keyMapper.settings.Bottom = (float)captBottom;
+                        this.keyMapper.settings.Left = 1.0f - (float)captLeft;
+                        this.keyMapper.settings.Right = 1.0f - (float)captRight;
+                        //this.keyMapper.settings.CenterX = 0.5f;
+                        //this.keyMapper.settings.CenterY = 0.5f;
+                    }
                     this.keyMapper.loadKeyMap("Calibration_Preview.json");
                     break;
                 default: break;
@@ -899,7 +870,7 @@ namespace WiiTUIO.Provider
             switch (step)
             {
                 case 0: // Acabamos de procesar el Centro
-                    if (Settings.Default.pointer_4IRMode == "square")
+                    if (Settings.Default.pointer_4IRMode == "square" || Settings.Default.pointer_4IRMode == "none")
                     {
                         Dispatcher.BeginInvoke(new Action(delegate ()
                         {
@@ -927,20 +898,7 @@ namespace WiiTUIO.Provider
                     }
                     break;
                 case 1: // Acabamos de procesar BR o Top-Center
-                    if (Settings.Default.pointer_4IRMode == "none")
-                    {
-                        Dispatcher.BeginInvoke(new Action(delegate ()
-                        {
-                            this.movePoint(marginXBackup, marginYBackup);
-                            this.CalibrationPoint.Visibility = Visibility.Visible;
-                            this.insText2.Text = AimTopLeft;
-                            this.TextBorder.UpdateLayout();
-                            this.TextBorder.SetValue(Canvas.LeftProperty, 0.5 * this.ActualWidth - (this.TextBorder.ActualWidth / 2));
-                            this.TextBorder.SetValue(Canvas.TopProperty, 0.25 * this.ActualHeight - (this.TextBorder.ActualHeight / 2));
-                        }), null);
-                        step = 2;
-                    }
-                    if (Settings.Default.pointer_4IRMode == "square")
+                    if (Settings.Default.pointer_4IRMode == "square" || Settings.Default.pointer_4IRMode == "none")
                     {
                         Dispatcher.BeginInvoke(new Action(delegate ()
                         {
@@ -968,20 +926,8 @@ namespace WiiTUIO.Provider
                     }
                     break;
                 case 2: // Acabamos de procesar TL o Bottom-Center
-                    if (Settings.Default.pointer_4IRMode == "none")
-                    {
-                        Dispatcher.BeginInvoke(new Action(delegate ()
-                        {
-                            this.CalibrationPoint.Visibility = Visibility.Hidden; // Hide target
-                            this.wiimoteNo.Text = null;
-                            this.insText2.Text = AimConfirm;
-                            this.TextBorder.UpdateLayout();
-                            this.TextBorder.SetValue(Canvas.LeftProperty, 0.5 * this.ActualWidth - (this.TextBorder.ActualWidth / 2));
-                            this.TextBorder.SetValue(Canvas.TopProperty, 0.25 * this.ActualHeight - (this.TextBorder.ActualHeight / 2));
-                        }), null);
-                        step = 5; // Go directly to unified confirmation step
-                    }
-                    else if (Settings.Default.pointer_4IRMode == "square")
+                    
+                    if (Settings.Default.pointer_4IRMode == "square" || Settings.Default.pointer_4IRMode == "none")
                     {
                         Dispatcher.BeginInvoke(new Action(delegate ()
                         {
@@ -1022,7 +968,7 @@ namespace WiiTUIO.Provider
                         }), null);
                         step = 4;
                     }
-                    else if (Settings.Default.pointer_4IRMode == "square")
+                    else if (Settings.Default.pointer_4IRMode == "square" || Settings.Default.pointer_4IRMode == "none")
                     {
                         Dispatcher.BeginInvoke(new Action(delegate ()
                         {
@@ -1037,8 +983,6 @@ namespace WiiTUIO.Provider
                     }
                     break;
                 case 4: // Acabamos de procesar BL o Right-Center (ÚLTIMO PUNTO)
-                    if (Settings.Default.pointer_4IRMode == "diamond" || Settings.Default.pointer_4IRMode == "square")
-                    {
                         Dispatcher.BeginInvoke(new Action(delegate ()
                         {
                             this.CalibrationPoint.Visibility = Visibility.Hidden; // Hide target
@@ -1049,7 +993,6 @@ namespace WiiTUIO.Provider
                             this.TextBorder.SetValue(Canvas.TopProperty, 0.25 * this.ActualHeight - (this.TextBorder.ActualHeight / 2));
                         }), null);
                         step = 5; // Go directly to unified confirmation step
-                    }
                     break;
                 default: break;
             }

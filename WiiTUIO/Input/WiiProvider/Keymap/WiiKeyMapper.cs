@@ -159,6 +159,9 @@ namespace WiiTUIO.Provider
         {
             this.WiimoteID = wiimoteID;
             serial = serial ?? this.WiimoteID.ToString();
+
+
+
             this.settings = new CalibrationSettings(serial);
             this.outputHandlers = handlerFactory.getOutputHandlers(this.WiimoteID);
             foreach (IOutputHandler handler in outputHandlers)

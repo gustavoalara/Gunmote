@@ -75,18 +75,28 @@
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
                                         <DockPanel>
+                                            
                                             <Rectangle Cursor="Hand" Width="16" Height="16" Fill="Gray" Tag="{Binding}" MouseUp="RemoveHookAppEntry" VerticalAlignment="Center" DockPanel.Dock="Right" Margin="8,0,0,0">
                                                 <Rectangle.OpacityMask>
                                                     <VisualBrush Visual="{StaticResource appbar_close}" Stretch="UniformToFill" />
                                                 </Rectangle.OpacityMask>
                                             </Rectangle>
-
+                                            
                                             <Rectangle Cursor="Hand" Width="16" Height="16" Fill="Gray" Tag="{Binding}" MouseUp="AddHookAppEntry" VerticalAlignment="Center" DockPanel.Dock="Right" Margin="8,0,0,0">
                                                 <Rectangle.OpacityMask>
                                                     <VisualBrush Visual="{StaticResource appbar_add}" Stretch="UniformToFill" />
                                                 </Rectangle.OpacityMask>
                                             </Rectangle>
-
+                                            <Button Content="..." 
+                                                Cursor="Hand" 
+                                                Tag="{Binding}" 
+                                                Click="BrowseHookAppEntry_Click" 
+                                                VerticalAlignment="Center" 
+                                                DockPanel.Dock="Right" 
+                                                Margin="4,0,0,0" 
+                                                Padding="5,0"
+                                                FontFamily="Segoe UI Semilight"
+                                                FontSize="12"/>
                                             <TextBox Text="{Binding SearchString,UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semilight" FontSize="12" Padding="2,1" Margin="6,3,6,6"
                                                 Foreground="{Binding BrushColor}" Tag="{Binding}" LostFocus="HookApp_TextBox_LostFocus" KeyUp="HookApp_TextBox_KeyUp">
                                             </TextBox>
