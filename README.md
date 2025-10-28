@@ -65,6 +65,18 @@ If you would like to help translate into new languages, there are some Excel fil
 
 Release History
 ==============
+**v1.0 beta 34**<br />
+- 2IR now is working again and uses the new calibration system
+- Consolidated Wiimote serial number in calibration profiles for 2IR mode as well
+- Added executable search when linking an application
+- Several other improvements in the calibration code
+- Added sample inis for ArcadeHook
+
+**v1.0 beta 33**<br />
+- Total rework on the calibration system. The system now detects automatically the LED position, screens size, etc. and it's not needed manually reconfiguring parameters. Now it uses 5 shoots for any led arrangement and shows the LEDs and shape detected by the wiimote camera
+- Now new profiles are linked to the selected LED arrangement when created 
+- Internal code cleanup and improvement
+  
 **v1.0 beta 32**<br />
 - Added the ability to display the system monitors in the monitor selection dropdown within the advanced settings screen. For now, this makes the overlays move to the selected screen (including the cursor and cursor lightgun modes). The mouse and mouse lightgun modes remain on the screen where the IR LEDs are located
   
