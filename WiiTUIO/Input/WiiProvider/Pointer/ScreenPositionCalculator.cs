@@ -286,7 +286,7 @@ namespace WiiTUIO.Provider
                         irPoint2 = lastIrPoint2;
                     }
                 }
-
+                
                 // If no midpoint found from previous points, check all available
                 // IR points for a possible midpoint
                 for (int i = 0; !foundMidpoint && i < irState.IRSensors.Count(); i++)
@@ -305,14 +305,50 @@ namespace WiiTUIO.Provider
                         }
                     }
                 }
+                if (Settings.Default.Debug)
+                {
+                    var sensorPointsDict = new Dictionary<int, WiimoteLib.PointF>();
 
+                    // Añadimos los dos puntos que hemos determinado que forman la barra
+                    if (irState.IRSensors[irPoint1].Found)
+                    {
+                        sensorPointsDict.Add(irPoint1, irState.IRSensors[irPoint1].Position);
+                    }
+                    if (irState.IRSensors[irPoint2].Found)
+                    {
+                        sensorPointsDict.Add(irPoint2, irState.IRSensors[irPoint2].Position);
+                    }
+
+                    // Opcional: Añadir también cualquier OTRO punto que se esté viendo,
+                    // para que el debug sea completo.
+                    for (int k = 0; k < irState.IRSensors.Count(); k++)
+                    {
+                        if (k != irPoint1 && k != irPoint2 && irState.IRSensors[k].Found)
+                        {
+                            if (!sensorPointsDict.ContainsKey(k))
+                            {
+                                sensorPointsDict.Add(k, irState.IRSensors[k].Position);
+                            }
+                        }
+                    }
+
+                    // Invertimos el eje X para la visualización, ya que el modo "none" lo invierte al final
+                    var invertedSensorPoints = new Dictionary<int, PointF>();
+                    foreach (var entry in sensorPointsDict)
+                    {
+                        invertedSensorPoints.Add(entry.Key, new PointF { X = 1.0f - entry.Value.X, Y = entry.Value.Y });
+                    }
+
+                    DebugVisualizer.DrawSensorView(invertedSensorPoints);
+                }
                 if (foundMidpoint)
                 {
                     int i = irPoint1;
                     int j = irPoint2;
                     median.X = (irState.IRSensors[i].Position.X + irState.IRSensors[j].Position.X) / 2.0f;
                     median.Y = (irState.IRSensors[i].Position.Y + irState.IRSensors[j].Position.Y) / 2.0f;
-
+                    
+                    
                     smoothedX = smoothedX * 0.9f + wiimoteState.AccelState.RawValues.X * 0.1f;
                     smoothedZ = smoothedZ * 0.9f + wiimoteState.AccelState.RawValues.Z * 0.1f;
 
@@ -389,31 +425,6 @@ namespace WiiTUIO.Provider
                 {
                     offsetY = SBPositionOffset;
                     marginOffsetY = -CalcMarginOffsetY;
-                }
-                if (Settings.Default.Debug)
-                {
-                    PointF[] debugDisplayPos = new PointF[4];
-                    var sensorPointsDict = new Dictionary<int, WiimoteLib.PointF>();
-
-                    // 2. Copiar los datos invirtiendo el eje X.
-                    for (int i = 0; i < 4; i++)
-                    {
-                        debugDisplayPos[i] = new PointF
-                        {
-                            // Invertimos el eje X (asumiendo coordenadas normalizadas de 0.0 a 1.0)
-                            X = 1.0f - finalPos[i].X,
-                            // El eje Y se mantiene igual.
-                            Y = finalPos[i].Y
-                        };
-                        
-                            // ...lo añadimos al diccionario para dibujarlo.
-                            sensorPointsDict.Add(i, finalPos[i]);
-                        
-                    }
-
-                    // 3. Dibujar el rombo de debug con la copia invertida.
-                    //DebugVisualizer.DrawRhombus(debugDisplayPos);
-                    DebugVisualizer.DrawSensorView(sensorPointsDict);
                 }
                 resultPos = median;
             }

@@ -539,14 +539,11 @@ namespace WiiTUIO.Provider
 
         private void finishedCalibration()
         {
-            // Only save Settings.Default if mode is not "none", as only 4IRMode modifies them
-            if (Settings.Default.pointer_4IRMode != "none")
-            {
-                // If square, save Settings so CenterX, CenterY, TLled, TRled changes persist
-                // and restored calibration margins.
-                Settings.Default.Debug = wasDebugActiveBeforeCalibration;
-                Settings.Default.Save();
-            }
+            
+            
+            Settings.Default.Debug = wasDebugActiveBeforeCalibration;
+            Settings.Default.Save();
+            
             // None and diamond modes don't need Settings.Default.Save() here
             // as their relevant properties are saved in WiimoteSettings.SaveCalibrationData()
 

@@ -15,7 +15,6 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using Microsoft.Win32; // +++ AÑADIDO: Necesario para OpenFileDialog
-using System.ComponentModel; // +++ AÑADIDO: Necesario para INotifyPropertyChanged
 
 namespace WiiTUIO
 {

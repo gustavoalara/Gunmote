@@ -247,7 +247,7 @@ namespace WiiTUIO.Properties
             }
         }
 
-        private string _pointer_sensorBarPos = "center";
+        private string _pointer_sensorBarPos = "top";
         public string pointer_sensorBarPos
         {
             get { return _pointer_sensorBarPos; }
@@ -414,7 +414,7 @@ namespace WiiTUIO.Properties
             }
         }
 
-        private double _CalibrationMarginX = 0.05625;
+        private double _CalibrationMarginX = 0.0;
         public double CalibrationMarginX
         {
             get => _CalibrationMarginX;
@@ -426,7 +426,7 @@ namespace WiiTUIO.Properties
             }
         }
 
-        private double _CalibrationMarginY = 0.1;
+        private double _CalibrationMarginY = 0.0;
         public double CalibrationMarginY
         {
             get => _CalibrationMarginY;
