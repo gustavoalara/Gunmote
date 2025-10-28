@@ -73,7 +73,7 @@ Release History
 - Added sample inis for ArcadeHook
 
   **v1.0 beta 33**<br />
-- Total rework on the calibration system. Now it uses 5 shoots for any led arrangement and shows the LEDs and shape detected by the wiimote camera
+- Total rework on the calibration system. The system detects automatically the LED position, screens size, etc. and it's not needed to manually reconfiguring parameters. Now it uses 5 shoots for any led arrangement and shows the LEDs and shape detected by the wiimote camera
 - Now new profiles are linked to the selected LED arrangement when created 
 - Internal code cleanup and improvement
   
