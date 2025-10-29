@@ -163,7 +163,7 @@
     <value>GunMote ermöglicht es, einen oder mehrere Wiimotes als Lightgun-Gerät und Gamepad zu nutzen. </value>
   </data>
   <data name="TouchmoteAbout2" xml:space="preserve">
-    <value>Dank an Symphax für diese wunderbare Anwendung, die unseren Wiimotes neues Leben eingehaucht hat, an Ryochan für seine Verbesserungen und Suegrini für die 4-IR-LED-Funktion für mehr Präzision. Diese Version setzt die Arbeit fort und verbessert die diamantförmige Anordnung der IR-LEDs. </value>
+    <value>Vielen Dank an Symphax für die Entwicklung dieser wunderbaren Anwendung, die unseren Wiimotes ein zweites Leben geschenkt hat, an Ryochan für seine Verbesserungen und an Suegrini für die Hinzufügung der Möglichkeit, 4 IR-LEDs für eine höhere Präzision zu verwenden. Diese Version setzt diese Arbeit fort und fügt viele neue Verbesserungen hinzu.</value>
   </data>
   <data name="TrayBalloonTip" xml:space="preserve">
     <value>Zum Bearbeiten der GunMote-Parameter drücken </value>
