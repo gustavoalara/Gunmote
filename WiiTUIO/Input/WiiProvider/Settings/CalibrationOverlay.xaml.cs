@@ -441,7 +441,7 @@ namespace WiiTUIO.Provider
                 }), null);
 
                 // --- BACKUP CURRENT VALUES AND PREPARE FOR EACH MODE ---
-                // Always backup basic top, bottom, left, right settings
+                
                 topBackup = this.keyMapper.settings.Top;
                 bottomBackup = this.keyMapper.settings.Bottom;
                 leftBackup = this.keyMapper.settings.Left;
@@ -450,23 +450,26 @@ namespace WiiTUIO.Provider
                 centerYBackup = this.keyMapper.settings.CenterY;
                 offsetYTopBackup = this.keyMapper.settings.OffsetYTop;
                 offsetYBottomBackup = this.keyMapper.settings.OffsetYBottom;
+                tlBackup = this.keyMapper.settings.TLled;
+                trBackup = this.keyMapper.settings.TRled;
 
                 // Capture backup of margins here, as they are used in "none" and restored in "square" if canceled.
                 marginXBackup = Settings.Default.CalibrationMarginX;
                 marginYBackup = Settings.Default.CalibrationMarginY;
 
-                // BACKUP for SQUARE mode
 
-                tlBackup = this.keyMapper.settings.TLled;
-                trBackup = this.keyMapper.settings.TRled;
-
-                
+                // Default values
                 this.keyMapper.settings.Top = 0.0f;
                 this.keyMapper.settings.Bottom = 1.0f;
                 this.keyMapper.settings.Left = 0.0f;
                 this.keyMapper.settings.Right = 1.0f;
                 this.keyMapper.settings.OffsetYTop = 0.0f;
                 this.keyMapper.settings.OffsetYBottom = 1.0f;
+                this.keyMapper.settings.CenterX = 0.5f;
+                this.keyMapper.settings.CenterY = 0.5f;
+                this.keyMapper.settings.TLled = 0.23f;
+                this.keyMapper.settings.TRled = 0.77f;
+                
                 
 
                 Dispatcher.BeginInvoke(new Action(delegate ()
