@@ -118,76 +118,76 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AdvConfigTitle" xml:space="preserve">
-    <value>Configurazione avanzata                                                                                                             </value>
+    <value>Configurazione avanzata</value>
   </data>
   <data name="Battery" xml:space="preserve">
-    <value>Batteria:                                                                                                                           </value>
+    <value>Batteria:</value>
   </data>
   <data name="Connected" xml:space="preserve">
-    <value>Connesso                                                                                                                            </value>
+    <value>Connesso</value>
   </data>
   <data name="ConnectOnStart" xml:space="preserve">
-    <value>Connetti all'avvio                                                                                                                  </value>
+    <value>Connetti all'avvio</value>
   </data>
   <data name="DisconnectWiimotesOnDolphin" xml:space="preserve">
-    <value>Disconnetti Wiimote all'avvio di Dolphin                                                                                            </value>
+    <value>Disconnetti Wiimote all'avvio di Dolphin</value>
   </data>
   <data name="DolphinPath" xml:space="preserve">
-    <value>Percorso Dolphin:                                                                                                                   </value>
+    <value>Percorso Dolphin:</value>
   </data>
   <data name="GlobalConf" xml:space="preserve">
-    <value>Configurazione generale                                                                                                             </value>
+    <value>Configurazione generale</value>
   </data>
   <data name="Configuración de Keymaps:" xml:space="preserve">
-    <value>Configurazione Keymaps:                                                                                                             </value>
+    <value>Configurazione Keymaps:</value>
   </data>
   <data name="KeymapsPath" xml:space="preserve">
-    <value>Percorso Keymaps:                                                                                                                   </value>
+    <value>Percorso Keymaps:</value>
   </data>
   <data name="menuExit" xml:space="preserve">
-    <value>Esci                                                                                                                                </value>
+    <value>Esci </value>
   </data>
   <data name="NotificationsEnabled" xml:space="preserve">
-    <value>Notifiche attivate                                                                                                                  </value>
+    <value>Notifiche attivate</value>
   </data>
   <data name="NoTopmost" xml:space="preserve">
-    <value>Non tenere la finestra sempre in primo piano                                                                                        </value>
+    <value>Non tenere la finestra sempre in primo piano</value>
   </data>
   <data name="PrimaryMonitor" xml:space="preserve">
-    <value>Monitor principale:                                                                                                                 </value>
+    <value>Monitor principale:</value>
   </data>
   <data name="SaveAndReboot" xml:space="preserve">
-    <value>Salva e riavvia GunMote                                                                                                           </value>
+    <value>Salva e riavvia GunMote</value>
   </data>
   <data name="TouchmoteAbout1" xml:space="preserve">
-    <value>GunMote permette a uno o più Wiimote di comportarsi come dispositivo Lightgun e gamepad.                                       </value>
+    <value>GunMote permette a uno o più Wiimote di comportarsi come dispositivo Lightgun e gamepad.</value>
   </data>
   <data name="TouchmoteAbout2" xml:space="preserve">
     <value>Grazie a Symphax per aver creato questa fantastica applicazione che ha dato una seconda vita ai nostri Wiimote, a Ryochan per i suoi miglioramenti e a Suegrini per aver aggiunto la possibilità di utilizzare 4 LED IR per una maggiore precisione. Questa versione continua quel lavoro e aggiunge molti nuovi miglioramenti.</value>
   </data>
   <data name="TrayBalloonTip" xml:space="preserve">
-    <value>Premi per modificare i parametri di GunMote                                                                                       </value>
+    <value>Premi per modificare i parametri di GunMote</value>
   </data>
   <data name="AutoDisconnectTimeout" xml:space="preserve">
-    <value>Timeout disconnessione automatica (ms):                                                                                             </value>
+    <value>Timeout disconnessione automatica (ms):</value>
   </data>
   <data name="DefaultContinousScale" xml:space="preserve">
-    <value>Scala continua predefinita:                                                                                                         </value>
+    <value>Scala continua predefinita:</value>
   </data>
   <data name="DefaultContinousPressThreshold" xml:space="preserve">
-    <value>Soglia pressione continua predefinita:                                                                                              </value>
+    <value>Soglia pressione continua predefinita:</value>
   </data>
   <data name="DefaultContinousDeadzone" xml:space="preserve">
-    <value>Zona morta continua predefinita:                                                                                                    </value>
+    <value>Zona morta continua predefinita:</value>
   </data>
   <data name="PointerConfigHeaderText" xml:space="preserve">
-    <value>Configurazione puntatore                                                                                                            </value>
+    <value>Configurazione puntatore</value>
   </data>
   <data name="PointerSensorBarPosCompensation" xml:space="preserve">
-    <value>Compensazione posizione SensorBar:                                                                                                  </value>
+    <value>Compensazione posizione SensorBar:</value>
   </data>
   <data name="PointerCursorSize" xml:space="preserve">
-    <value>Dimensione cursore puntatore:                                                                                                       </value>
+    <value>Dimensione cursore puntatore:</value>
   </data>
   <data name="PointerMarginsTopBottom" xml:space="preserve">
     <value>Margini superiore/inferiore puntatore:                                                                                              </value>
