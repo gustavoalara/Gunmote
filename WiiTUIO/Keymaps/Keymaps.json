@@ -1,13 +1,16 @@
 {
+  "Applications": [],
+  "Default": "default.json",
+  "Calibration": "Calibration.json",
+  "Calibration_Preview": "Calibration_Preview.json",
   "LayoutChooser": [
     {
       "Title": "Default",
       "Keymap": "default.json"
     },
-  ],
-  "Applications": [
-  ],
-  "Default": "default.json",
-  "Calibration": "Calibration.json",
-  "Calibration_Preview": "Calibration_Preview.json"
+    {
+      "Title": "Gamepad (xinput)",
+      "Keymap": "z_custom.json"
+    }
+  ]
 }

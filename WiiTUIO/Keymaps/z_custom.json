@@ -1,0 +1,27 @@
+{
+  "Title": "Gamepad (xinput)",
+  "All": {
+    "OnScreen": {
+      "Pointer": "360.stickl-light",
+      "A": "360.a",
+      "B": "360.b",
+      "Home": "360.guide",
+      "Left": "360.left",
+      "Right": "360.right",
+      "Up": "360.up",
+      "Down": "360.down",
+      "Minus": "360.back",
+      "Plus": "360.start",
+      "One": "360.x",
+      "Two": "360.y",
+      "Shake": "disable",
+      "Nunchuk.C": "360.triggerr",
+      "Nunchuk.Z": "360.bumperr",
+      "Nunchuk.StickDown": "360.stickrdown",
+      "Nunchuk.StickUp": "360.stickrup",
+      "Nunchuk.StickRight": "360.stickrright",
+      "Nunchuk.StickLeft": "360.stickrleft",
+      "Nunchuk.Shake": "disable"
+    }
+  }
+}

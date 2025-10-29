@@ -124,7 +124,7 @@
     <value>Batterie :</value>
   </data>
   <data name="Connected" xml:space="preserve">
-    <value>Connecté </value>
+    <value>Connecté</value>
   </data>
   <data name="ConnectOnStart" xml:space="preserve">
     <value>Connecter au démarrage</value>

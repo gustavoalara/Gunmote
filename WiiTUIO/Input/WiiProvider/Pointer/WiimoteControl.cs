@@ -128,23 +128,32 @@ namespace WiiTUIO.Provider
 
         private void ArcadeHook_OnOutput(string key, string value)
         {
-            int val = int.Parse(value);
+            
+            int val = 0; // Inicializamos a 0 por defecto
+            bool isNumeric = int.TryParse(value, out val); // Intentamos convertir y guardamos el resultado
             try
             {
                 switch (key)
                 {
                     case "Rumble":
-                        WiiKeyMap_OnRumble(val > 0);
+                        if (isNumeric)
+                            WiiKeyMap_OnRumble(val > 0);
                         break;
                     case "LED":
-                        WiimoteMutex.WaitOne();
-                        this.Wiimote.SetLEDs(val == 1, val == 2, val == 3, val == 4);
-                        WiimoteMutex.ReleaseMutex();
+                        if (isNumeric)
+                        {
+                            WiimoteMutex.WaitOne();
+                            this.Wiimote.SetLEDs(val == 1, val == 2, val == 3, val == 4);
+                            WiimoteMutex.ReleaseMutex();
+                        }
                         break;
                     case "LEDFill":
-                        WiimoteMutex.WaitOne();
-                        this.Wiimote.SetLEDs(val >= 1, val >= 2, val >= 3, val >= 4);
-                        WiimoteMutex.ReleaseMutex();
+                        if (isNumeric)
+                        {
+                            WiimoteMutex.WaitOne();
+                            this.Wiimote.SetLEDs(val >= 1, val >= 2, val >= 3, val >= 4);
+                            WiimoteMutex.ReleaseMutex();
+                        }
                         break;
                     case "Sound":
                         WiiKeyMap_OnSpeaker(value);

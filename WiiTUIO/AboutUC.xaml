@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             mc:Ignorable="d" d:DesignWidth="423.278" Height="308"
+             mc:Ignorable="d" d:DesignWidth="423.278" Height="384"
              xmlns:loc="clr-namespace:WiiTUIO">
     <UserControl.Resources>
         <ResourceDictionary>
@@ -29,6 +29,15 @@
         </Label>
         <TextBlock Canvas.Left="81" TextWrapping="Wrap" Canvas.Top="83" Height="54" Width="292" FontFamily="Segoe UI Semilight" Text="{loc:Localization TouchmoteAbout1}" HorizontalAlignment="Center" VerticalAlignment="Top"/>
         <TextBlock Canvas.Left="81" TextWrapping="Wrap" Canvas.Top="145" Height="129" Width="292" FontFamily="Segoe UI Semilight" HorizontalAlignment="Center" VerticalAlignment="Top" Text="{loc:Localization TouchmoteAbout2}"/>
-
+                <TextBlock Canvas.Left="81" TextWrapping="Wrap" Canvas.Top="261" Height="23" Width="292" FontFamily="Segoe UI Semilight" HorizontalAlignment="Center" VerticalAlignment="Top">
+            <Hyperlink NavigateUri="https://github.com/gustavoalara/Gunmote/wiki" RequestNavigate="Hyperlink_RequestNavigate">
+                https://github.com/gustavoalara/Gunmote
+            </Hyperlink>
+        </TextBlock>
+        <TextBlock Canvas.Left="81" TextWrapping="Wrap" Canvas.Top="284" Height="23" Width="292" FontFamily="Segoe UI Semilight" HorizontalAlignment="Center" VerticalAlignment="Top">
+            <Hyperlink NavigateUri="https://github.com/gustavoalara/Gunmote/wiki" RequestNavigate="Hyperlink_RequestNavigate">
+                https://github.com/gustavoalara/Gunmote/wiki
+            </Hyperlink>
+        </TextBlock>
     </Canvas>
 </UserControl>

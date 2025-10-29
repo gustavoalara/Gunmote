@@ -2,77 +2,30 @@
   "Title": "Default",
   "All": {
     "OnScreen": {
-      "Pointer": [
-        "360.stickl-light",
-        "lightgunmouse"
-      ],
-      "B": [
-        "360.a",
-        "mouseleft"
-      ],
-      "Home": [
-        "360.guide",
-        "escape"
-      ],
-      "Left": [
-        "360.left",
-        "left",
-        "vk_a"
-      ],
-      "Right": [
-        "360.right",
-        "right",
-        "vk_d"
-      ],
-      "Up": [
-        "360.up",
-        "up",
-        "vk_w"
-      ],
-      "Down": [
-        "360.down",
-        "down",
-        "vk_s"
-      ],
-      "Plus": [
-        "360.start",
-        "vk_5",
-        "space"
-      ],
+      "Pointer": "lightgunmouse",
+      "A": "mouseright",
+      "B": "mouseleft",
+      "Home": "escape",
+      "Left": "left",
+      "Right": "right",
+      "Up": "up",
+      "Down": "down",
+      "Plus": "vk_1",
+      "Minus": "vk_5",
+      "One": "mousemiddle",
+      "Two": "mousexbutton1",
       "AccelX+": "disable",
       "AccelX-": "disable",
       "AccelY+": "disable",
       "AccelY-": "disable",
       "AccelZ+": "disable",
       "AccelZ-": "disable",
-      "Nunchuk.StickUp": [
-        "360.stickrup",
-        "up",
-        "vk_w"
-      ],
-      "Nunchuk.StickDown": [
-        "360.stickrdown",
-        "down",
-        "vk_s"
-      ],
-      "Nunchuk.StickLeft": [
-        "360.stickrleft",
-        "left",
-        "vk_a"
-      ],
-      "Nunchuk.StickRight": [
-        "360.stickrright",
-        "right",
-        "vk_d"
-      ],
-      "Nunchuk.C": [
-        "360.back",
-        "mouseright"
-      ],
-      "Nunchuk.Z": [
-        "360.a",
-        "mouseleft"
-      ],
+      "Nunchuk.StickUp": "up",
+      "Nunchuk.StickDown": "down",
+      "Nunchuk.StickLeft": "left",
+      "Nunchuk.StickRight": "right",
+      "Nunchuk.C": "mouseright",
+      "Nunchuk.Z": "mouseleft",
       "Classic.Left": "360.Left",
       "Classic.Right": "360.Right",
       "Classic.Up": "360.Up",
@@ -98,49 +51,24 @@
       "Classic.R": "disable",
       "Classic.ZL": "360.BumperL",
       "Classic.ZR": "360.BumperR",
-      "PointerX+": "Deshabilitada",
-      "PointerY-": "Deshabilitada",
-      "PointerY+": "Deshabilitada",
-      "Extension": "Deshabilitada",
-      "Nunchuk.Rotation+": "Deshabilitada",
-      "Nunchuk.Rotation-": "Deshabilitada",
-      "Nunchuk.AccelX-": "Deshabilitada",
-      "Nunchuk.AccelX+": "Deshabilitada",
-      "Nunchuk.AccelY-": "Deshabilitada",
-      "Nunchuk.AccelY+": "Deshabilitada",
-      "Nunchuk.AccelZ-": "Deshabilitada",
-      "Nunchuk.AccelZ+": "Deshabilitada",
-      "PointerX-": "Deshabilitada",
-      "Shake": [
-        "360.back",
-        "mouseright"
-      ],
-      "Nunchuk.Shake": [
-        "Deshabilitada",
-        "mouseright"
-      ],
-      "Minus": [
-        "360.back",
-        "vk_1"
-      ],
-      "A": [
-        "360.b",
-        "mouseright"
-      ],
-      "One": [
-        "360.x",
-        "mousemiddle"
-      ],
-      "Two": [
-        "360.y",
-        "mousexbutton1"
-      ]
+      "PointerX+": "disable",
+      "PointerY-": "disable",
+      "PointerY+": "disable",
+      "Extension": "disable",
+      "Nunchuk.Rotation+": "disable",
+      "Nunchuk.Rotation-": "disable",
+      "Nunchuk.AccelX-": "disable",
+      "Nunchuk.AccelX+": "disable",
+      "Nunchuk.AccelY-": "disable",
+      "Nunchuk.AccelY+": "disable",
+      "Nunchuk.AccelZ-": "disable",
+      "Nunchuk.AccelZ+": "disable",
+      "PointerX-": "disable",
+      "Nunchuk.Shake": "mouseright",
+      "Shake": "mouseright"
     },
     "OffScreen": {
-      "B": [
-        "360.b",
-        "mouseright"
-      ]
+      "B": "mouseright"
     }
   }
 }

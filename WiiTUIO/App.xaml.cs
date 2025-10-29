@@ -62,7 +62,7 @@ namespace WiiTUIO
                 else
                 {
                     // Si no hay argumentos (y no es un reinicio), significa que se lanzó una segunda instancia normal.
-                    MessageBox.Show("Touchmote is already running. Look for it in the taskbar.");
+                    MessageBox.Show("Gunmote is already running. Look for it in the taskbar.");
                 }
                 Application.Current.Shutdown(220);
             }

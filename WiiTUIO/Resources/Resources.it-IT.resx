@@ -298,10 +298,10 @@
     <value>Configurazione colori ID Wiimote                                                                                                    </value>
   </data>
   <data name="ColorID1" xml:space="preserve">
-    <value>Colore ID 1 (R, G, B):                                                                                                              </value>
+    <value>Colore ID 1 (R, G, B):                                                                      </value>
   </data>
   <data name="ColorID2" xml:space="preserve">
-    <value>Colore ID 2 (R, G, B):                                                                                                              </value>
+    <value>Colore ID 2 (R, G, B):                                                                   </value>
   </data>
   <data name="ColorID3" xml:space="preserve">
     <value>Colore ID 3 (R, G, B):                                                                                                              </value>
@@ -397,11 +397,10 @@
     <value>punta ai bersagli e premi A o B per calibrare                                                                                       </value>
   </data>
   <data name="AimBottomRight" xml:space="preserve">
-    <value>Punta all'angolo INFERIORE DESTRO e premi A o B per calibrare                                                                       </value>
+    <value>Punta all'angolo INFERIORE DESTRO e premi A o B per calibrare                                </value>
   </data>
   <data name="AimCenter" xml:space="preserve">
-    <value>Punta al bersaglio CENTRALE  e premi A o B per calibrare                                                                    
-</value>
+    <value>Punta al bersaglio CENTRALE  e premi A o B per calibrare</value>
   </data>
   <data name="AimTargets" xml:space="preserve">
     <value>Mira ai bersagli e premi A o B per calibrare.
@@ -415,10 +414,10 @@ Dovrai sparare più volte a ogni bersaglio.</value>
     <value>Punta all'angolo SUPERIORE SINISTRO e premi A o B per calibrare                                                                     </value>
   </data>
   <data name="AimBottomCenter" xml:space="preserve">
-    <value>Punta al bersaglio CENTRALE INFERIORE e premi A o B per calibrare                                                                   </value>
+    <value>Punta al bersaglio CENTRALE INFERIORE e premi A o B per calibrare        </value>
   </data>
   <data name="AimConfirm" xml:space="preserve">
-    <value>Premi A per confermare la calibrazione, premi - per resettare la calibrazione                                                       </value>
+    <value>Premi A per confermare la calibrazione, premi - per resettare la calibrazione </value>
   </data>
   <data name="AimLeftCenter" xml:space="preserve">
     <value>Punta al bersaglio CENTRALE SINISTRO e premi A o B per calibrare                                                                    </value>
@@ -436,7 +435,7 @@ Dovrai sparare più volte a ogni bersaglio.</value>
     <value>Rilascia                                                                                                                            </value>
   </data>
   <data name="AimConfig" xml:space="preserve">
-    <value>Configurazione puntamento                                                                                                           </value>
+    <value>Configurazione puntamento                                                                </value>
   </data>
   <data name="SensorMode" xml:space="preserve">
     <value>Modalità sensore                                                                                                                    </value>
