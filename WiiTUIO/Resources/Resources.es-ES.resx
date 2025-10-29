@@ -163,7 +163,7 @@
     <value>GunMote proporciona una manera de actuar a uno o varios Wiimotes como dispositivo Lightgun y gamepad.</value>
   </data>
   <data name="TouchmoteAbout2" xml:space="preserve">
-    <value>Gracias a Symphax por la creación de esta maravillosa aplicación que le ha dado una segunda vida a nuestros Wiimotes, a Ryochan por sus mejoras y a Suegrini por añadir la capacidad de usar 4 IR LEDS para mayor precisión. Esta versión continúa ese trabajo y añade mejoras a la disposición en diamante de los IR LEDs .</value>
+    <value>Gracias a Symphax por la creación de esta maravillosa aplicación que le ha dado una segunda vida a nuestros Wiimotes, a Ryochan por sus mejoras y a Suegrini por añadir la capacidad de usar 4 IR LEDS para mayor precisión. Esta versión continúa ese trabajo y añade muchisimas nuevas mejoras.</value>
   </data>
   <data name="TrayBalloonTip" xml:space="preserve">
     <value>Pulsar para editar los parámetros de GunMote</value>
