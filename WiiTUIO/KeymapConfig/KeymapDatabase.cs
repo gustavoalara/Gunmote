@@ -49,7 +49,7 @@ namespace WiiTUIO
             Thread.CurrentThread.CurrentCulture = Thread.CurrentThread.CurrentUICulture;
 
 
-            this.DisableKey = tDisableKey;
+            this.DisableKey = "disable";
 
             allInputs = new List<KeymapInput>();
             allInputs.Add(new KeymapInput(KeymapInputSource.IR, tPointer, "Pointer", true, false, true));
