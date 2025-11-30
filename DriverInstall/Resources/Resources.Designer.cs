@@ -61,7 +61,7 @@ namespace DriverInstall.Resources {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a Adding Touchmote Test Certificate to trusted root..
+        ///   Busca una cadena traducida similar a Adding GunMote Test Certificate to trusted root..
         /// </summary>
         internal static string AddingCertMsg {
             get {
@@ -79,7 +79,7 @@ namespace DriverInstall.Resources {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a Touchmote Enhanced Driver Installation.
+        ///   Busca una cadena traducida similar a GunMote Driver Installation.
         /// </summary>
         internal static string DriverInstallTitle {
             get {
@@ -133,7 +133,7 @@ namespace DriverInstall.Resources {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a Removing Test Touchmote Certificate.
+        ///   Busca una cadena traducida similar a Removing Test GunMote Certificate.
         /// </summary>
         internal static string RemovingCertMsg {
             get {

@@ -151,6 +151,33 @@ namespace WiiTUIO
 
             base.OnInitialized(e);
 
+            try
+            {
+                string exePath = System.IO.Path.Combine(
+                    AppDomain.CurrentDomain.BaseDirectory,
+                    "DriverInstall.exe");
+
+                if (File.Exists(exePath))
+                {
+                    ProcessStartInfo psi = new ProcessStartInfo
+                    {
+                        FileName = exePath,
+                        Arguments = "-removeAllButMK -silent",
+                        UseShellExecute = false,
+                        CreateNoWindow = true
+                    };
+                    Process.Start(psi);
+                }
+                else
+                {
+                    Console.WriteLine("DriverInstall.exe no encontrado en el directorio de la aplicación.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error ejecutando DriverInstall: " + ex.Message);
+            }
+
             KeymapConfigWindow.Instance.Visibility = System.Windows.Visibility.Collapsed;
 
             this.mainPanel.Visibility = Visibility.Visible;

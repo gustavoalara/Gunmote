@@ -1999,7 +1999,7 @@ namespace WiiTUIO.Resources {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a Thanks to Symphax for creating this wonderful application that has given a second life to our Wiimotes, to Ryochan for his improvements and to Suegrini for adding the ability to use 4 IR LEDS for greater accuracy. This version continues that work and adds improvements to the diamond arrangement of the IR LEDs..
+        ///   Busca una cadena traducida similar a Thanks to Symphax for creating this wonderful application that has given our Wiimotes a second life, to Ryochan for his improvements, and to Suegrini for adding the ability to use 4 IR LEDs for greater accuracy. This version continues that work and adds many new improvements..
         /// </summary>
         internal static string TouchmoteAbout2 {
             get {

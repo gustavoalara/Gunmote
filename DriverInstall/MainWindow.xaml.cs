@@ -49,11 +49,6 @@ namespace DriverInstall
                 {
                     this.installVmultiDriverComplete();
                 }
-
-                if (Environment.GetCommandLineArgs().Contains("-certificate"))
-                {
-                    this.installCert();
-                }
             }
             else if (Environment.GetCommandLineArgs().Contains("-uninstall"))
             {
@@ -62,11 +57,10 @@ namespace DriverInstall
                 {
                     this.uninstallVmultiDriverComplete();
                 }
-
-                if (Environment.GetCommandLineArgs().Contains("-certificate"))
-                {
-                    this.uninstallCert();
-                }
+            }
+            else if (Environment.GetCommandLineArgs().Contains("-removeAllButMK"))
+            {
+                this.removeAllButMKB();
             }
 
             if (shutdown)
@@ -86,14 +80,11 @@ namespace DriverInstall
         private void installAll()
         {
             this.installVmultiDriverComplete();
-            this.uninstallCert();
-            this.installCert();
         }
 
         private void uninstallAll()
         {
             this.uninstallVmultiDriverComplete();
-            this.uninstallCert();
         }
 
         private void installVmultiDriverComplete()
@@ -105,41 +96,6 @@ namespace DriverInstall
             this.removeAllButMKB();
         }
 
-        private void installCert()
-        {
-            X509Store store = new X509Store(StoreName.Root, StoreLocation.CurrentUser);
-            StorePermission sp = new StorePermission(PermissionState.Unrestricted);
-            sp.Flags = StorePermissionFlags.OpenStore;
-            sp.Assert();
-            store.Open(OpenFlags.ReadWrite);
-            X509Certificate2Collection collection = new X509Certificate2Collection();
-            string path = System.AppDomain.CurrentDomain.BaseDirectory + "CodeSign.cer";
-            X509Certificate2 cert = new X509Certificate2(path);
-            byte[] encodedCert = cert.GetRawCertData();
-            // --- LOCALIZACIÓN PENDIENTE: Este string debería venir de los recursos ---
-            consoleLine(AddingCertMsg);
-            store.Add(cert);
-            store.Close();
-        }
-
-        private void uninstallCert()
-        {
-            X509Store store = new X509Store(StoreName.Root, StoreLocation.CurrentUser);
-            StorePermission sp = new StorePermission(PermissionState.Unrestricted);
-            sp.Flags = StorePermissionFlags.OpenStore;
-            sp.Assert();
-            store.Open(OpenFlags.ReadWrite);
-            // --- LOCALIZACIÓN PENDIENTE: Este string debería venir de los recursos ---
-            consoleLine(RemovingCertMsg);
-            foreach (X509Certificate2 c in store.Certificates)
-            {
-                if (c.IssuerName.Name.Contains("Touchmote"))
-                {
-                    store.Remove(c);
-                }
-            }
-            store.Close();
-        }
 
         private void uninstallVmultiDriverComplete()
         {
@@ -157,7 +113,7 @@ namespace DriverInstall
                 {
                     System.Diagnostics.ProcessStartInfo procStartInfo = new System.Diagnostics.ProcessStartInfo
                     {
-                        WorkingDirectory = System.AppDomain.CurrentDomain.BaseDirectory + "Driver\\",
+                        WorkingDirectory = System.AppDomain.CurrentDomain.BaseDirectory + "Driver\\" + driver + "\\",
                         FileName = System.AppDomain.CurrentDomain.BaseDirectory + "Driver\\devcon",
                         Arguments = $"install {driver}.inf ecologylab\\{driver}",
                         RedirectStandardOutput = true,
@@ -228,7 +184,7 @@ namespace DriverInstall
                     {
                         WorkingDirectory = System.AppDomain.CurrentDomain.BaseDirectory + "Driver\\",
                         FileName = System.AppDomain.CurrentDomain.BaseDirectory + "Driver\\devcon",
-                        Arguments = "disable *vmulti*COL0" + i + "*",
+                        Arguments = "remove *vmulti*COL0" + i + "*",
                         RedirectStandardOutput = true,
                         UseShellExecute = false,
                         CreateNoWindow = true
