@@ -108,57 +108,57 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Error_EnumeratingDevices" xml:space="preserve">
-    <value>Error enumerant dispositius             </value>
+    <value>Error enumerant dispositius</value>
   </data>
   <data name="Error_EnumeratingRadios" xml:space="preserve">
-    <value>Error enumerant ràdios                 </value>
+    <value>Error enumerant ràdios</value>
   </data>
   <data name="Pairing_Activated" xml:space="preserve">
-    <value>Activat                                 </value>
+    <value>Activat</value>
   </data>
   <data name="Pairing_Authenticated" xml:space="preserve">
-    <value>Autenticat                              </value>
+    <value>Autenticat</value>
   </data>
   <data name="Pairing_CouldNotActivate" xml:space="preserve">
-    <value>No es pot activar                       </value>
+    <value>No es pot activar</value>
   </data>
   <data name="Pairing_CouldNotPairPermanently" xml:space="preserve">
-    <value>No es pot aparellar permanentment el Wiimote </value>
+    <value>No es pot aparellar permanentment el Wiimote</value>
   </data>
   <data name="Pairing_CouldNotRemoveDevice" xml:space="preserve">
-    <value>No es pot eliminar el dispositiu        </value>
+    <value>No es pot eliminar el dispositiu</value>
   </data>
   <data name="Pairing_EnumeratingRadios" xml:space="preserve">
-    <value>Enumerant ràdios...                     </value>
+    <value>Enumerant ràdios...</value>
   </data>
   <data name="Pairing_FoundDevice" xml:space="preserve">
-    <value>Troballes:                              </value>
+    <value>Troballes:</value>
   </data>
   <data name="Pairing_FoundNewWiimote" xml:space="preserve">
-    <value>S'ha trobat un nou Wiimote              </value>
+    <value>S'ha trobat un nou Wiimote</value>
   </data>
   <data name="Pairing_FoundRadios" xml:space="preserve">
-    <value>Trobats                                 </value>
+    <value>Trobats</value>
   </data>
   <data name="Pairing_NoBluetoothDevicesFound" xml:space="preserve">
-    <value>No s'han trobat dispositius Bluetooth   </value>
+    <value>No s'han trobat dispositius Bluetooth</value>
   </data>
   <data name="Pairing_NoBluetoothDevicesFoundInScan" xml:space="preserve">
-    <value>No s'han trobat dispositius bluetooth.  </value>
+    <value>No s'han trobat dispositius bluetooth.</value>
   </data>
   <data name="Pairing_Paired" xml:space="preserve">
-    <value>Aparellat                               </value>
+    <value>Aparellat</value>
   </data>
   <data name="Pairing_RemovingOldConnections" xml:space="preserve">
-    <value>Eliminant connexions antigues...        </value>
+    <value>Eliminant connexions antigues...</value>
   </data>
   <data name="Pairing_RemovingOldWiimote" xml:space="preserve">
-    <value>Eliminant Wiimote antic                 </value>
+    <value>Eliminant Wiimote antic</value>
   </data>
   <data name="Pairing_Scanning" xml:space="preserve">
-    <value>Escanejant...                           </value>
+    <value>Escanejant...</value>
   </data>
   <data name="Pairing_TotalPairedDevices" xml:space="preserve">
-    <value> Total Dispositius Aparellats\n </value>
+    <value> Total Dispositius Aparellats\n</value>
   </data>
 </root>

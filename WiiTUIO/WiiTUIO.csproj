@@ -412,6 +412,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Resources.ca-ES.resx" />
     <EmbeddedResource Include="Resources\Resources.de-DE.resx" />
+    <EmbeddedResource Include="Resources\Resources.eu-ES.resx" />
     <EmbeddedResource Include="Resources\Resources.fr-FR.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.fr-FR.Designer.cs</LastGenOutput>
@@ -424,10 +425,13 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.es-ES.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Resources.gl-ES.resx" />
     <EmbeddedResource Include="Resources\Resources.it-IT.resx" />
+    <EmbeddedResource Include="Resources\Resources.pt-BR.resx" />
+    <EmbeddedResource Include="Resources\Resources.pt.resx" />
     <EmbeddedResource Include="Resources\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <LastGenOutput>Resources1.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="app.config" />
     <None Include="app.manifest">

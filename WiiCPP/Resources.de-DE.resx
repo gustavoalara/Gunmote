@@ -111,54 +111,55 @@
     <value>Fehler beim Auflisten der Geräte           </value>
   </data>
   <data name="Error_EnumeratingRadios" xml:space="preserve">
-    <value>Fehler beim Auflisten der Funkgeräte       </value>
+    <value>Fehler beim Auflisten der Funkgeräte</value>
   </data>
   <data name="Pairing_Activated" xml:space="preserve">
-    <value>Aktiviert                                  </value>
+    <value>Aktiviert</value>
   </data>
   <data name="Pairing_Authenticated" xml:space="preserve">
-    <value>Authentifiziert                            </value>
+    <value>Authentifiziert</value>
   </data>
   <data name="Pairing_CouldNotActivate" xml:space="preserve">
-    <value>Aktivierung nicht möglich                  </value>
+    <value>Aktivierung nicht möglich</value>
   </data>
   <data name="Pairing_CouldNotPairPermanently" xml:space="preserve">
-    <value>Permanente Kopplung des Wiimote fehlgeschlagen </value>
+    <value>Permanente 
+Kopplung des Wiimote fehlgeschlagen</value>
   </data>
   <data name="Pairing_CouldNotRemoveDevice" xml:space="preserve">
-    <value>Gerät konnte nicht entfernt werden         </value>
+    <value>Gerät konnte nicht entfernt werden</value>
   </data>
   <data name="Pairing_EnumeratingRadios" xml:space="preserve">
-    <value>Funkgeräte werden aufgelistet...           </value>
+    <value>Funkgeräte werden aufgelistet...</value>
   </data>
   <data name="Pairing_FoundDevice" xml:space="preserve">
-    <value>Gefunden:                                  </value>
+    <value>Gefunden:</value>
   </data>
   <data name="Pairing_FoundNewWiimote" xml:space="preserve">
-    <value>Neues Wiimote gefunden                     </value>
+    <value>Neues Wiimote gefunden</value>
   </data>
   <data name="Pairing_FoundRadios" xml:space="preserve">
-    <value>Gefunden                                   </value>
+    <value>Gefunden</value>
   </data>
   <data name="Pairing_NoBluetoothDevicesFound" xml:space="preserve">
-    <value>Keine Bluetooth-Geräte gefunden            </value>
+    <value>Keine Bluetooth-Geräte gefunden</value>
   </data>
   <data name="Pairing_NoBluetoothDevicesFoundInScan" xml:space="preserve">
-    <value>Keine Bluetooth-Geräte im Scan gefunden    </value>
+    <value>Keine Bluetooth-Geräte im Scan gefunden</value>
   </data>
   <data name="Pairing_Paired" xml:space="preserve">
-    <value>Gekoppelt                                  </value>
+    <value>Gekoppelt                 </value>
   </data>
   <data name="Pairing_RemovingOldConnections" xml:space="preserve">
-    <value>Alte Verbindungen werden entfernt...       </value>
+    <value>Alte Verbindungen werden entfernt...</value>
   </data>
   <data name="Pairing_RemovingOldWiimote" xml:space="preserve">
-    <value>Altes Wiimote wird entfernt                </value>
+    <value>Altes Wiimote wird entfernt</value>
   </data>
   <data name="Pairing_Scanning" xml:space="preserve">
-    <value>Wird gescannt...                           </value>
+    <value>Wird gescannt...</value>
   </data>
   <data name="Pairing_TotalPairedDevices" xml:space="preserve">
-    <value> Insgesamt gekoppelte Geräte\n </value>
+    <value> Insgesamt gekoppelte Geräte\n</value>
   </data>
 </root>

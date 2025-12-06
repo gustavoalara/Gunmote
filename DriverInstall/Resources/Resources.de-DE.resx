@@ -98,33 +98,33 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AddingCertMsg" xml:space="preserve">
-    <value>Füge GunMote-Testzertifikat zu vertrauenswürdigen Stammzertifikaten hinzu </value>
+    <value>Füge GunMote-Testzertifikat zu vertrauenswürdigen Stammzertifikaten hinzu</value>
   </data>
   <data name="DriverInstallSuccesfull" xml:space="preserve">
-    <value>Treiberinstallation erfolgreich                            </value>
+    <value>Treiberinstallation erfolgreich</value>
   </data>
   <data name="DriverInstallTitle" xml:space="preserve">
-    <value>GunMote-Treiberinstallation                     </value>
+    <value>GunMote-Treiberinstallation</value>
   </data>
   <data name="DriverUninstallSuccessfull" xml:space="preserve">
-    <value>Treiberdeinstallation erfolgreich                          </value>
+    <value>Treiberdeinstallation erfolgreich</value>
   </data>
   <data name="ErrorDisablingDriver" xml:space="preserve">
-    <value>Fehler beim Deaktivieren des Treibers. {0}                 </value>
+    <value>Fehler beim Deaktivieren des Treibers. {0}</value>
   </data>
   <data name="ErrorVmultiInstall" xml:space="preserve">
-    <value>Fehler bei vmulti-Treiberinstallation: {0}                 </value>
+    <value>Fehler bei vmulti-Treiberinstallation: {0}</value>
   </data>
   <data name="ErrorVmultiUninstall" xml:space="preserve">
-    <value>Fehler bei vmulti-Treiberdeinstallation: {0}               </value>
+    <value>Fehler bei vmulti-Treiberdeinstallation: {0}</value>
   </data>
   <data name="InstallButton" xml:space="preserve">
-    <value>Installieren                                              </value>
+    <value>Installieren</value>
   </data>
   <data name="RemovingCertMsg" xml:space="preserve">
-    <value>Entferne GunMote-Testzertifikat                         </value>
+    <value>Entferne GunMote-Testzertifikat</value>
   </data>
   <data name="UninstallButton" xml:space="preserve">
-    <value>Deinstallieren   </value>
+    <value>Deinstallieren</value>
   </data>
 </root>

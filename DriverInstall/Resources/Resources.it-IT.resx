@@ -98,28 +98,28 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="DriverInstallSuccesfull" xml:space="preserve">
-    <value>Installazione driver completata con successo              </value>
+    <value>Installazione driver completata con successo</value>
   </data>
   <data name="DriverInstallTitle" xml:space="preserve">
-    <value>Installazione Driver Avanzato GunMote                   </value>
+    <value>Installazione Driver Avanzato GunMote</value>
   </data>
   <data name="DriverUninstallSuccessfull" xml:space="preserve">
-    <value>Disinstallazione driver completata con successo           </value>
+    <value>Disinstallazione driver completata con successo</value>
   </data>
   <data name="ErrorDisablingDriver" xml:space="preserve">
-    <value>Errore disabilitazione driver. {0}                        </value>
+    <value>Errore disabilitazione driver. {0}</value>
   </data>
   <data name="ErrorVmultiInstall" xml:space="preserve">
-    <value>Errore durante l'installazione del driver vmulti: {0}     </value>
+    <value>Errore durante l'installazione del driver vmulti: {0}</value>
   </data>
   <data name="ErrorVmultiUninstall" xml:space="preserve">
-    <value>Errore durante la disinstallazione del driver vmulti: {0} </value>
+    <value>Errore durante la disinstallazione del driver vmulti: {0}</value>
   </data>
   <data name="InstallButton" xml:space="preserve">
-    <value>Installa                                                  </value>
+    <value>Installa</value>
   </data>
   <data name="RemovingCertMsg" xml:space="preserve">
-    <value>Rimozione certificato di test GunMote                   </value>
+    <value>Rimozione certificato di test GunMote</value>
   </data>
   <data name="AddingCertMsg" xml:space="preserve">
     <value>Aggiunta del certificato di test di GunMote ai trusted root.</value>

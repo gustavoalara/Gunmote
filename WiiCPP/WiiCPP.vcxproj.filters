@@ -71,5 +71,8 @@
     <EmbeddedResource Include="Resources.ca-ES.resx">
       <Filter>Resource Files</Filter>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources.pt-BR.resx">
+      <Filter>Resource Files</Filter>
+    </EmbeddedResource>
   </ItemGroup>
 </Project>

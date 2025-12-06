@@ -34,9 +34,14 @@
             <CheckBox x:Name="cbDisconnectOnExit" Content="{loc:Localization DisconnectOnExit}" Canvas.Left="125" Canvas.Top="131" FontFamily="Segoe UI Semilight" Checked="cbDisconnectOnExit_Checked" Unchecked="cbDisconnectOnExit_Unchecked" />
             <CheckBox x:Name="cbMinimizeToTray" Content="{loc:Localization MinimizeToTray}" Canvas.Left="125" Canvas.Top="154" FontFamily="Segoe UI Semilight" Checked="cbMinimizeToTray_Checked" Unchecked="cbMinimizeToTray_Unchecked" />
             <CheckBox x:Name="cbMinimizeOnStart" Content="{loc:Localization MinimizeOnStart}" Canvas.Left="125" Canvas.Top="177" FontFamily="Segoe UI Semilight" Checked="cbMinimizeOnStart_Checked" Unchecked="cbMinimizeOnStart_Unchecked" />
-            <Button x:Name="btnEditKeymaps" Content="{loc:Localization EditKeymaps}" Canvas.Left="46" Canvas.Top="204" Width="160" Click="btnEditKeymaps_Click" Height="30" HorizontalAlignment="Left" VerticalAlignment="Center"></Button>
-            <Button x:Name="btnAdvConfig" Content="{loc:Localization AdvConfigTitle}" Canvas.Left="223" Canvas.Top="204" Width="158" Click="btnAdvConfig_Click" Height="30" HorizontalAlignment="Left" VerticalAlignment="Center"></Button>
-
+            <Button x:Name="btnEditKeymaps" Content="{loc:Localization EditKeymaps}" Canvas.Left="125" Canvas.Top="204" Width="160" Click="btnEditKeymaps_Click" Height="30" HorizontalAlignment="Left" VerticalAlignment="Center"></Button>
+            <Button Name="btnAppSettings" Width="40" Height="40" Click="btnAdvConfig_Click" HorizontalAlignment="Left" Canvas.Left="371" VerticalAlignment="Center" Canvas.Top="10" Style="{DynamicResource MetroCircleButtonStyle}" ToolTip="{loc:Localization AdvConfigTitle}">
+                <Rectangle Width="14" Height="14" Fill="Black" Opacity="0.8">
+                    <Rectangle.OpacityMask>
+                        <VisualBrush Visual="{StaticResource appbar_warning}" Stretch="Fill" />
+                    </Rectangle.OpacityMask>
+                </Rectangle>
+            </Button>
         </Canvas>
         <StackPanel x:Name="providerSettingsContent" />
     </StackPanel>

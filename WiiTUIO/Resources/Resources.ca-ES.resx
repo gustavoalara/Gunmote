@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AdvConfigTitle" xml:space="preserve">
-    <value>Configuració Avançada</value>
+    <value>Configuració Avançada (Manipular amb cura)</value>
   </data>
   <data name="Battery" xml:space="preserve">
     <value>Bateria: </value>

@@ -118,55 +118,55 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Error_EnumeratingDevices" xml:space="preserve">
-    <value>Errore nell'enumerazione dei dispositivi   </value>
+    <value>Errore nell'enumerazione dei dispositivi</value>
   </data>
   <data name="Error_EnumeratingRadios" xml:space="preserve">
-    <value>Errore nell'enumerazione delle radio       </value>
+    <value>Errore nell'enumerazione delle radio</value>
   </data>
   <data name="Pairing_Activated" xml:space="preserve">
-    <value>Attivato                                   </value>
+    <value>Attivato</value>
   </data>
   <data name="Pairing_Authenticated" xml:space="preserve">
-    <value>Autenticato                                </value>
+    <value>Autenticato</value>
   </data>
   <data name="Pairing_CouldNotActivate" xml:space="preserve">
-    <value>Impossibile attivare                       </value>
+    <value>Impossibile attivare</value>
   </data>
   <data name="Pairing_CouldNotPairPermanently" xml:space="preserve">
-    <value>Impossibile associare permanentemente il Wiimote </value>
+    <value>Impossibile associare permanentemente il Wiimote</value>
   </data>
   <data name="Pairing_CouldNotRemoveDevice" xml:space="preserve">
-    <value>Impossibile rimuovere il dispositivo       </value>
+    <value>Impossibile rimuovere il dispositivo</value>
   </data>
   <data name="Pairing_EnumeratingRadios" xml:space="preserve">
-    <value>Enumerazione radio in corso...             </value>
+    <value>Enumerazione radio in corso...</value>
   </data>
   <data name="Pairing_FoundDevice" xml:space="preserve">
-    <value>Trovati:                                   </value>
+    <value>Trovati:</value>
   </data>
   <data name="Pairing_FoundNewWiimote" xml:space="preserve">
-    <value>Trovato nuovo Wiimote                      </value>
+    <value>Trovato nuovo Wiimote</value>
   </data>
   <data name="Pairing_FoundRadios" xml:space="preserve">
-    <value>Trovati                                    </value>
+    <value>Trovati</value>
   </data>
   <data name="Pairing_NoBluetoothDevicesFound" xml:space="preserve">
-    <value>Nessun dispositivo Bluetooth trovato       </value>
+    <value>Nessun dispositivo Bluetooth trovato</value>
   </data>
   <data name="Pairing_NoBluetoothDevicesFoundInScan" xml:space="preserve">
-    <value>Nessun dispositivo Bluetooth trovato nella scansione </value>
+    <value>Nessun dispositivo Bluetooth trovato nella scansione</value>
   </data>
   <data name="Pairing_Paired" xml:space="preserve">
-    <value>Associato                                  </value>
+    <value>Associato</value>
   </data>
   <data name="Pairing_RemovingOldConnections" xml:space="preserve">
-    <value>Rimozione vecchie connessioni in corso...  </value>
+    <value>Rimozione vecchie connessioni in corso...</value>
   </data>
   <data name="Pairing_RemovingOldWiimote" xml:space="preserve">
-    <value>Rimozione vecchio Wiimote                  </value>
+    <value>Rimozione vecchio Wiimote</value>
   </data>
   <data name="Pairing_Scanning" xml:space="preserve">
-    <value>Scansione in corso...                      </value>
+    <value>Scansione in corso...</value>
   </data>
   <data name="Pairing_TotalPairedDevices" xml:space="preserve">
     <value>Dispositivi associati totali\n</value>

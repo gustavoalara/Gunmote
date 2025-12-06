@@ -104,7 +104,7 @@ namespace WiiTUIO.Properties
             }
         }
 
-        private int _autoDisconnectTimeout = 300000;
+        private int _autoDisconnectTimeout = 900000;
         public int autoDisconnectTimeout
         {
             get { return _autoDisconnectTimeout; }
@@ -510,7 +510,7 @@ namespace WiiTUIO.Properties
             }
         }
 
-        private double _shake_threshold = 0.2;
+        private double _shake_threshold = 0.5;
         public double shake_threshold
         {
             get { return _shake_threshold; }
@@ -532,7 +532,7 @@ namespace WiiTUIO.Properties
             }
         }
 
-        private int _shake_maxTimeInBetween = 500;
+        private int _shake_maxTimeInBetween = 400;
         public int shake_maxTimeInBetween
         {
             get { return _shake_maxTimeInBetween; }
@@ -543,7 +543,7 @@ namespace WiiTUIO.Properties
             }
         }
 
-        private int _shake_pressedTime = 200;
+        private int _shake_pressedTime = 100;
         public int shake_pressedTime
         {
             get { return _shake_pressedTime; }

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -117,34 +117,58 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AddingCertMsg" xml:space="preserve">
-    <value>Afegint Certificat de Prova GunMote a l'arrel de confiança.</value>
+  <data name="Error_EnumeratingDevices" xml:space="preserve">
+    <value>Erro ao enumerar dispositivos</value>
   </data>
-  <data name="DriverInstallSuccesfull" xml:space="preserve">
-    <value>Instal·lació del driver completada.</value>
+  <data name="Error_EnumeratingRadios" xml:space="preserve">
+    <value>Erro ao enumerar rádios</value>
   </data>
-  <data name="DriverInstallTitle" xml:space="preserve">
-    <value>Instal·lació del Driver de GunMote</value>
+  <data name="Pairing_Activated" xml:space="preserve">
+    <value>Ativado</value>
   </data>
-  <data name="DriverUninstallSuccessfull" xml:space="preserve">
-    <value>Desinstal·lació del driver completada.</value>
+  <data name="Pairing_Authenticated" xml:space="preserve">
+    <value>Autenticado</value>
   </data>
-  <data name="ErrorDisablingDriver" xml:space="preserve">
-    <value>Error deshabilitant driver: {0}</value>
+  <data name="Pairing_CouldNotActivate" xml:space="preserve">
+    <value>Não é possível ativar</value>
   </data>
-  <data name="ErrorVmultiInstall" xml:space="preserve">
-    <value>Error durant la instal·lació del driver vmulti: {0}</value>
+  <data name="Pairing_CouldNotPairPermanently" xml:space="preserve">
+    <value>Não é possível emparelhar o Wiimote permanentemente</value>
   </data>
-  <data name="ErrorVmultiUninstall" xml:space="preserve">
-    <value>Error durant la desinstal·lació del driver vmulti: {0}</value>
+  <data name="Pairing_CouldNotRemoveDevice" xml:space="preserve">
+    <value>Não é possível remover o dispositivo</value>
   </data>
-  <data name="InstallButton" xml:space="preserve">
-    <value>Instal·lar</value>
+  <data name="Pairing_EnumeratingRadios" xml:space="preserve">
+    <value>Enumerando Rádios...</value>
   </data>
-  <data name="RemovingCertMsg" xml:space="preserve">
-    <value>Eliminant Certificat de Prova GunMote.</value>
+  <data name="Pairing_FoundDevice" xml:space="preserve">
+    <value>Encontrado:</value>
   </data>
-  <data name="UninstallButton" xml:space="preserve">
-    <value>Desinstal·lar</value>
+  <data name="Pairing_FoundNewWiimote" xml:space="preserve">
+    <value>Novo Wiimote encontrado</value>
+  </data>
+  <data name="Pairing_FoundRadios" xml:space="preserve">
+    <value>Encontrados</value>
+  </data>
+  <data name="Pairing_NoBluetoothDevicesFound" xml:space="preserve">
+    <value>Nenhum dispositivo Bluetooth encontrado</value>
+  </data>
+  <data name="Pairing_NoBluetoothDevicesFoundInScan" xml:space="preserve">
+    <value>Nenhum dispositivo Bluetooth encontrado.</value>
+  </data>
+  <data name="Pairing_Paired" xml:space="preserve">
+    <value>Emparelhado</value>
+  </data>
+  <data name="Pairing_RemovingOldConnections" xml:space="preserve">
+    <value>Removendo conexões antigas...</value>
+  </data>
+  <data name="Pairing_RemovingOldWiimote" xml:space="preserve">
+    <value>Removendo o Wiimote antigo</value>
+  </data>
+  <data name="Pairing_Scanning" xml:space="preserve">
+    <value>Escaneando...</value>
+  </data>
+  <data name="Pairing_TotalPairedDevices" xml:space="preserve">
+    <value>Total de dispositivos emparelhados\n</value>
   </data>
 </root>
