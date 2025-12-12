@@ -967,7 +967,7 @@ namespace WiiTUIO.Output.Handlers
                 }
             }
 
-            else if (key.Equals("lightgunmouse"))
+            else if (key.Equals("lightgunmouse") || key.Equals("lightgunmouse-4:3"))
             {
                 //if (!shitTestDuration.IsRunning)
                 //{

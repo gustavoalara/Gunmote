@@ -117,9 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="WiimoteRumbleTimeLong" xml:space="preserve">
-    <value>Tempo de vibração longo (ms):</value>
-  </data>
   <data name="AdvConfigTitle" xml:space="preserve">
     <value>Configuração avançada (Manuseie com cuidado)</value>
   </data>
@@ -284,6 +281,9 @@
   </data>
   <data name="WiimoteRumbleTimeShort" xml:space="preserve">
     <value>Tempo de vibração curto (ms):</value>
+  </data>
+  <data name="WiimoteRumbleTimeLong" xml:space="preserve">
+    <value>Tempo de vibração longo (ms):</value>
   </data>
   <data name="WiimodeRumbleTimeAlternatingOn" xml:space="preserve">
     <value>Tempo de vibração alternado ativado (ms):</value>
@@ -1057,5 +1057,8 @@ Você precisará atirar em cada alvo várias vezes.</value>
   </data>
   <data name="ShootsPerTarget" xml:space="preserve">
     <value>Atira por alvo</value>
+  </data>
+  <data name="tLightgunMouse43" xml:space="preserve">
+    <value>Rato Arma Leve 4:3</value>
   </data>
 </root>

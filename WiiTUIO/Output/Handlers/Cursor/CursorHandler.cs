@@ -120,7 +120,7 @@ namespace WiiTUIO.Output.Handlers
 
                 return true;
             }
-            else if (key.Equals("lightguncursor"))
+            else if (key.Equals("lightguncursor") || key.Equals("lightguncursor-4:3"))
             {
                 long currentTime = Stopwatch.GetTimestamp();
                 long timeElapsed = currentTime - previousLightTime;

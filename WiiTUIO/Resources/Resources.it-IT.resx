@@ -1059,4 +1059,7 @@ Dovrai sparare più volte a ogni bersaglio.</value>
   <data name="ShootsPerTarget" xml:space="preserve">
     <value>Colpi per Bersaglio</value>
   </data>
+  <data name="tLightgunMouse43" xml:space="preserve">
+    <value>Mouse Lightgun                                                                                                                       4:3</value>
+  </data>
 </root>

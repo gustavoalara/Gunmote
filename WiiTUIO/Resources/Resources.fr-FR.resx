@@ -1061,4 +1061,7 @@ Vous devrez tirer plusieurs fois sur chaque cible.</value>
   <data name="ShootsPerTarget" xml:space="preserve">
     <value>Tirs par Cible</value>
   </data>
+  <data name="tLightgunMouse43" xml:space="preserve">
+    <value>Souris Lightgun 4:3</value>
+  </data>
 </root>

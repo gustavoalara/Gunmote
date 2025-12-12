@@ -117,9 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="About" xml:space="preserve">
-    <value>Sobre</value>
-  </data>
   <data name="AdvConfigTitle" xml:space="preserve">
     <value>Configuración avanzada (Manipular con coidado)</value>
   </data>
@@ -460,6 +457,9 @@ Terás que disparar a cada obxectivo varias veces.</value>
   </data>
   <data name="tbDefault" xml:space="preserve">
     <value>Por defecto</value>
+  </data>
+  <data name="About" xml:space="preserve">
+    <value>Sobre</value>
   </data>
   <data name="SettingsBut" xml:space="preserve">
     <value>Configuración</value>
@@ -1057,5 +1057,8 @@ Terás que disparar a cada obxectivo varias veces.</value>
   </data>
   <data name="ShootsPerTarget" xml:space="preserve">
     <value>Tiros por branco</value>
+  </data>
+  <data name="tLightgunMouse43" xml:space="preserve">
+    <value>Rato arma lixeira 4:3</value>
   </data>
 </root>

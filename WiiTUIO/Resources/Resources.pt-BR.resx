@@ -1058,4 +1058,7 @@ Você precisará atirar em cada alvo várias vezes.</value>
   <data name="ShootsPerTarget" xml:space="preserve">
     <value>Atira por alvo</value>
   </data>
+  <data name="tLightgunMouse43" xml:space="preserve">
+    <value>Rato Arma Leve 4:3</value>
+  </data>
 </root>

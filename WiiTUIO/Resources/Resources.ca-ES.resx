@@ -1060,4 +1060,7 @@ Hauràs de disparar diverses vegades a cada objectiu.</value>
   <data name="ShootsPerTarget" xml:space="preserve">
     <value>Dispars per Diana</value>
   </data>
+  <data name="tLightgunMouse43" xml:space="preserve">
+    <value>Ratolí Pistola de Llum 4:3</value>
+  </data>
 </root>

@@ -284,6 +284,12 @@ namespace WiiTUIO.Provider
                         case "360.stickl-light-4:3":
                             screenPositionCalculator.RecalculateLightgunAspect(1.3334);
                             break;
+                        case "lightgunmouse-4:3":
+                            screenPositionCalculator.RecalculateFullLightgun();
+                            break;
+                        case "lightguncursor-4:3":
+                            screenPositionCalculator.RecalculateFullLightgun();
+                            break;
                         case "360.stickr-light-4:3":
                             screenPositionCalculator.RecalculateLightgunAspect(1.3334);
                             break;

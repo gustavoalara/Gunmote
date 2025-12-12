@@ -1772,7 +1772,17 @@ namespace WiiTUIO.Resources {
                 return ResourceManager.GetString("tLightgunMouse", resourceCulture);
             }
         }
-        
+
+        /// <summary>
+        ///   Busca una cadena traducida similar a Lightgun mouse 4:3.
+        /// </summary>
+        internal static string tLightgunMouse43
+        {
+            get
+            {
+                return ResourceManager.GetString("tLightgunMouse43", resourceCulture);
+            }
+        }
         /// <summary>
         ///   Busca una cadena traducida similar a Long Rumble.
         /// </summary>

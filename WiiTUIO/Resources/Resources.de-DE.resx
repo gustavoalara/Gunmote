@@ -1061,4 +1061,7 @@ Du musst mehrmals auf jedes Ziel schießen.</value>
   <data name="ShootsPerTarget" xml:space="preserve">
     <value>Schüsse pro Zielscheibe</value>
   </data>
+  <data name="tLightgunMouse43" xml:space="preserve">
+    <value>Lightgun-Maus 4:3</value>
+  </data>
 </root>

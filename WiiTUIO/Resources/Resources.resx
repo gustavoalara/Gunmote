@@ -1059,4 +1059,10 @@ You’ll need to shoot each target several times.</value>
   <data name="ShootsPerTarget" xml:space="preserve">
     <value>Shoots Per Target</value>
   </data>
+  <data name="tLightgunMouse43" xml:space="preserve">
+    <value>Lightgun mouse 4:3</value>
+  </data>
+  <data name="tLightgunmouse-4:3" xml:space="preserve">
+    <value>hygujh</value>
+  </data>
 </root>

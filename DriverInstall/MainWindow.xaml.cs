@@ -173,43 +173,38 @@ namespace DriverInstall
 
         private void removeAllButMKB()
         {
+            // COLs que quieres bloquear y eliminar
             int[] drivers = { 1, 2, 4, 5, 6 };
 
+
+            // Ahora ya sí, eliminas los dispositivos con devcon
             foreach (int i in drivers)
             {
                 try
                 {
-                    // Setup the process start info
-                    System.Diagnostics.ProcessStartInfo procStartInfo = new System.Diagnostics.ProcessStartInfo
+                    ProcessStartInfo psi = new ProcessStartInfo
                     {
-                        WorkingDirectory = System.AppDomain.CurrentDomain.BaseDirectory + "Driver\\",
-                        FileName = System.AppDomain.CurrentDomain.BaseDirectory + "Driver\\devcon",
+                        WorkingDirectory = AppDomain.CurrentDomain.BaseDirectory + "Driver\\",
+                        FileName = AppDomain.CurrentDomain.BaseDirectory + "Driver\\devcon",
                         Arguments = "remove *vmulti*COL0" + i + "*",
                         RedirectStandardOutput = true,
                         UseShellExecute = false,
                         CreateNoWindow = true
                     };
 
-                    // Create and start the process
-                    System.Diagnostics.Process proc = new System.Diagnostics.Process
-                    {
-                        StartInfo = procStartInfo
-                    };
-
+                    Process proc = new Process { StartInfo = psi };
                     proc.Start();
                     string result = proc.StandardOutput.ReadToEnd();
-                    Console.WriteLine(result); // Considerar enviar esto también a consoleLine
+                    Console.WriteLine(result);
                     proc.WaitForExit();
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex.Message); // Considerar enviar esto también a consoleLine
-                    // --- LOCALIZACIÓN PENDIENTE: El mensaje de error también podría ser localizado o formateado ---
-                    consoleLine(string.Format(ErrorDisablingDriver,  ex.Message));
+                    Console.WriteLine(ex.Message);
+                    consoleLine(string.Format(ErrorDisablingDriver, ex.Message));
                 }
             }
         }
-
         private void btnInstall_Click(object sender, RoutedEventArgs e)
         {
             this.installVmultiDriverComplete();

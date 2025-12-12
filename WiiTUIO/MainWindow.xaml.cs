@@ -74,6 +74,8 @@ namespace WiiTUIO
 
         private IntPtr previousForegroundWindow = IntPtr.Zero;
 
+        private static readonly int[] UnwantedVmultiCols = { 1, 2, 4, 5, 6 };
+
         /// <summary>
         /// A reference to the WiiProvider we want to use to get/forward input.
         /// </summary>
@@ -151,32 +153,7 @@ namespace WiiTUIO
 
             base.OnInitialized(e);
 
-            try
-            {
-                string exePath = System.IO.Path.Combine(
-                    AppDomain.CurrentDomain.BaseDirectory,
-                    "DriverInstall.exe");
-
-                if (File.Exists(exePath))
-                {
-                    ProcessStartInfo psi = new ProcessStartInfo
-                    {
-                        FileName = exePath,
-                        Arguments = "-removeAllButMK -silent",
-                        UseShellExecute = false,
-                        CreateNoWindow = true
-                    };
-                    Process.Start(psi);
-                }
-                else
-                {
-                    Console.WriteLine("DriverInstall.exe no encontrado en el directorio de la aplicación.");
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error ejecutando DriverInstall: " + ex.Message);
-            }
+            this.uninstallDrivers();
 
             KeymapConfigWindow.Instance.Visibility = System.Windows.Visibility.Collapsed;
 
@@ -574,6 +551,119 @@ namespace WiiTUIO
             }
         }
 
+        private bool UnwantedVmultiColsPresent()
+        {
+            try
+            {
+                string workingDir = System.AppDomain.CurrentDomain.BaseDirectory + "Driver\\";
+                string devconPath = System.IO.Path.Combine(workingDir, "devcon");
+
+                foreach (int col in UnwantedVmultiCols)
+                {
+                    var psi = new ProcessStartInfo
+                    {
+                        WorkingDirectory = workingDir,
+                        FileName = devconPath,
+                        Arguments = "find *vmulti*COL0" + col + "*",
+                        RedirectStandardOutput = true,
+                        UseShellExecute = false,
+                        CreateNoWindow = true
+                    };
+
+                    using (var proc = new Process { StartInfo = psi })
+                    {
+                        proc.Start();
+                        string output = proc.StandardOutput.ReadToEnd();
+                        proc.WaitForExit();
+
+                        if (string.IsNullOrWhiteSpace(output))
+                            continue;
+
+                        // Normalmente en inglés: "No matching devices found."
+                        // En sistemas en castellano puede ser algo como "No se encontraron dispositivos..."
+                        bool noMatchingEn = output.IndexOf("No matching devices", StringComparison.OrdinalIgnoreCase) >= 0;
+                        bool noMatchingEs = output.IndexOf("No se encontraron dispositivos", StringComparison.OrdinalIgnoreCase) >= 0;
+
+                        if (!noMatchingEn && !noMatchingEs)
+                        {
+                            // Hay algo que no es el típico "no matching devices" -> asumimos que ha encontrado vmulti COL0x
+                            return true;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error comprobando vmulti COLx: " + ex.Message);
+            }
+
+            return false;
+        }
+
+
+        private void ScheduleVmultiCleanupAfterPair()
+        {
+            // No bloqueamos la UI, lo hacemos en segundo plano
+            Task.Run(async () =>
+            {
+                try
+                {
+                    const int timeoutMs = 15000;   // tiempo máximo de espera total
+                    const int pollMs = 1000;    // cada cuánto comprobamos
+                    int waited = 0;
+
+                    while (waited < timeoutMs)
+                    {
+                        if (UnwantedVmultiColsPresent())
+                        {
+                            Console.WriteLine("Detectados vmulti COLx no deseados. Ejecutando limpieza...");
+                            // Reutilizamos tu instalador para hacer el removeAllButMK
+                            RunRemoveAllButMKB();
+                            return;
+                        }
+
+                        await Task.Delay(pollMs).ConfigureAwait(false);
+                        waited += pollMs;
+                    }
+
+                    Console.WriteLine("Timeout esperando a que aparezcan los vmulti COLx no deseados.");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error en ScheduleVmultiCleanupAfterPair: " + ex.Message);
+                }
+            });
+        }
+
+        private void RunRemoveAllButMKB()
+        {
+            try
+            {
+                string exePath = System.IO.Path.Combine(
+                    AppDomain.CurrentDomain.BaseDirectory,
+                    "DriverInstall.exe");
+
+                if (File.Exists(exePath))
+                {
+                    var psi = new ProcessStartInfo
+                    {
+                        FileName = exePath,
+                        Arguments = "-removeAllButMK -silent",
+                        UseShellExecute = false,
+                        CreateNoWindow = true
+                    };
+                    Process.Start(psi);
+                }
+                else
+                {
+                    Console.WriteLine("DriverInstall.exe no encontrado para limpieza de COLx.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error ejecutando RunRemoveAllButMKB: " + ex.Message);
+            }
+        }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
@@ -678,7 +768,7 @@ namespace WiiTUIO
                 //connectProviderHandler();
 
             }), null);
-
+            ScheduleVmultiCleanupAfterPair();
 
         }
 
@@ -1035,6 +1125,36 @@ namespace WiiTUIO
             wiiPair.stop();
         }
 
+        private void uninstallDrivers()
+        {
+            try
+            {
+                string exePath = System.IO.Path.Combine(
+                    AppDomain.CurrentDomain.BaseDirectory,
+                    "DriverInstall.exe");
+
+                if (File.Exists(exePath))
+                {
+                    ProcessStartInfo psi = new ProcessStartInfo
+                    {
+                        FileName = exePath,
+                        Arguments = "-removeAllButMK -silent",
+                        UseShellExecute = false,
+                        CreateNoWindow = true
+                    };
+                    Process.Start(psi);
+                }
+                else
+                {
+                    Console.WriteLine("DriverInstall.exe no encontrado en el directorio de la aplicación.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error ejecutando DriverInstall: " + ex.Message);
+            }
+        }
+
         public void onPairingProgress(WiiCPP.WiiPairReport report)
         {
             Console.WriteLine("Pairing progress: number=" + report.numberPaired + " removeMode=" + report.removeMode + " devicelist=" + report.deviceNames);
@@ -1076,6 +1196,8 @@ namespace WiiTUIO
 
                         this.pairProgress.IsActive = false;
                     }), null);
+
+                    ScheduleVmultiCleanupAfterPair();
                 }
             }
         }

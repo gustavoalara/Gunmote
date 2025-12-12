@@ -1061,4 +1061,7 @@ Deberá disparar varias veces a cada objetivo</value>
   <data name="ShootsPerTarget" xml:space="preserve">
     <value>Disparos por Diana</value>
   </data>
+  <data name="tLightgunMouse43" xml:space="preserve">
+    <value>Ratón Lightgun 4:3</value>
+  </data>
 </root>

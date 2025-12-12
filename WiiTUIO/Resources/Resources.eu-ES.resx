@@ -117,9 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="About" xml:space="preserve">
-    <value>Guri buruz</value>
-  </data>
   <data name="AdvConfigTitle" xml:space="preserve">
     <value>Konfigurazio aurreratua (Arduraz tratatu)</value>
   </data>
@@ -460,6 +457,9 @@ Helburu bakoitzari hainbat aldiz tiro egin beharko duzu.</value>
   </data>
   <data name="tbDefault" xml:space="preserve">
     <value>Lehenetsia</value>
+  </data>
+  <data name="About" xml:space="preserve">
+    <value>Guri buruz</value>
   </data>
   <data name="SettingsBut" xml:space="preserve">
     <value>Ezarpenak</value>
@@ -1057,5 +1057,8 @@ Helburu bakoitzari hainbat aldiz tiro egin beharko duzu.</value>
   </data>
   <data name="ShootsPerTarget" xml:space="preserve">
     <value>Helburu bakoitzeko jaurtiketak</value>
+  </data>
+  <data name="tLightgunMouse43" xml:space="preserve">
+    <value>Pistola Sagua 4:3</value>
   </data>
 </root>
