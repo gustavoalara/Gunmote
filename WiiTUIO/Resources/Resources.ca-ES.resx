@@ -654,7 +654,7 @@ Hauràs de disparar diverses vegades a cada objectiu.</value>
     <value>Ratolí FPS</value>
   </data>
   <data name="tLightgunMouse" xml:space="preserve">
-    <value>Ratolí Pistola de Llum</value>
+    <value>Ratolí</value>
   </data>
   <data name="tMouseLeftB" xml:space="preserve">
     <value>Botó esquerre del ratolí</value>
@@ -1061,6 +1061,9 @@ Hauràs de disparar diverses vegades a cada objectiu.</value>
     <value>Dispars per Diana</value>
   </data>
   <data name="tLightgunMouse43" xml:space="preserve">
-    <value>Ratolí Pistola de Llum 4:3</value>
+    <value>Ratolí 4:3</value>
+  </data>
+  <data name="tLightgunMouse169" xml:space="preserve">
+    <value>Ratolí 16:9</value>
   </data>
 </root>

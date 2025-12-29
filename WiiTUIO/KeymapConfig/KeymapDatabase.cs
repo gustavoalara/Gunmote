@@ -197,6 +197,7 @@ namespace WiiTUIO
             allOutputs.Add(new KeymapOutput(KeymapOutputType.MOUSE, tFPSMouse, "fpsmouse", false, false, true, false));
             allOutputs.Add(new KeymapOutput(KeymapOutputType.MOUSE, tLightgunMouse, "lightgunmouse", false, false, true, false));
             allOutputs.Add(new KeymapOutput(KeymapOutputType.MOUSE, tLightgunMouse43, "lightgunmouse-4:3", false, false, true, false));
+            allOutputs.Add(new KeymapOutput(KeymapOutputType.MOUSE, tLightgunMouse169, "lightgunmouse-16:9", false, false, true, false));
             allOutputs.Add(new KeymapOutput(KeymapOutputType.MOUSE, tMouseLeftB, "mouseleft"));
             allOutputs.Add(new KeymapOutput(KeymapOutputType.MOUSE, tMouseMiddleB, "mousemiddle"));
             allOutputs.Add(new KeymapOutput(KeymapOutputType.MOUSE, tMouseRightB, "mouseright"));
@@ -370,8 +371,9 @@ namespace WiiTUIO
             allOutputs.Add(new KeymapOutput(KeymapOutputType.XINPUT, tBumperR, "360.bumperr"));
 
             //allOutputs.Add(new KeymapOutput(KeymapOutputType.CURSOR, "Cursor", "cursor", false, false, true, false));
-            allOutputs.Add(new KeymapOutput(KeymapOutputType.CURSOR, "Lightgun Cursor", "lightguncursor", false, false, true, false));
-            allOutputs.Add(new KeymapOutput(KeymapOutputType.CURSOR, "Lightgun Cursor 4:3", "lightguncursor-4:3", false, false, true, false));
+            allOutputs.Add(new KeymapOutput(KeymapOutputType.CURSOR, "Cursor", "lightguncursor", false, false, true, false));
+            allOutputs.Add(new KeymapOutput(KeymapOutputType.CURSOR, "Cursor 4:3", "lightguncursor-4:3", false, false, true, false));
+            allOutputs.Add(new KeymapOutput(KeymapOutputType.CURSOR, "Cursor 16:9", "lightguncursor-16:9", false, false, true, false));
             //allOutputs.Add(new KeymapOutput(KeymapOutputType.CURSOR, tPressCursor, "cursorpress"));
 
             allOutputs.Add(new KeymapOutput(KeymapOutputType.WIIMOTE, tShortRumble, "rumbleshort"));

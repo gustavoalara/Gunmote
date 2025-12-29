@@ -133,7 +133,7 @@ namespace WiiTUIO.Provider
                 Console.WriteLine("Setting primary monitor for screen position calculator to " + this.primaryScreen.Bounds);
                 this.recalculateScreenBounds(this.primaryScreen);
             }
-            
+
             else if (e.PropertyName == "Left" || e.PropertyName == "Right" || e.PropertyName == "Top" || e.PropertyName == "Bottom")
             {
                 trueTopLeftPt.X = topLeftPt.X = this.settings.Left;
@@ -170,12 +170,12 @@ namespace WiiTUIO.Provider
             midMarginY = Settings.Default.pointer_marginsTopBottom * 0.5;
             marginBoundsX = 1 / (1 - Settings.Default.pointer_marginsLeftRight);
             marginBoundsY = 1 / (1 - Settings.Default.pointer_marginsTopBottom);
-            
+
             trueTopLeftPt.X = topLeftPt.X = this.settings.Left;
             trueTopLeftPt.Y = topLeftPt.Y = this.settings.Top;
             trueBottomRightPt.X = bottomRightPt.X = this.settings.Right;
             trueBottomRightPt.Y = bottomRightPt.Y = this.settings.Bottom;
-            
+
             if (Settings.Default.pointer_4IRMode == "diamond")
             {
                 // 1. Vértices del rombo ideal en coordenadas normalizadas (0.0 a 1.0)
@@ -216,7 +216,7 @@ namespace WiiTUIO.Provider
                 idealAngleAtLeft = NormalizeAngle(vec_LT_angle - vec_LB_angle);
 
                 hasIdealGeometry = true;
-            } 
+            }
 
             if (targetAspectRatio == 0.0)
             {
@@ -230,7 +230,7 @@ namespace WiiTUIO.Provider
 
         private void recalculateLightgunCoordBounds()
         {
-            
+
             if (Settings.Default.pointer_4IRMode == "diamond")
             {
                 double calibratedWidth = Math.Abs(this.settings.Right - this.settings.Left);
@@ -286,7 +286,7 @@ namespace WiiTUIO.Provider
                         irPoint2 = lastIrPoint2;
                     }
                 }
-                
+
                 // If no midpoint found from previous points, check all available
                 // IR points for a possible midpoint
                 for (int i = 0; !foundMidpoint && i < irState.IRSensors.Count(); i++)
@@ -347,8 +347,8 @@ namespace WiiTUIO.Provider
                     int j = irPoint2;
                     median.X = (irState.IRSensors[i].Position.X + irState.IRSensors[j].Position.X) / 2.0f;
                     median.Y = (irState.IRSensors[i].Position.Y + irState.IRSensors[j].Position.Y) / 2.0f;
-                    
-                    
+
+
                     smoothedX = smoothedX * 0.9f + wiimoteState.AccelState.RawValues.X * 0.1f;
                     smoothedZ = smoothedZ * 0.9f + wiimoteState.AccelState.RawValues.Z * 0.1f;
 
@@ -934,6 +934,7 @@ namespace WiiTUIO.Provider
 
             double finalMarginX = 0;
             double finalMarginY = 0;
+
             /*if (Settings.Default.pointer_4IRMode == "none")
             {       finalMarginX = Settings.Default.CalibrationMarginX;
                     finalMarginY = Settings.Default.CalibrationMarginY;
@@ -941,9 +942,7 @@ namespace WiiTUIO.Provider
 
             lightbarX = (resultPos.X - topLeftPt.X) * boundsX;
             lightbarY = (resultPos.Y - topLeftPt.Y) * boundsY;
-            
 
-            
             if (x <= 0) { x = 0; }
             else if (x >= primaryScreen.Bounds.Width) { x = primaryScreen.Bounds.Width - 1; }
             if (y <= 0) { y = 0; }
@@ -952,10 +951,16 @@ namespace WiiTUIO.Provider
             CursorPos result = new CursorPos(x, y, median.X, median.Y, angle,
                 lightbarX, lightbarY, lightbarX, lightbarY, width, height); // Pasamos lightbarX/Y
 
-            if (lightbarX < 0.0 || lightbarX > 1.0 || lightbarY < 0.0 || lightbarY > 1.0)
+
+            GetActiveLightbarBounds(out float minX, out float maxX, out float minY, out float maxY);
+            Console.WriteLine("AspecRatio es: " + targetAspectRatio);
+            Console.WriteLine("minX es: " + minX + " maxX es: " + maxX);
+            Console.WriteLine("minY es: " + minY + " maxY es: " + maxY);
+
+            if (lightbarX < minX || lightbarX > maxX || lightbarY < minY || lightbarY > maxY)
             {
                 result.OffScreen = true;
-                result.LightbarX = lightbarX; // Mantenemos el valor sin acotar aquí para posible debug
+                result.LightbarX = lightbarX;
                 result.LightbarY = lightbarY;
             }
 
@@ -984,9 +989,34 @@ namespace WiiTUIO.Provider
 
             return result;
         }
+        private void GetActiveLightbarBounds(out float minX, out float maxX, out float minY, out float maxY)
+        {
+            minX = 0f; maxX = 1f;
+            minY = 0f; maxY = 1f;
 
+            if (targetAspectRatio <= 0.0) return;
+
+            double screenAspect = (double)primaryScreen.Bounds.Width / (double)primaryScreen.Bounds.Height;
+
+            if (screenAspect > targetAspectRatio)
+            {
+                // pillarbox -> recorte en X
+                double dead = (1.0 - (targetAspectRatio / screenAspect)) / 2.0;
+                minX = (float)dead;
+                maxX = (float)(1.0 - dead);
+            }
+            else if (screenAspect < targetAspectRatio)
+            {
+                // letterbox -> recorte en Y
+                double dead = (1.0 - (screenAspect / targetAspectRatio)) / 2.0;
+                minY = (float)dead;
+                maxY = (float)(1.0 - dead);
+            }
+        }
         public void RecalculateFullLightgun()
         {
+            Console.WriteLine("AspecRatio dentro de RecalculateFullLightgun es: " + targetAspectRatio);
+
             targetAspectRatio = 0.0;
 
             topLeftPt = trueTopLeftPt;
@@ -994,10 +1024,11 @@ namespace WiiTUIO.Provider
 
             recalculateLightgunCoordBounds();
         }
-
+        
         public void RecalculateLightgunAspect(double targetAspect)
         {
             this.targetAspectRatio = targetAspect;
+            Console.WriteLine("AspecRatio dentro de RecalculateLightgunAspect es: " + targetAspectRatio);
 
             int outputWidth = (int)(targetAspect * primaryScreen.Bounds.Height);
             double scaleFactor = outputWidth / (double)primaryScreen.Bounds.Width;

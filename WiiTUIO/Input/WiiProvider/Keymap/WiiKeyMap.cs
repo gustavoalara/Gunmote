@@ -133,7 +133,8 @@ namespace WiiTUIO.Provider
                     this.OnConfigChanged(new WiiKeyMapConfigChangedEvent(keymap.getName(),keymap.getFilename(),pointerConfig.Stack.First().Key));
                 }
             }
-        }
+        } 
+
 
         public void SendConfigChangedEvt()
         {

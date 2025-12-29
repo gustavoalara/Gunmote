@@ -120,14 +120,14 @@ namespace WiiTUIO.Output.Handlers
 
                 return true;
             }
-            else if (key.Equals("lightguncursor") || key.Equals("lightguncursor-4:3"))
+            else if (key.Equals("lightguncursor") || key.Equals("lightguncursor-4:3") || key.Equals("lightguncursor-16:9"))
             {
                 long currentTime = Stopwatch.GetTimestamp();
                 long timeElapsed = currentTime - previousLightTime;
                 double elapsedMs = timeElapsed * (1.0 / Stopwatch.Frequency);
                 previousLightTime = currentTime;
 
-                if (!cursorPos.OutOfReach)
+                if (!cursorPos.OutOfReach && !cursorPos.OffScreen)
                 {
                     this.cursor.Show();
 

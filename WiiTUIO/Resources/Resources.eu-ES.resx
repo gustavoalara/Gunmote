@@ -654,7 +654,7 @@ Helburu bakoitzari hainbat aldiz tiro egin beharko duzu.</value>
     <value>FPS sagua</value>
   </data>
   <data name="tLightgunMouse" xml:space="preserve">
-    <value>Pistola Sagua</value>
+    <value>Sagua</value>
   </data>
   <data name="tMouseLeftB" xml:space="preserve">
     <value>Saguaren ezkerreko botoia</value>
@@ -1059,6 +1059,9 @@ Helburu bakoitzari hainbat aldiz tiro egin beharko duzu.</value>
     <value>Helburu bakoitzeko jaurtiketak</value>
   </data>
   <data name="tLightgunMouse43" xml:space="preserve">
-    <value>Pistola Sagua 4:3</value>
+    <value>Sagua 4:3</value>
+  </data>
+  <data name="tLightgunMouse169" xml:space="preserve">
+    <value>Sagua 16:9</value>
   </data>
 </root>

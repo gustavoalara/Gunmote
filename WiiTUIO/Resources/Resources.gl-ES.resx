@@ -654,7 +654,7 @@ Terás que disparar a cada obxectivo varias veces.</value>
     <value>Rato FPS</value>
   </data>
   <data name="tLightgunMouse" xml:space="preserve">
-    <value>Rato arma lixeira</value>
+    <value>Rato</value>
   </data>
   <data name="tMouseLeftB" xml:space="preserve">
     <value>Botón esquerdo do rato</value>
@@ -1059,6 +1059,9 @@ Terás que disparar a cada obxectivo varias veces.</value>
     <value>Tiros por branco</value>
   </data>
   <data name="tLightgunMouse43" xml:space="preserve">
-    <value>Rato arma lixeira 4:3</value>
+    <value>Rato 4:3</value>
+  </data>
+  <data name="tLightgunMouse169" xml:space="preserve">
+    <value>Rato 16:9</value>
   </data>
 </root>

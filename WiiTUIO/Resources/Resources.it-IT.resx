@@ -654,7 +654,7 @@ Dovrai sparare più volte a ogni bersaglio.</value>
     <value>Mouse FPS                                                                                                                           </value>
   </data>
   <data name="tLightgunMouse" xml:space="preserve">
-    <value>Mouse Lightgun                                                                                                                      </value>
+    <value>Mouse                                                                                                                     </value>
   </data>
   <data name="tMouseLeftB" xml:space="preserve">
     <value>Bottone sinistro mouse                                                                                                              </value>
@@ -1060,6 +1060,9 @@ Dovrai sparare più volte a ogni bersaglio.</value>
     <value>Colpi per Bersaglio</value>
   </data>
   <data name="tLightgunMouse43" xml:space="preserve">
-    <value>Mouse Lightgun                                                                                                                       4:3</value>
+    <value>Mouse 4:3</value>
+  </data>
+  <data name="tLightgunMouse169" xml:space="preserve">
+    <value>Mouse 16:9</value>
   </data>
 </root>

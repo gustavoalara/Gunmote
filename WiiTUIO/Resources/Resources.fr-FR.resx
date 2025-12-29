@@ -655,7 +655,7 @@ Vous devrez tirer plusieurs fois sur chaque cible.</value>
     <value>Souris FPS</value>
   </data>
   <data name="tLightgunMouse" xml:space="preserve">
-    <value>Souris Lightgun</value>
+    <value>Souris</value>
   </data>
   <data name="tMouseLeftB" xml:space="preserve">
     <value>Bouton gauche de la souris</value>
@@ -1062,6 +1062,9 @@ Vous devrez tirer plusieurs fois sur chaque cible.</value>
     <value>Tirs par Cible</value>
   </data>
   <data name="tLightgunMouse43" xml:space="preserve">
-    <value>Souris Lightgun 4:3</value>
+    <value>Souris 4:3</value>
+  </data>
+  <data name="tLightgunMouse169" xml:space="preserve">
+    <value>Souris 16:9</value>
   </data>
 </root>

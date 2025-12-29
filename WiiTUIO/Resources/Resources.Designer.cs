@@ -106,7 +106,7 @@ namespace WiiTUIO.Resources {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a Advanced Configuration.
+        ///   Busca una cadena traducida similar a Advanced Configuration (Handle with care).
         /// </summary>
         internal static string AdvConfigTitle {
             get {
@@ -1772,17 +1772,25 @@ namespace WiiTUIO.Resources {
                 return ResourceManager.GetString("tLightgunMouse", resourceCulture);
             }
         }
-
+        
         /// <summary>
-        ///   Busca una cadena traducida similar a Lightgun mouse 4:3.
+        ///   Busca una cadena traducida similar a Lightgun Mouse 16:9.
         /// </summary>
-        internal static string tLightgunMouse43
-        {
-            get
-            {
+        internal static string tLightgunMouse169 {
+            get {
+                return ResourceManager.GetString("tLightgunMouse169", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Lightgun Mouse 4:3.
+        /// </summary>
+        internal static string tLightgunMouse43 {
+            get {
                 return ResourceManager.GetString("tLightgunMouse43", resourceCulture);
             }
         }
+        
         /// <summary>
         ///   Busca una cadena traducida similar a Long Rumble.
         /// </summary>

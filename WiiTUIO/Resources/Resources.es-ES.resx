@@ -655,7 +655,7 @@ Deberá disparar varias veces a cada objetivo</value>
     <value>Ratón FPS</value>
   </data>
   <data name="tLightgunMouse" xml:space="preserve">
-    <value>Ratón Lightgun</value>
+    <value>Ratón</value>
   </data>
   <data name="tMouseLeftB" xml:space="preserve">
     <value>Botón izq. del ratón</value>
@@ -1062,6 +1062,9 @@ Deberá disparar varias veces a cada objetivo</value>
     <value>Disparos por Diana</value>
   </data>
   <data name="tLightgunMouse43" xml:space="preserve">
-    <value>Ratón Lightgun 4:3</value>
+    <value>Ratón 4:3</value>
+  </data>
+  <data name="tLightgunMouse169" xml:space="preserve">
+    <value>Ratón 16:9</value>
   </data>
 </root>

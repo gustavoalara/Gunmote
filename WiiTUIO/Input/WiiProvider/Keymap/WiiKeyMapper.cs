@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
@@ -205,6 +206,7 @@ namespace WiiTUIO.Provider
             JObject specificKeymap = new JObject();
             JObject commonKeymap = new JObject();
 
+
             this.fallbackKeymap = defaultKeymap;
 
             this.KeyMap = new WiiKeyMap(this.WiimoteID, this.defaultKeymap, this.outputHandlers);
@@ -214,6 +216,8 @@ namespace WiiTUIO.Provider
             this.KeyMap.OnRumble += keyMap_onRumble;
             this.KeyMap.OnLED += keyMap_onLED;
             this.KeyMap.OnSpeaker += keyMap_onSpeaker;
+            this.loadKeyMap(this.defaultKeymap.Filename);
+
 
             if (callConfigChangedEvt)
             {
@@ -269,7 +273,7 @@ namespace WiiTUIO.Provider
                 handler.endUpdate();
             }
             this.KeyMap.SetKeymap(keymap);
-
+            double aspect = 0.0;
             if (this.KeyMap.Config.TryGetValue("Pointer", out KeymapOutConfig pointerConfig))
             {
                 foreach (KeymapOutput output in pointerConfig.Stack)
@@ -282,22 +286,18 @@ namespace WiiTUIO.Provider
                             screenPositionCalculator.RecalculateFullLightgun();
                             break;
                         case "360.stickl-light-4:3":
-                            screenPositionCalculator.RecalculateLightgunAspect(1.3334);
-                            break;
                         case "lightgunmouse-4:3":
-                            screenPositionCalculator.RecalculateFullLightgun();
-                            break;
                         case "lightguncursor-4:3":
-                            screenPositionCalculator.RecalculateFullLightgun();
-                            break;
                         case "360.stickr-light-4:3":
                             screenPositionCalculator.RecalculateLightgunAspect(1.3334);
+                            aspect = 1.3334;
                             break;
                         case "360.stickl-light-16:9":
-                            screenPositionCalculator.RecalculateLightgunAspect(1.7778);
-                            break;
                         case "360.stickr-light-16:9":
+                        case "lightguncursor-16:9":
+                        case "lightgunmouse-16:9":
                             screenPositionCalculator.RecalculateLightgunAspect(1.7778);
+                            aspect = 1.7778;
                             break;
                         default:
                             screenPositionCalculator.RecalculateFullLightgun();

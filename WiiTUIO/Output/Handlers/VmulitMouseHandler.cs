@@ -674,7 +674,7 @@ namespace WiiTUIO.Output.Handlers
                 }
             }
 
-            else if (key.Equals("lightgunmouse"))
+            else if (key.Equals("lightgunmouse") || key.Equals("lightgunmouse-4:3") || key.Equals("lightgunmouse-16:9"))
             {
                 long currentTime = Stopwatch.GetTimestamp();
                 long timeElapsed = currentTime - previousLightTime;

@@ -656,7 +656,7 @@ You’ll need to shoot each target several times.</value>
     <value>FPS Mouse</value>
   </data>
   <data name="tLightgunMouse" xml:space="preserve">
-    <value>Lightgun Mouse</value>
+    <value>Mouse</value>
   </data>
   <data name="tMouseLeftB" xml:space="preserve">
     <value>Mouse Left Button</value>
@@ -1062,6 +1062,9 @@ You’ll need to shoot each target several times.</value>
     <value>Shoots Per Target</value>
   </data>
   <data name="tLightgunMouse43" xml:space="preserve">
-    <value>Lightgun Mouse 4:3</value>
+    <value>Mouse 4:3</value>
+  </data>
+  <data name="tLightgunMouse169" xml:space="preserve">
+    <value>Mouse 16:9</value>
   </data>
 </root>

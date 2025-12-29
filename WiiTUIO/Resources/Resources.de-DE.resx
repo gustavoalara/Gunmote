@@ -655,7 +655,7 @@ Du musst mehrmals auf jedes Ziel schießen.</value>
     <value>FPS-Maus </value>
   </data>
   <data name="tLightgunMouse" xml:space="preserve">
-    <value>Lightgun-Maus </value>
+    <value>Maus </value>
   </data>
   <data name="tMouseLeftB" xml:space="preserve">
     <value>Linke Maustaste </value>
@@ -1062,6 +1062,9 @@ Du musst mehrmals auf jedes Ziel schießen.</value>
     <value>Schüsse pro Zielscheibe</value>
   </data>
   <data name="tLightgunMouse43" xml:space="preserve">
-    <value>Lightgun-Maus 4:3</value>
+    <value>Maus 4:3</value>
+  </data>
+  <data name="tLightgunMouse169" xml:space="preserve">
+    <value>Maus 16:9</value>
   </data>
 </root>

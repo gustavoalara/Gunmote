@@ -654,7 +654,7 @@ Você precisará atirar em cada alvo várias vezes.</value>
     <value>Rato FPS</value>
   </data>
   <data name="tLightgunMouse" xml:space="preserve">
-    <value>Rato Arma Leve</value>
+    <value>Rato</value>
   </data>
   <data name="tMouseLeftB" xml:space="preserve">
     <value>Botão esquerdo do mouse</value>
@@ -1059,6 +1059,9 @@ Você precisará atirar em cada alvo várias vezes.</value>
     <value>Atira por alvo</value>
   </data>
   <data name="tLightgunMouse43" xml:space="preserve">
-    <value>Rato Arma Leve 4:3</value>
+    <value>Rato 4:3</value>
+  </data>
+  <data name="tLightgunMouse169" xml:space="preserve">
+    <value>Rato 16:9</value>
   </data>
 </root>
