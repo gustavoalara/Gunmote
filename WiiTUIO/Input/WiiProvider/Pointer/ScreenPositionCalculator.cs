@@ -953,6 +953,7 @@ namespace WiiTUIO.Provider
 
 
             GetActiveLightbarBounds(out float minX, out float maxX, out float minY, out float maxY);
+
             Console.WriteLine("AspecRatio es: " + targetAspectRatio);
             Console.WriteLine("minX es: " + minX + " maxX es: " + maxX);
             Console.WriteLine("minY es: " + minY + " maxY es: " + maxY);
@@ -971,6 +972,10 @@ namespace WiiTUIO.Provider
             return result;
         }
 
+        public void SetTargetAspect(double aspect)
+        {
+            targetAspectRatio = aspect;
+        }
         private PointF rotatePoint(PointF point, double angle)
         {
             double sin = Math.Sin(angle * -1);

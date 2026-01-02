@@ -2,7 +2,6 @@
   "Title": "Gamepad (xinput)",
   "All": {
     "OnScreen": {
-      "Pointer": "360.stickl-light",
       "A": "360.a",
       "B": "360.b",
       "Home": "360.guide",
@@ -21,7 +20,11 @@
       "Nunchuk.StickUp": "360.stickrup",
       "Nunchuk.StickRight": "360.stickrright",
       "Nunchuk.StickLeft": "360.stickrleft",
-      "Nunchuk.Shake": "disable"
+      "Nunchuk.Shake": "disable",
+      "Pointer": "360.stickl-light"
+    },
+    "OffScreen": {
+      "A": "360.b"
     }
   }
 }

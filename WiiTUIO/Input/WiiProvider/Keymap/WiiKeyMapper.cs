@@ -223,8 +223,7 @@ namespace WiiTUIO.Provider
             {
                 this.SendConfigChangedEvt();
             }
-        }
-
+        } 
         private JObject loadApplicationsJSON()
         {
             JObject result = null;
@@ -285,18 +284,24 @@ namespace WiiTUIO.Provider
                         case "lightgunmouse":
                             screenPositionCalculator.RecalculateFullLightgun();
                             break;
-                        case "360.stickl-light-4:3":
                         case "lightgunmouse-4:3":
                         case "lightguncursor-4:3":
+                            screenPositionCalculator.SetTargetAspect(1.3334);
+                            aspect = 1.3334;
+                            break;
                         case "360.stickr-light-4:3":
+                        case "360.stickl-light-4:3":
                             screenPositionCalculator.RecalculateLightgunAspect(1.3334);
                             aspect = 1.3334;
                             break;
                         case "360.stickl-light-16:9":
                         case "360.stickr-light-16:9":
+                            screenPositionCalculator.RecalculateLightgunAspect(1.7778);
+                            aspect = 1.7778;
+                            break;
                         case "lightguncursor-16:9":
                         case "lightgunmouse-16:9":
-                            screenPositionCalculator.RecalculateLightgunAspect(1.7778);
+                            screenPositionCalculator.SetTargetAspect(1.7778);
                             aspect = 1.7778;
                             break;
                         default:

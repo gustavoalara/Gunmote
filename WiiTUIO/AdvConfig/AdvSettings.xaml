@@ -68,6 +68,9 @@
                     <CheckBox x:Name="cbNoTopmost" Content="{loc:Localization NoTopmost}" 
                               IsChecked="{Binding noTopmost, UpdateSourceTrigger=PropertyChanged}"
                               Style="{DynamicResource MahApps.Metro.Styles.CheckBox}"/>
+                    <CheckBox x:Name="cbisHelpPanelOpen" Content="{loc:Localization cbShowHelp}" 
+                              IsChecked="{Binding isHelpPanelOpen, UpdateSourceTrigger=PropertyChanged}"
+                              Style="{DynamicResource MahApps.Metro.Styles.CheckBox}"/>
 
                     <Grid Margin="0,5,0,0">
                         <Grid.ColumnDefinitions>

@@ -2807,7 +2807,17 @@ namespace WiiTUIO.Resources {
                 return ResourceManager.GetString("UpdateCheck_UnexpectedError", resourceCulture);
             }
         }
-        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Unexpected error when checking for updates: {0}.
+        /// </summary>
+        internal static string tbRememberMsg
+        {
+            get
+            {
+                return ResourceManager.GetString("tbRememberMsg", resourceCulture);
+            }
+        }
+
         /// <summary>
         ///   Busca una cadena traducida similar a Loop Sound Time (ms):.
         /// </summary>

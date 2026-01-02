@@ -11,7 +11,7 @@ using PointF = WiimoteLib.PointF;
 
 namespace WiiTUIO.Properties
 {
-    class Settings
+    public class Settings
     {
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -79,6 +79,16 @@ namespace WiiTUIO.Properties
             {
                 _pairedOnce = value;
                 OnPropertyChanged("pairedOnce");
+            }
+        }
+        private bool _isHelpPanelOpen = true;
+        public bool isHelpPanelOpen
+        {
+            get { return _isHelpPanelOpen; }
+            set
+            {
+                _isHelpPanelOpen = value;
+                OnPropertyChanged("isHelpPanelOpen");
             }
         }
 

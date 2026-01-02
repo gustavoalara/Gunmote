@@ -1064,4 +1064,13 @@ Helburu bakoitzari hainbat aldiz tiro egin beharko duzu.</value>
   <data name="tLightgunMouse169" xml:space="preserve">
     <value>Sagua 16:9</value>
   </data>
+  <data name="tbRememberMsg" xml:space="preserve">
+    <value>Gunmote lehen aldiz exekutatzen baduzu, gogoratu gutxienez ezarpenetara joatea, LEDen kokapena hautatzea eta Wiimote kontrolagailuak kalibratzea.</value>
+  </data>
+  <data name="firstSteps" xml:space="preserve">
+    <value>Lehen Urratsak</value>
+  </data>
+  <data name="cbShowHelp" xml:space="preserve">
+    <value>Erakutsi lehen urratsetako laguntza-bideoa</value>
+  </data>
 </root>

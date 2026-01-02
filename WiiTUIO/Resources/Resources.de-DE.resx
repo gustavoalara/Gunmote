@@ -400,8 +400,7 @@
     <value>Auf die UNTERE RECHTE Ecke zeigen und A oder B zur Kalibrierung drücken. </value>
   </data>
   <data name="AimCenter" xml:space="preserve">
-    <value>Auf das MITTLERE Ziel zielen und A oder B zur Kalibrierung drücken. 
-</value>
+    <value>Auf das MITTLERE Ziel zielen und A oder B zur Kalibrierung drücken.</value>
   </data>
   <data name="AimTargets" xml:space="preserve">
     <value>Ziele auf die Ziele und drücke A oder B, um zu kalibrieren.
@@ -1066,5 +1065,14 @@ Du musst mehrmals auf jedes Ziel schießen.</value>
   </data>
   <data name="tLightgunMouse169" xml:space="preserve">
     <value>Maus 16:9</value>
+  </data>
+  <data name="tbRememberMsg" xml:space="preserve">
+    <value>Wenn du Gunmote zum ersten Mal startest, denke daran, zumindest in die Einstellungen zu gehen, das LED-Layout auszuwählen und deine Wiimote-Controller zu kalibrieren.</value>
+  </data>
+  <data name="firstSteps" xml:space="preserve">
+    <value>Erste Schritte</value>
+  </data>
+  <data name="cbShowHelp" xml:space="preserve">
+    <value>Hilfevideo für die ersten Schritte anzeigen</value>
   </data>
 </root>

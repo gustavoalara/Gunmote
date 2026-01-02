@@ -1,16 +1,24 @@
 {
-  "Applications": [],
-  "Default": "default.json",
-  "Calibration": "Calibration.json",
-  "Calibration_Preview": "Calibration_Preview.json",
   "LayoutChooser": [
     {
-      "Title": "Default",
+      "Title": "Default (Mouse)",
       "Keymap": "default.json"
+    },
+	{
+      "Title": "Mouse 4:3",
+      "Keymap": "mouse43.json"
     },
     {
       "Title": "Gamepad (xinput)",
       "Keymap": "z_custom.json"
+    },
+    {
+      "Title": "Gamepad (xinput) 4:3",
+      "Keymap": "z_custom43.json"
     }
-  ]
+  ],
+  "Applications": [],
+  "Default": "default.json",
+  "Calibration": "Calibration.json",
+  "Calibration_Preview": "Calibration_Preview.json"
 }

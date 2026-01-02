@@ -5,7 +5,7 @@
   xmlns:loc="clr-namespace:WiiTUIO"
   xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
   Title="Gunmote" ResizeMode="CanMinimize"
-  Width="419" SizeToContent="Height">
+  Width="1219" SizeToContent="Height">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -39,7 +39,14 @@
             </Button>
         </Controls:WindowCommands>
     </Controls:MetroWindow.WindowCommands>
-    <StackPanel Width="419">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <!-- Columna principal: tu UI actual -->
+            <ColumnDefinition Width="419" />
+            <!-- Columna derecha: panel ayuda -->
+            <ColumnDefinition Width="800" x:Name="HelpPanelColumn" />
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Column="0" Width="419">
         <StackPanel Name="mainPanel">
             <StackPanel Name="spErrorMsg" Background="#FFFF4138" MouseUp="spErrorMsg_MouseUp" Cursor="Hand">
                 <TextBlock Margin="10" FontSize="14" FontFamily="Segoe UI Semibold">Error</TextBlock>
@@ -103,5 +110,51 @@
         </StackPanel>
         <StackPanel Name="canvasLanguage">
         </StackPanel>
-    </StackPanel>
+        </StackPanel>
+        <Border Grid.Column="1"
+            BorderBrush="#FF191919"
+            BorderThickness="1,0,0,0"
+            Background="#FFFFFFFF">
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <!-- Cabecera con título + cerrar -->
+                <DockPanel Margin="10">
+
+                    <!-- Botón a la derecha -->
+                    <Button Name="HelpPanelCloseBtn"
+                    Width="40"
+                    Height="40"
+                    DockPanel.Dock="Right"
+                    Style="{DynamicResource MetroCircleButtonStyle}"
+                    Click="HelpPanelCloseBtn_Click">
+                                <Rectangle Width="14" Height="14" Fill="Black" Opacity="0.8">
+                                    <Rectangle.OpacityMask>
+                                        <VisualBrush Visual="{StaticResource appbar_arrow_left}" Stretch="Fill"/>
+                                    </Rectangle.OpacityMask>
+                                </Rectangle>
+                            </Button>
+
+                            <!-- Título a la izquierda (ocupa el resto) -->
+                        <TextBlock Text="{loc:Localization firstSteps}"
+                       VerticalAlignment="Center"
+                       FontSize="14"
+                       FontFamily="Segoe UI Semibold"/>
+
+                </DockPanel>
+
+                <!-- Vídeo -->
+                <MediaElement x:Name="HelpVideo"
+                  Grid.Row="1"
+                  Margin="10,0,10,10"
+                  LoadedBehavior="Manual"
+                  UnloadedBehavior="Stop"
+                  Stretch="Uniform"/>
+            </Grid>
+        </Border>
+    </Grid>
 </Controls:MetroWindow>

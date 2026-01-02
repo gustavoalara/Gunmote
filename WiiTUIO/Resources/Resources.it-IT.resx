@@ -1065,4 +1065,13 @@ Dovrai sparare più volte a ogni bersaglio.</value>
   <data name="tLightgunMouse169" xml:space="preserve">
     <value>Mouse 16:9</value>
   </data>
+  <data name="tbRememberMsg" xml:space="preserve">
+    <value>Se è la prima volta che esegui Gunmote, ricordati almeno di andare nelle impostazioni, selezionare la disposizione dei LED e calibrare i tuoi controller Wiimote.</value>
+  </data>
+  <data name="firstSteps" xml:space="preserve">
+    <value>Primi passi</value>
+  </data>
+  <data name="cbShowHelp" xml:space="preserve">
+    <value>Mostra il video di aiuto per i primi passi</value>
+  </data>
 </root>

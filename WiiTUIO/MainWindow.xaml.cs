@@ -76,6 +76,9 @@ namespace WiiTUIO
 
         private static readonly int[] UnwantedVmultiCols = { 1, 2, 4, 5, 6 };
 
+        private const double MainWidth = 419;   // tu ancho actual
+        private const double HelpWidth = 800;   // ancho del panel derecho
+
         /// <summary>
         /// A reference to the WiiProvider we want to use to get/forward input.
         /// </summary>
@@ -145,8 +148,24 @@ namespace WiiTUIO
 
             // Load from the XAML.
             InitializeComponent();
-        }
 
+            var videoPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "help.mp4");
+            HelpVideo.Source = new Uri(videoPath, UriKind.Absolute);
+
+            // Loop infinito (una sola vez)
+            HelpVideo.MediaEnded += (s, e) =>
+            {
+                HelpVideo.Position = TimeSpan.Zero;
+                HelpVideo.Play();
+            };
+
+            if (Settings.Default.isHelpPanelOpen)
+                OpenHelpPanel();
+            else
+                CloseHelpPanel();
+
+        }
+        
         protected override void OnInitialized(EventArgs e)
         {
             KeymapDatabase.Current.CreateDefaultFiles();
@@ -270,6 +289,32 @@ namespace WiiTUIO
             }
         }
 
+        private void OpenHelpPanel()
+        {
+            HelpPanelColumn.Width = new GridLength(HelpWidth);
+            this.Width = MainWidth + HelpWidth;
+
+            HelpVideo.Position = TimeSpan.Zero;
+            HelpVideo.Play();
+
+            Settings.Default.isHelpPanelOpen = true;
+            Settings.Default.Save();
+        }
+        private void CloseHelpPanel()
+        {
+            HelpVideo.Stop();
+
+            HelpPanelColumn.Width = new GridLength(0);
+            this.Width = MainWidth;
+
+            Settings.Default.isHelpPanelOpen = false;
+            Settings.Default.Save();
+        }
+        private void HelpPanelCloseBtn_Click(object sender, RoutedEventArgs e)
+        {
+            CloseHelpPanel();
+        }
+
         private HttpWebRequest wrGETURL;
 
         /// <summary>
@@ -360,7 +405,7 @@ namespace WiiTUIO
                 {
                     Dispatcher.Invoke(() => {
                         MessageBoxResult dialogResult = MessageBox.Show(
-                            string.Format(UpdateCheck_NewVersionAvailable_Message, latestVersion.ToString()),
+                            string.Format(UpdateCheck_NewVersionAvailable_Message + tbRememberMsg, latestVersion.ToString()),
                             UpdateCheck_NewVersionAvailable_Title,
                             MessageBoxButton.YesNo,
                             MessageBoxImage.Information
@@ -370,7 +415,7 @@ namespace WiiTUIO
                         {
                             if (!string.IsNullOrEmpty(installerDownloadUrl))
                             {
-                                ShowMessage(string.Format(UpdateCheck_DownloadingUpdate, Path.GetFileName(installerDownloadUrl)), MessageType.Info);
+                                ShowMessage(string.Format(UpdateCheck_DownloadingUpdate + tbRememberMsg, Path.GetFileName(installerDownloadUrl)), MessageType.Info);
                                 // Show download progress UI elements
                                 if (downloadProgressPanel != null)
                                 {
@@ -382,7 +427,7 @@ namespace WiiTUIO
                             }
                             else
                             {
-                                ShowMessage(UpdateCheck_NoInstallerFound, MessageType.Error);
+                                ShowMessage(UpdateCheck_NoInstallerFound + tbRememberMsg, MessageType.Error);
                                 // Fallback to opening the releases page if no installer URL is found
                                 Process.Start(new ProcessStartInfo(GitHubReleasesPageUrl) { UseShellExecute = true });
                             }
@@ -392,7 +437,7 @@ namespace WiiTUIO
                 else
                 {
                     // La versión actual es la más reciente o superior
-                    ShowMessage(UpdateCheck_LatestVersion, MessageType.Info);
+                    ShowMessage(UpdateCheck_LatestVersion + tbRememberMsg, MessageType.Info);
                 }
             }
             catch (WebException wex)
