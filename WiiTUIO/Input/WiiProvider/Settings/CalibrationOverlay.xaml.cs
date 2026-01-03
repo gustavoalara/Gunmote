@@ -32,6 +32,7 @@ namespace WiiTUIO.Provider
         private WiiKeyMapper keyMapper;
         private static CalibrationOverlay defaultInstance;
         private bool wasDebugActiveBeforeCalibration;
+        private bool wasNotificationsActiveBeforeCalibration;
 
         private System.Windows.Forms.Screen primaryScreen;
         private IntPtr previousForegroundWindow = IntPtr.Zero;
@@ -385,8 +386,10 @@ namespace WiiTUIO.Provider
             {
                 this.hidden = false;
                 wasDebugActiveBeforeCalibration = Settings.Default.Debug;
+                wasNotificationsActiveBeforeCalibration = Settings.Default.notifications_enabled;
 
                 Settings.Default.Debug = true;
+                Settings.Default.notifications_enabled = false;
 
                 this.keyMapper = keyMapper;
                 this.keyMapper.SwitchToCalibration();
@@ -545,6 +548,7 @@ namespace WiiTUIO.Provider
             
             
             Settings.Default.Debug = wasDebugActiveBeforeCalibration;
+            Settings.Default.notifications_enabled = wasNotificationsActiveBeforeCalibration;
             Settings.Default.Save();
             
             // None and diamond modes don't need Settings.Default.Save() here
@@ -561,6 +565,7 @@ namespace WiiTUIO.Provider
         {
 
             Settings.Default.Debug = wasDebugActiveBeforeCalibration;
+            Settings.Default.notifications_enabled = wasNotificationsActiveBeforeCalibration;
 
             // Restore backup values based on mode
             this.keyMapper.settings.Top = topBackup;
