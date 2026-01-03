@@ -65,6 +65,35 @@ If you would like to help translate into new languages, there are some Excel fil
 
 Release History
 ==============
+**v1.1.0.3**<br />
+- Disable notifications during calibration to avoid odd behaviours
+- Fix window size and behaviour when using minimized to tray or to taskbar
+
+**v1.1.0.2**<br />
+- Added 4:3 and 16:9 modes on mouse/cursor input. Remove "lightgun" from the mouse/cursor pointers.
+- Added Getting Started video help and reminder message
+  
+**v1.1.0.1**<br />
+- More fixes for vmulti devices control
+
+**v1.1**<br />
+- Update to .net 4.8.1.
+- Fix problems with the ECOTuio drivers installation and multiple vmulti devices visibility
+- Added Portuguese, Brazilian Portuguese, Basque and Galician to the list of supported languages
+- Adjusted some shaking parameters
+- Extended the autodisconnect timeout
+- Replaced the “advanced” button with a more discreet and safer one.
+  
+**v1.0 beta 36**<br />
+- Fix disabled keys not showing in other languages different to spanish
+- Fix 4IR calibration after changing from 2IR
+- Fix problem in Arcadehook that closed the aplication
+- Updated About window with github links
+
+**v1.0 beta 35**<br />
+- Fix debug visualizer in 2IR calibration
+- Calibration Margin X/Y 0 by default for better calibration results
+
 **v1.0 beta 34**<br />
 - 2IR now is working again and uses the new calibration system
 - Consolidated Wiimote serial number in calibration profiles for 2IR mode as well
