@@ -79,6 +79,8 @@ namespace WiiTUIO
         private const double MainWidth = 419;   // tu ancho actual
         private const double HelpWidth = 800;   // ancho del panel derecho
 
+        private readonly bool _startInTray;
+
         /// <summary>
         /// A reference to the WiiProvider we want to use to get/forward input.
         /// </summary>
@@ -136,18 +138,28 @@ namespace WiiTUIO
             currentProcess.PriorityClass = ProcessPriorityClass.High;
             Thread.CurrentThread.Priority = ThreadPriority.Normal;
 
+            /*
             if (Settings.Default.minimizeOnStart)
             {
                 this.ShowActivated = false;
                 this.WindowState = System.Windows.WindowState.Minimized;
             }
-
+            */
             //Settings.Default.primaryMonitor = "";
 
             defaultInstance = this;
 
             // Load from the XAML.
             InitializeComponent();
+
+            _startInTray = Settings.Default.minimizeToTray;
+
+            if (_startInTray)
+            {
+                ShowActivated = false;
+                ShowInTaskbar = false;
+                Visibility = Visibility.Hidden;
+            }
 
             var videoPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "help.mp4");
             HelpVideo.Source = new Uri(videoPath, UriKind.Absolute);
@@ -165,7 +177,25 @@ namespace WiiTUIO
                 CloseHelpPanel();
 
         }
-        
+
+        protected override void OnSourceInitialized(EventArgs e)
+        {
+            base.OnSourceInitialized(e);
+
+            if (Settings.Default.minimizeToTray)
+            {
+                // true => fuerza "minimizar ahora", lo que crea el icono y lo hace visible
+                MinimizeToTray.Enable(this, true);
+                return;
+            }
+
+            if (Settings.Default.minimizeOnStart)
+            {
+                ShowActivated = false;
+                WindowState = WindowState.Minimized;
+            }
+        }
+
         protected override void OnInitialized(EventArgs e)
         {
             KeymapDatabase.Current.CreateDefaultFiles();
@@ -288,27 +318,41 @@ namespace WiiTUIO
                 this.connectProvider();
             }
         }
+        private void ApplyHelpPanelLayoutOnly()
+        {
+            bool open = Settings.Default.isHelpPanelOpen;
+            HelpPanelColumn.Width = open ? new GridLength(HelpWidth) : new GridLength(0);
+            this.Width = open ? (MainWidth + HelpWidth) : MainWidth;
+        }
+        public void ApplyHelpPanelState(bool forcePlay = false)
+        {
+            bool open = Settings.Default.isHelpPanelOpen;
 
+            HelpPanelColumn.Width = open ? new GridLength(HelpWidth) : new GridLength(0);
+            this.Width = open ? (MainWidth + HelpWidth) : MainWidth;
+
+            if (open)
+            {
+                if (forcePlay) HelpVideo.Position = TimeSpan.Zero;
+                HelpVideo.Play();
+            }
+            else
+            {
+                HelpVideo.Stop();
+            }
+        }
         private void OpenHelpPanel()
         {
-            HelpPanelColumn.Width = new GridLength(HelpWidth);
-            this.Width = MainWidth + HelpWidth;
-
-            HelpVideo.Position = TimeSpan.Zero;
-            HelpVideo.Play();
-
             Settings.Default.isHelpPanelOpen = true;
             Settings.Default.Save();
+            ApplyHelpPanelState(forcePlay: true);
         }
+
         private void CloseHelpPanel()
         {
-            HelpVideo.Stop();
-
-            HelpPanelColumn.Width = new GridLength(0);
-            this.Width = MainWidth;
-
             Settings.Default.isHelpPanelOpen = false;
             Settings.Default.Save();
+            ApplyHelpPanelState();
         }
         private void HelpPanelCloseBtn_Click(object sender, RoutedEventArgs e)
         {
@@ -712,10 +756,10 @@ namespace WiiTUIO
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            if (Settings.Default.minimizeToTray)
+            /* if (Settings.Default.minimizeToTray)
             {
                 MinimizeToTray.Enable(this, Settings.Default.minimizeOnStart);
-            }
+            } */
 
             KeymapConfigWindow.Instance.Owner = this;
         }

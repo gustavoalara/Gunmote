@@ -159,8 +159,21 @@ public static class MinimizeToTray
         private void HandleNotifyIconOrBalloonClicked(object sender, EventArgs e)
         {
             // Restore the Window
+            _window.Show();
+            _window.Visibility = Visibility.Visible;
+            _window.ShowInTaskbar = true;
+
             _window.WindowState = WindowState.Normal;
-            _window.Width = 419; //Hack to fix layout problems with minimizing on start.
+
+            _window.Dispatcher.BeginInvoke(new Action(() =>
+            {
+                // Reaplica el layout correcto según settings (incluye panel derecho si toca)
+                if (_window is MainWindow mw)
+                {
+                    mw.ApplyHelpPanelState(forcePlay: true);
+                }
+            }), System.Windows.Threading.DispatcherPriority.Loaded);
+
             _window.Activate();
         }
     }
