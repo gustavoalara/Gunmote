@@ -65,6 +65,9 @@ If you would like to help translate into new languages, there are some Excel fil
 
 Release History
 ==============
+**v1.1.0.4**<br />
+- Fix issue with XInput D-Pad asignation to Nunchuk/Classic Stick
+
 **v1.1.0.3**<br />
 - Disable notifications during calibration to avoid odd behaviours
 - Fix window size and behaviour when using minimized to tray or to taskbar
