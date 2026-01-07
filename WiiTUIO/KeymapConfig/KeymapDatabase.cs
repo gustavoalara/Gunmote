@@ -340,10 +340,10 @@ namespace WiiTUIO
             allOutputs.Add(new KeymapOutput(KeymapOutputType.XINPUT, "B", "360.b"));
             allOutputs.Add(new KeymapOutput(KeymapOutputType.XINPUT, "X", "360.x"));
             allOutputs.Add(new KeymapOutput(KeymapOutputType.XINPUT, "Y", "360.y"));
-            allOutputs.Add(new KeymapOutput(KeymapOutputType.XINPUT, tLeft, "360.left", true, true, false, false));
-            allOutputs.Add(new KeymapOutput(KeymapOutputType.XINPUT, tRight, "360.right", true, true, false, false));
-            allOutputs.Add(new KeymapOutput(KeymapOutputType.XINPUT, tUp, "360.up", true, true, false, false));
-            allOutputs.Add(new KeymapOutput(KeymapOutputType.XINPUT, tDown, "360.down", true, true, false, false));
+            allOutputs.Add(new KeymapOutput(KeymapOutputType.XINPUT, tLeft, "360.left", true, false, false, false));
+            allOutputs.Add(new KeymapOutput(KeymapOutputType.XINPUT, tRight, "360.right", true, false, false, false));
+            allOutputs.Add(new KeymapOutput(KeymapOutputType.XINPUT, tUp, "360.up", true, false, false, false));
+            allOutputs.Add(new KeymapOutput(KeymapOutputType.XINPUT, tDown, "360.down", true, false, false, false));
             allOutputs.Add(new KeymapOutput(KeymapOutputType.XINPUT, tBack, "360.back"));
             allOutputs.Add(new KeymapOutput(KeymapOutputType.XINPUT, tStart, "360.start"));
             allOutputs.Add(new KeymapOutput(KeymapOutputType.XINPUT, tGuide, "360.guide"));
