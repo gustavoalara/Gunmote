@@ -71,7 +71,21 @@
                     <CheckBox x:Name="cbisHelpPanelOpen" Content="{loc:Localization cbShowHelp}" 
                               IsChecked="{Binding isHelpPanelOpen, UpdateSourceTrigger=PropertyChanged}"
                               Style="{DynamicResource MahApps.Metro.Styles.CheckBox}"/>
-
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                    
+                        <Label Grid.Column="0" Content="{loc:Localization cbWiimoterotation}"/>
+                        <ComboBox Grid.Column="1"
+                                  SelectedValue="{Binding wiimoteRotation, UpdateSourceTrigger=PropertyChanged}"
+                                  SelectedValuePath="Tag">
+                            <ComboBoxItem Content="0° (default)" Tag="0"/>
+                            <ComboBoxItem Content="90°" Tag="90"/>
+                            <ComboBoxItem Content="-90°" Tag="-90"/>
+                        </ComboBox>
+                    </Grid>
                     <Grid Margin="0,5,0,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
