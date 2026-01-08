@@ -268,7 +268,17 @@ namespace WiiTUIO.Provider
             PointF resultPos = new PointF();
 
             IRState irState = wiimoteState.IRState;
-
+            
+            PointF[] pos = new PointF[4];
+            bool[] found = new bool[4];
+            
+            for (int i = 0; i < 4; i++)
+            {
+                found[i] = irState.IRSensors[i].Found;
+                if (found[i])
+                    pos[i] = ApplyWiimoteRotation(irState.IRSensors[i].Position);
+            }
+            
             if (Settings.Default.pointer_4IRMode == "none")
             {
                 int irPoint1 = 0;
@@ -426,7 +436,8 @@ namespace WiiTUIO.Provider
                     offsetY = SBPositionOffset;
                     marginOffsetY = -CalcMarginOffsetY;
                 }
-                resultPos = median;
+                resultPos = ApplyWiimoteRotation(median);
+                median = resultPos; 
             }
             else if (Settings.Default.pointer_4IRMode == "diamond")
             {
@@ -437,9 +448,9 @@ namespace WiiTUIO.Provider
                 // --- FASE 1: IDENTIFICACIÓN DE PUNTOS ---
                 for (int i = 0; i < 4; i++)
                 {
-                    if (irState.IRSensors[i].Found)
+                    if (found[i])
                     {
-                        visiblePoints.Add(irState.IRSensors[i].Position);
+                        visiblePoints.Add(pos[i]);
                         foundCount++;
                     }
                 }
@@ -747,14 +758,15 @@ namespace WiiTUIO.Provider
 
                 for (int i = 0; i < 4; i++)
                 {
-                    if (irState.IRSensors[i].Found)
+                    if (found[i])
                     {
-                        double point_angle = Math.Atan2(irState.IRSensors[i].Position.Y - median.Y, irState.IRSensors[i].Position.X - median.X) - Roll;
+                        var p = pos[i];
+                        double point_angle = Math.Atan2(p.Y - median.Y, p.X - median.X) - Roll;
                         if (point_angle < 0) point_angle += 2 * Math.PI;
 
                         int index = (int)(point_angle / (Math.PI / 2));
 
-                        finalPos[index] = irState.IRSensors[i].Position;
+                        finalPos[index] = p;
                         see[index] = (see[index] << 1) | 1;
                         seenFlags |= (byte)(1 << index);
                     }
@@ -993,6 +1005,20 @@ namespace WiiTUIO.Provider
             result.Y = (float)ynew;
 
             return result;
+        }
+        private PointF ApplyWiimoteRotation(PointF p)
+        {
+            switch (Settings.Default.wiimoteRotation) 
+            {
+                case 90:
+                    return new PointF { X = 1.0f - p.Y, Y = p.X };
+        
+                case -90:
+                    return new PointF { X = p.Y, Y = 1.0f - p.X };
+        
+                default:
+                    return p;
+            }
         }
         private void GetActiveLightbarBounds(out float minX, out float maxX, out float minY, out float maxY)
         {
