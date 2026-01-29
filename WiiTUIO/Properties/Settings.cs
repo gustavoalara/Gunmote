@@ -519,7 +519,6 @@ namespace WiiTUIO.Properties
                 OnPropertyChanged("fpsmouse_speed");
             }
         }
-
         private double _shake_threshold = 0.5;
         public double shake_threshold
         {

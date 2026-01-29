@@ -56,7 +56,7 @@ namespace WiiTUIO.Provider
         private double marginXBackup;
         private double marginYBackup;
 
-        
+
         // Constant for the side length of the triangle
         private const double TRIANGLE_SIDE_LENGTH = 20.0;
 
@@ -76,8 +76,8 @@ namespace WiiTUIO.Provider
             public double RelativeX;
             public double RelativeY;
             public float PitchOffsetY;
-            public double Width; 
-            public double Height; 
+            public double Width;
+            public double Height;
         }
 
         private List<ShotData> currentTargetShots = new List<ShotData>();
@@ -444,7 +444,7 @@ namespace WiiTUIO.Provider
                 }), null);
 
                 // --- BACKUP CURRENT VALUES AND PREPARE FOR EACH MODE ---
-                
+
                 topBackup = this.keyMapper.settings.Top;
                 bottomBackup = this.keyMapper.settings.Bottom;
                 leftBackup = this.keyMapper.settings.Left;
@@ -472,8 +472,8 @@ namespace WiiTUIO.Provider
                 this.keyMapper.settings.CenterY = 0.5f;
                 this.keyMapper.settings.TLled = 0.23f;
                 this.keyMapper.settings.TRled = 0.77f;
-                
-                
+
+
 
                 Dispatcher.BeginInvoke(new Action(delegate ()
                 {
@@ -545,12 +545,12 @@ namespace WiiTUIO.Provider
 
         private void finishedCalibration()
         {
-            
-            
+
+
             Settings.Default.Debug = wasDebugActiveBeforeCalibration;
             Settings.Default.notifications_enabled = wasNotificationsActiveBeforeCalibration;
             Settings.Default.Save();
-            
+
             // None and diamond modes don't need Settings.Default.Save() here
             // as their relevant properties are saved in WiimoteSettings.SaveCalibrationData()
 
@@ -609,15 +609,15 @@ namespace WiiTUIO.Provider
                 {
                     // Logic moved from StartCalibration to here. This shows the FIRST target.
                     Dispatcher.BeginInvoke(new Action(delegate ()
-                        {
-                            this.movePoint(0.5, 0.5); // Center
-                            this.CalibrationPoint.Visibility = Visibility.Hidden;
-                            this.insText2.Text = AimCenter;
-                            this.TextBorder.UpdateLayout();
-                            this.TextBorder.SetValue(Canvas.LeftProperty, 0.5 * this.ActualWidth - (this.TextBorder.ActualWidth / 2));
-                            this.TextBorder.SetValue(Canvas.TopProperty, 0.25 * this.ActualHeight - (this.TextBorder.ActualHeight / 2));
-                        }), null);
-                        step = 0; // Step 0 for center
+                    {
+                        this.movePoint(0.5, 0.5); // Center
+                        this.CalibrationPoint.Visibility = Visibility.Hidden;
+                        this.insText2.Text = AimCenter;
+                        this.TextBorder.UpdateLayout();
+                        this.TextBorder.SetValue(Canvas.LeftProperty, 0.5 * this.ActualWidth - (this.TextBorder.ActualWidth / 2));
+                        this.TextBorder.SetValue(Canvas.TopProperty, 0.25 * this.ActualHeight - (this.TextBorder.ActualHeight / 2));
+                    }), null);
+                    step = 0; // Step 0 for center
                     return;
                 }
             }
@@ -640,14 +640,14 @@ namespace WiiTUIO.Provider
                     // Restart calibration based on mode
                     this.keyMapper.SwitchToCalibration();
                     Dispatcher.BeginInvoke(new Action(delegate ()
-                        {
-                            this.movePoint(0.5, 0.5); // Return to center
-                            this.insText2.Text = AimCenter;
-                            this.TextBorder.UpdateLayout();
-                            this.TextBorder.SetValue(Canvas.LeftProperty, 0.5 * this.ActualWidth - (this.TextBorder.ActualWidth / 2));
-                            this.TextBorder.SetValue(Canvas.TopProperty, 0.25 * this.ActualHeight - (this.TextBorder.ActualHeight / 2));
-                        }), null);
-                        step = 0;
+                    {
+                        this.movePoint(0.5, 0.5); // Return to center
+                        this.insText2.Text = AimCenter;
+                        this.TextBorder.UpdateLayout();
+                        this.TextBorder.SetValue(Canvas.LeftProperty, 0.5 * this.ActualWidth - (this.TextBorder.ActualWidth / 2));
+                        this.TextBorder.SetValue(Canvas.TopProperty, 0.25 * this.ActualHeight - (this.TextBorder.ActualHeight / 2));
+                    }), null);
+                    step = 0;
                     this.currentShotCount = 0;
                     this.currentTargetShots.Clear();
                 }
@@ -660,34 +660,83 @@ namespace WiiTUIO.Provider
                 // Contamos cuántos sensores están activos
                 int foundSensors = irState.IRSensors.Count(sensor => sensor.Found);
 
-                if ((Settings.Default.pointer_4IRMode != "none" && foundSensors < 3) || Settings.Default.pointer_4IRMode == "none" && foundSensors <2)
+                if ((Settings.Default.pointer_4IRMode != "none" && foundSensors < 3) || Settings.Default.pointer_4IRMode == "none" && foundSensors < 2)
                 {
                     // No hay suficientes sensores, mostrar error y no contar el disparo
                     Dispatcher.BeginInvoke(new Action(delegate ()
                     {
                         this.wiimoteNo.Text = null;
-                        this.insText2.Text = NoSensors; 
+                        this.insText2.Text = NoSensors;
 
                         this.TextBorder.UpdateLayout();
                         this.TextBorder.SetValue(Canvas.LeftProperty, 0.5 * this.ActualWidth - (this.TextBorder.ActualWidth / 2));
                         this.TextBorder.SetValue(Canvas.TopProperty, 0.25 * this.ActualHeight - (this.TextBorder.ActualHeight / 2));
                     }), null);
-                    return; 
+                    return;
                 }
 
-                // --- Capturar datos del disparo ---
-                double Pitch = Math.Atan2(accelState.Values.Y, accelState.Values.Z);
+                // Pitch correction (mapped depending on default Wiimote mount rotation)
+                double Pitch;
+
+                switch (Settings.Default.wiimoteRotation)
+                {
+                    case 90:
+                        // Wiimote mounted sideways: use X/Z as "vertical tilt"
+                        Pitch = Math.Atan2(accelState.Values.X, accelState.Values.Z);
+                        break;
+
+                    case -90:
+                        // Same but mirrored: invert X to preserve sign convention
+                        Pitch = Math.Atan2(-accelState.Values.X, accelState.Values.Z);
+                        break;
+
+                    default:
+                        Pitch = Math.Atan2(accelState.Values.Y, accelState.Values.Z);
+                        break;
+                }
+
                 const float k_pitchCorrectionFactor = 0.02f;
                 float pitchOffsetY = k_pitchCorrectionFactor * (float)Math.Tan(Pitch);
+
+
+                const float MAX_PITCH_OFFSET = 0.25f; // prueba 0.25 (luego ajustas a 0.20 o 0.30)
+
+                if (pitchOffsetY > MAX_PITCH_OFFSET) pitchOffsetY = MAX_PITCH_OFFSET;
+                else if (pitchOffsetY < -MAX_PITCH_OFFSET) pitchOffsetY = -MAX_PITCH_OFFSET;
+
+                const double MAX_PITCH_RAD = Math.PI / 3.0; // 60°
+                if (Pitch > MAX_PITCH_RAD) Pitch = MAX_PITCH_RAD;
+                else if (Pitch < -MAX_PITCH_RAD) Pitch = -MAX_PITCH_RAD;
+
+                // Añadir datos del disparo a la lista (incluyendo Width y Height)
+                double shotX = this.keyMapper.cursorPos.RelativeX;
+                double shotY = this.keyMapper.cursorPos.RelativeY;
+
+                double shotW = this.keyMapper.cursorPos.Width;
+                double shotH = this.keyMapper.cursorPos.Height;
+
+                // Only apply correction when user configured a default rotated mount.
+                int invRot = GetInverseCalibrationRotation();
+                if (invRot != 0)
+                {
+                    // Un-rotate point so calibration data is stored in the same reference as 0°.
+                    RotateNormPoint(ref shotX, ref shotY, invRot);
+
+                    // Width/Height are axis-dependent. With a 90° mount, axes swap.
+                    // (Keep this, otherwise square/none calibration can explode.)
+                    double tmp = shotW;
+                    shotW = shotH;
+                    shotH = tmp;
+                }
 
                 // Añadir datos del disparo a la lista (incluyendo Width y Height)
                 currentTargetShots.Add(new ShotData
                 {
-                    RelativeX = this.keyMapper.cursorPos.RelativeX,
-                    RelativeY = this.keyMapper.cursorPos.RelativeY,
+                    RelativeX = shotX,
+                    RelativeY = shotY,
                     PitchOffsetY = pitchOffsetY,
-                    Width = this.keyMapper.cursorPos.Width, 
-                    Height = this.keyMapper.cursorPos.Height 
+                    Width = shotW,
+                    Height = shotH
                 });
 
                 currentShotCount++;
@@ -699,7 +748,7 @@ namespace WiiTUIO.Provider
                     Dispatcher.BeginInvoke(new Action(delegate ()
                     {
                         this.wiimoteNo.Text = null;
-                        
+
                         this.insText2.Text = $"¨{shoot} {currentShotCount} {of} {SHOTS_PER_TARGET}";
 
                         this.TextBorder.UpdateLayout();
@@ -709,7 +758,7 @@ namespace WiiTUIO.Provider
                 }
                 else
                 {
-                    
+
                     // Llamamos al nuevo método para procesar las medias y guardar los parámetros
                     ProcessAverageAndAdvance();
 
@@ -718,7 +767,7 @@ namespace WiiTUIO.Provider
                     currentTargetShots.Clear();
                 }
             }
-            
+
         }
 
         private void ProcessAverageAndAdvance()
@@ -730,8 +779,8 @@ namespace WiiTUIO.Provider
             double avgRelativeX = currentTargetShots.Average(s => s.RelativeX);
             double avgRelativeY = currentTargetShots.Average(s => s.RelativeY);
             float avgPitchOffsetY = currentTargetShots.Average(s => s.PitchOffsetY);
-            double avgWidth = currentTargetShots.Average(s => s.Width); 
-            double avgHeight = currentTargetShots.Average(s => s.Height); 
+            double avgWidth = currentTargetShots.Average(s => s.Width);
+            double avgHeight = currentTargetShots.Average(s => s.Height);
 
 
             // --- 2. APLICAR DATOS DE CALIBRACIÓN 
@@ -755,24 +804,27 @@ namespace WiiTUIO.Provider
             switch (step)
             {
                 case 0: // Center Capture 
-                    
+
                     // Usamos los promedios
                     this.keyMapper.settings.CenterX = (float)avgRelativeX;
-                    this.keyMapper.settings.CenterY = (float)avgRelativeY - avgPitchOffsetY;
+                    //this.keyMapper.settings.CenterY = (float)avgRelativeY - avgPitchOffsetY;
+                    this.keyMapper.settings.CenterY = (float)avgRelativeY;
 
+                    /*
                     Console.WriteLine($"DEBUG: Mostrando Width = {captWidth}");
                     Console.WriteLine($"DEBUG: Mostrando Height = {captHeight}");
                     Console.WriteLine($"DEBUG: Mostrando CenterX = {this.keyMapper.settings.CenterX}");
                     Console.WriteLine($"DEBUG: Mostrando CenterY = {this.keyMapper.settings.CenterY}");
-                    
+                    */
+
                     break;
                 case 1:
                     if (Settings.Default.pointer_4IRMode == "square" || Settings.Default.pointer_4IRMode == "none") //BOTTOM-RIGHT
                     {
                         captRight = 1.0 - avgRelativeX;
                         captBottom = avgRelativeY - avgPitchOffsetY;
-                        Console.WriteLine($"DEBUG: Mostrando Right = {captRight}");
-                        Console.WriteLine($"DEBUG: Mostrando Bottom = {captBottom}");
+                        //Console.WriteLine($"DEBUG: Mostrando Right = {captRight}");
+                        //Console.WriteLine($"DEBUG: Mostrando Bottom = {captBottom}");
                     }
                     else if (Settings.Default.pointer_4IRMode == "diamond") // TOP
                     {
@@ -825,7 +877,7 @@ namespace WiiTUIO.Provider
                     var OffsetYTop = this.keyMapper.settings.CenterY - (NormalizedScreenHeight / 2.0);
                     var OffsetYBottom = this.keyMapper.settings.CenterY + (NormalizedScreenHeight / 2.0);
 
-                    // ... (todos los Console.WriteLine de debug) ...
+                    /* / ... (todos los Console.WriteLine de debug) ...
                     Console.WriteLine($"DEBUG: Ancho Normalizado en Pantalla = {NormalizedScreenWidth}");
                     Console.WriteLine($"DEBUG: Alto Normalizado en Pantalla = {NormalizedScreenHeight}");
                     Console.WriteLine($"DEBUG: Escala X Calculada = {scaleX}");
@@ -838,6 +890,7 @@ namespace WiiTUIO.Provider
 
                     Console.WriteLine($"DEBUG: Mostrando OffsetYTop = {OffsetYTop}");
                     Console.WriteLine($"DEBUG: Mostrando OffsetYBottom = {OffsetYBottom}");
+                    */
                     if (Settings.Default.pointer_4IRMode == "diamond") // RIGHT
                     {
                         this.keyMapper.settings.Top = (float)OffsetYTop;
@@ -931,7 +984,7 @@ namespace WiiTUIO.Provider
                     }
                     break;
                 case 2: // Acabamos de procesar TL o Bottom-Center
-                    
+
                     if (Settings.Default.pointer_4IRMode == "square" || Settings.Default.pointer_4IRMode == "none")
                     {
                         Dispatcher.BeginInvoke(new Action(delegate ()
@@ -988,16 +1041,16 @@ namespace WiiTUIO.Provider
                     }
                     break;
                 case 4: // Acabamos de procesar BL o Right-Center (ÚLTIMO PUNTO)
-                        Dispatcher.BeginInvoke(new Action(delegate ()
-                        {
-                            this.CalibrationPoint.Visibility = Visibility.Hidden; // Hide target
-                            this.wiimoteNo.Text = null;
-                            this.insText2.Text = AimConfirm;
-                            this.TextBorder.UpdateLayout();
-                            this.TextBorder.SetValue(Canvas.LeftProperty, 0.5 * this.ActualWidth - (this.TextBorder.ActualWidth / 2));
-                            this.TextBorder.SetValue(Canvas.TopProperty, 0.25 * this.ActualHeight - (this.TextBorder.ActualHeight / 2));
-                        }), null);
-                        step = 5; // Go directly to unified confirmation step
+                    Dispatcher.BeginInvoke(new Action(delegate ()
+                    {
+                        this.CalibrationPoint.Visibility = Visibility.Hidden; // Hide target
+                        this.wiimoteNo.Text = null;
+                        this.insText2.Text = AimConfirm;
+                        this.TextBorder.UpdateLayout();
+                        this.TextBorder.SetValue(Canvas.LeftProperty, 0.5 * this.ActualWidth - (this.TextBorder.ActualWidth / 2));
+                        this.TextBorder.SetValue(Canvas.TopProperty, 0.25 * this.ActualHeight - (this.TextBorder.ActualHeight / 2));
+                    }), null);
+                    step = 5; // Go directly to unified confirmation step
                     break;
                 default: break;
             }
@@ -1017,7 +1070,45 @@ namespace WiiTUIO.Provider
 
             return tPoint;
         }
+        // Rotates a normalized (0..1) point around the center (0.5,0.5).
+        // deg must be 0, 90 or -90.
+        private static void RotateNormPoint(ref double x, ref double y, int deg)
+        {
+            if (deg == 0) return;
 
+            double dx = x - 0.5;
+            double dy = y - 0.5;
+
+            double rx = dx, ry = dy;
+
+            // +90: (x,y)->(-y,x)
+            // -90: (x,y)->(y,-x)
+            if (deg == 90)
+            {
+                rx = -dy;
+                ry = dx;
+            }
+            else if (deg == -90)
+            {
+                rx = dy;
+                ry = -dx;
+            }
+
+            x = rx + 0.5;
+            y = ry + 0.5;
+        }
+
+        // Returns the inverse of the default hold rotation so calibration is stored as if Wiimote were 0°.
+        //  90  -> -90
+        // -90  ->  90
+        //  0   ->  0
+        private static int GetInverseCalibrationRotation()
+        {
+            int rot = Settings.Default.wiimoteRotation;
+            if (rot == 90) return -90;
+            if (rot == -90) return 90;
+            return 0;
+        }
         public bool OverlayIsOn()
         {
             return !this.hidden;

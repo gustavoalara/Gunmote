@@ -88,6 +88,14 @@ namespace WiiTUIO.Output.Handlers
         private long previousLightTime = 0;
         private bool wasInReach;
 
+        private bool fpsHasLastMove = false;
+        private double fpsLastMoveX = 0.0;
+        private double fpsLastMoveY = 0.0;
+
+        private const double FPS_OFFSCREEN_DECAY = 0.98;
+        private const double FPS_OFFSCREEN_MIN = 0.05;
+
+
         public MouseHandler()
         {
             this.inputSimulator = new InputSimulator();
@@ -100,7 +108,7 @@ namespace WiiTUIO.Output.Handlers
             this.initialInReachElapsed = new Stopwatch();
             this.regionEasingX = new Stopwatch();
         }
-        
+
         public bool reset()
         {
             if (mouseLeftDown)
@@ -917,53 +925,39 @@ namespace WiiTUIO.Output.Handlers
                     {
                         this.inputSimulator.Mouse.MoveMouseBy((int)mouseX, (int)mouseY);
                     }
-
+                    fpsLastMoveX = mouseX;
+                    fpsLastMoveY = mouseY;
+                    fpsHasLastMove = true;
                     return true;
                 }
                 else
                 {
-                    // Consider outside of IR range. Reset some values.
+                    // OFFSCREEN: mantener movimiento continuo usando el último delta
                     remainderX = 0.0;
                     remainderY = 0.0;
 
-                    //accelHelperX = 0.0;
-                    //accelHelperY = 0.0;
-                    //accelTravelX = 0.0;
-                    //accelTravelY = 0.0;
-
-                    previousPointerX = 0.5;
-                    previousPointerY = 0.5;
-
-                    previousPointerRadial = 0.0;
-                    accelCurrentMultiRadial = 0.0;
-                    accelTravelRadial = 0.0;
-                    accelEasingMultiRadial = 0.0;
-                    totalTravelRadial = 0.0;
-                    //{
-                    //    deltaEasingTimeRadial.Reset();
-                    //}
-
-                    //if (deltaEasingTimeX.IsRunning)
-                    //{
-                    //    deltaEasingTimeX.Stop();
-                    //}
-
-                    //if (deltaEasingTimeY.IsRunning)
-                    //{
-                    //    deltaEasingTimeY.Stop();
-                    //}
-
-                    if (deltaEasingTimeRadial.IsRunning)
+                    if (fpsHasLastMove)
                     {
-                        deltaEasingTimeRadial.Reset();
+                        fpsLastMoveX *= FPS_OFFSCREEN_DECAY;
+                        fpsLastMoveY *= FPS_OFFSCREEN_DECAY;
+
+                        if (Math.Abs(fpsLastMoveX) < FPS_OFFSCREEN_MIN) fpsLastMoveX = 0.0;
+                        if (Math.Abs(fpsLastMoveY) < FPS_OFFSCREEN_MIN) fpsLastMoveY = 0.0;
+
+                        if (fpsLastMoveX != 0.0 || fpsLastMoveY != 0.0)
+                        {
+                            this.inputSimulator.Mouse.MoveMouseBy(
+                                (int)fpsLastMoveX,
+                                (int)fpsLastMoveY
+                            );
+                        }
                     }
 
+                    // Mantén la lógica de reentrada
                     initialInReachStatus = true;
 
                     if (regionEasingX.IsRunning)
-                    {
                         regionEasingX.Reset();
-                    }
                 }
             }
 

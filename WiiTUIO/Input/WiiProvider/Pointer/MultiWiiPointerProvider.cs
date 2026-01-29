@@ -70,8 +70,8 @@ namespace WiiTUIO.Provider
         /// </summary>
         public event Action<WiimoteStatus> OnStatusUpdate;
 
-        public event Action<int,int> OnConnect;
-        public event Action<int,int> OnDisconnect;
+        public event Action<int, int> OnConnect;
+        public event Action<int, int> OnDisconnect;
 
 
         #endregion
@@ -252,7 +252,7 @@ namespace WiiTUIO.Provider
                         // Ensure we are ok.
                         try
                         {
-                            Console.WriteLine("Teardown 4 "+ pDevice.HIDDevicePath +" because of " + pError.Message);
+                            Console.WriteLine("Teardown 4 " + pDevice.HIDDevicePath + " because of " + pError.Message);
                             this.teardownWiimoteConnection(pDevice);
                         }
                         finally { }
@@ -271,7 +271,7 @@ namespace WiiTUIO.Provider
 
             this.connectionMutex.ReleaseMutex();
 
-            if(pErrorReport != null)
+            if (pErrorReport != null)
             {
                 return false;
             }
@@ -290,8 +290,8 @@ namespace WiiTUIO.Provider
             int id = this.getFirstFreeId();
             wiimote.SetLEDs(id == 1, id == 2, id == 3, id == 4);
 
-            wiimote.WiimoteState.SpeakerState.DataFormat = SpeakerDataFormat.ADPCM;
-            wiimote.WiimoteState.SpeakerState.SampleRate = 3000;
+            wiimote.WiimoteState.SpeakerState.DataFormat = SpeakerDataFormat.PCM;
+            wiimote.WiimoteState.SpeakerState.SampleRate = 6000;
             wiimote.WiimoteState.SpeakerState.Volume = 0xFF;
             wiimote.EnableSpeaker();
 
@@ -356,7 +356,7 @@ namespace WiiTUIO.Provider
                 control.Wiimote.SetLEDs(id == 1, id == 2, id == 3, id == 4);
                 control.Wiimote.SetRumble(true);
                 control.Wiimote.SetSpeakerMuteState(false);
-                new Timer(connectRumble,control.Wiimote,0,Timeout.Infinite);
+                new Timer(connectRumble, control.Wiimote, 0, Timeout.Infinite);
             }
             catch { }
             finally

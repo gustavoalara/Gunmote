@@ -136,7 +136,7 @@ public static class DebugVisualizer
         Form form = sender as Form;
 
         // Establecemos la posición en la esquina superior izquierda
-        form.Location = new System.Drawing.Point(0, 0);
+        form.Location = new System.Drawing.Point(50, 50);
     }
 
     public static void HideAll()

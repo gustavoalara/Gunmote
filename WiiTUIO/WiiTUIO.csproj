@@ -230,13 +230,14 @@
     <Compile Include="Input\WiiProvider\Settings\CalibrationSettings.cs" />
     <Compile Include="Output\CursorPositionHelper.cs" />
     <Compile Include="Output\Handlers\Cursor\CursorHandler.cs" />
+    <Compile Include="Output\Handlers\FpsMouseWindowsHandler.cs" />
     <Compile Include="Output\Handlers\HandlerFactory.cs" />
     <Compile Include="Output\Handlers\ICursorHandler.cs" />
     <Compile Include="Output\Handlers\InputMethods.cs" />
     <Compile Include="Output\Handlers\IOutputHandler.cs" />
     <Compile Include="Output\Handlers\IFeedback.cs" />
     <Compile Include="Output\Handlers\IStickHandler.cs" />
-    <Compile Include="Output\Handlers\VmulitMouseHandler.cs" />
+    <Compile Include="Output\Handlers\VmultiMouseHandler.cs" />
     <Compile Include="Output\Handlers\VmultiKeyboardHandler.cs" />
     <Compile Include="IDColor.cs" />
     <Compile Include="Output\Handlers\IButtonHandler.cs" />
@@ -398,7 +399,9 @@
     <EmbeddedResource Include="Resources\Resources.ca-ES.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Resources.de-DE.resx" />
+    <EmbeddedResource Include="Resources\Resources.de-DE.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\Resources.eu-ES.resx" />
     <EmbeddedResource Include="Resources\Resources.fr-FR.resx" />
     <EmbeddedResource Include="Resources\Resources.en-US.resx" />

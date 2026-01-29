@@ -1,10 +1,12 @@
 ﻿using MahApps.Metro.Controls;
+using Microsoft.Win32; // +++ AÑADIDO: Necesario para OpenFileDialog
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,7 +16,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using Microsoft.Win32; // +++ AÑADIDO: Necesario para OpenFileDialog
+using WiiTUIO.Properties;
 
 namespace WiiTUIO
 {
@@ -460,7 +462,53 @@ namespace WiiTUIO
                 }
             }
         }
+        private void tbClone_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            if (this.currentKeymap == null) return;
 
+            // No tiene sentido clonar calibración/preview si no quieres que aparezcan perfiles raros
+            string calib = KeymapDatabase.Current.getKeymapSettings().getCalibrationKeymap();
+            string calibPrev = KeymapDatabase.Current.getKeymapSettings().getFinishCalibrationKeymap();
+            if (this.currentKeymap.Filename == calib || this.currentKeymap.Filename == calibPrev)
+                return;
+
+            string srcFilename = this.currentKeymap.Filename;
+            string srcPath = Path.Combine(Settings.Default.keymaps_path, srcFilename);
+
+            if (!File.Exists(srcPath)) return;
+
+            string newFilename = GenerateCloneFilename(srcFilename);
+            string dstPath = Path.Combine(Settings.Default.keymaps_path, newFilename);
+
+            File.Copy(srcPath, dstPath);
+
+            // Mantén el mismo Parent para conservar la herencia tal como estaba
+            Keymap cloned = new Keymap(this.currentKeymap.Parent, newFilename);
+
+            // Cambia el título visible del perfil (y guarda)
+            cloned.setName(this.currentKeymap.getName() + " (copia)");
+
+            // Selecciona el clon y refresca UI (selectKeymap ya vuelve a rellenar la lista)
+            this.selectKeymap(cloned);
+        }
+
+        private string GenerateCloneFilename(string originalFilename)
+        {
+            string baseName = Path.GetFileNameWithoutExtension(originalFilename);
+            string ext = Path.GetExtension(originalFilename);
+
+            // estilo: MiPerfil_copy.json, MiPerfil_copy_2.json, etc.
+            string candidate = $"{baseName}_copy{ext}";
+            int i = 2;
+
+            while (File.Exists(Path.Combine(Settings.Default.keymaps_path, candidate)))
+            {
+                candidate = $"{baseName}_copy_{i}{ext}";
+                i++;
+            }
+
+            return candidate;
+        }
         private void bAddKeymap_MouseUp(object sender, MouseButtonEventArgs e)
         {
             Keymap newKeymap = KeymapDatabase.Current.createNewKeymap();

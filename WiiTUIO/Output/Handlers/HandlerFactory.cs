@@ -27,14 +27,23 @@ namespace WiiTUIO.Output.Handlers
 
             IOutputHandler keyboardHandler = new KeyboardHandler();
             IOutputHandler mouseHandler = new MouseHandler();
-            if (vmulti.connect((int)id))
+            bool vmultiOk = vmulti.connect((int)id);
+            if (vmultiOk)
             {
                 keyboardHandler = new VmultiKeyboardHandler(vmulti);
                 mouseHandler = new VmultiMouseHandler(vmulti);
             }
 
             all.Add(keyboardHandler);
+
+            // Si VMulti está activo, inserta ANTES el handler de FPS por Windows
+            if (vmultiOk)
+            {
+                all.Add(new FpsMouseWindowsHandler());
+            }
+
             all.Add(mouseHandler);
+
             ViGEmHandler gamepadHandler = new ViGEmHandler(id);
             if (gamepadHandler.isAvailable) all.Add(gamepadHandler);
             all.Add(new WiimoteHandler());

@@ -1029,7 +1029,7 @@ namespace WiiTUIO.Provider
 
             recalculateLightgunCoordBounds();
         }
-        
+
         public void RecalculateLightgunAspect(double targetAspect)
         {
             this.targetAspectRatio = targetAspect;

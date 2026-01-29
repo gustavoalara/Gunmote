@@ -112,20 +112,64 @@ namespace WiiTUIO.Provider
                 {
                     using (BinaryReader reader = new BinaryReader(fs))
                     {
-                        reader.BaseStream.Seek(44, SeekOrigin.Begin);   // Skip WAV header
+                        //reader.BaseStream.Seek(44, SeekOrigin.Begin);   // Skip WAV header
+                        // byte[] soundData = reader.ReadBytes((int)(fs.Length - 44));
+                        byte[] soundData = ReadWavDataChunk(reader);
 
-                        byte[] soundData = reader.ReadBytes((int)(fs.Length - 44));
+                        
+                        //Conversión en memoria de PCM8 unsigned to signed
+                        for (int i = 0; i < soundData.Length; i++)
+                            soundData[i] = (byte)(soundData[i] ^ 0x80);
 
-                        int maxBytes = (int)(this.Wiimote.WiimoteState.SpeakerState.SampleRate * (maxPlaybackTime / 1000.0) * 0.5);
+                        if (soundData == null || soundData.Length == 0)
+                            return;
+
+                        double seconds = maxPlaybackTime / 1000.0;
+                        int sampleRate = this.Wiimote.WiimoteState.SpeakerState.SampleRate;
+
+                        // PCM8 mono: 1 byte por sample
+                        int maxBytes = (int)(sampleRate * seconds);
+
                         if (soundData.Length > maxBytes)
-                            Array.Resize(ref soundData, maxBytes);  // Truncate to max playback time
-
+                            Array.Resize(ref soundData, maxBytes);
+                                                
                         this.Wiimote.StartPlayback(soundData);
+
                     }
                 }
             }
         }
+        private static byte[] ReadWavDataChunk(BinaryReader reader)
+        {
+            // Asume que estamos al inicio del archivo
+            reader.BaseStream.Seek(0, SeekOrigin.Begin);
 
+            // RIFF header
+            if (new string(reader.ReadChars(4)) != "RIFF") return null;
+            reader.ReadInt32(); // riff size
+            if (new string(reader.ReadChars(4)) != "WAVE") return null;
+
+            // Buscar chunk "data"
+            while (reader.BaseStream.Position + 8 <= reader.BaseStream.Length)
+            {
+                string chunkId = new string(reader.ReadChars(4));
+                int chunkSize = reader.ReadInt32();
+
+                if (chunkSize < 0) return null;
+                long nextChunk = reader.BaseStream.Position + chunkSize;
+
+                if (chunkId == "data")
+                {
+                    if (reader.BaseStream.Position + chunkSize > reader.BaseStream.Length) return null;
+                    return reader.ReadBytes(chunkSize);
+                }
+
+                // Saltar chunk (alineación a palabra: si chunkSize es impar, suma 1)
+                reader.BaseStream.Position = nextChunk + (chunkSize % 2);
+            }
+
+            return null;
+        }
         private void ArcadeHook_OnOutput(string key, string value)
         {
             

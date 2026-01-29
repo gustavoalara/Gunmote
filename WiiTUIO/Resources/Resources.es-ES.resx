@@ -195,17 +195,11 @@
   <data name="PointerMarginsLeftRight" xml:space="preserve">
     <value>Márgenes izquierdo/derecho del puntero:</value>
   </data>
-  <data name="PointerFPS" xml:space="preserve">
-    <value>Puntero FPS:</value>
-  </data>
   <data name="PointerPositionSmoothing" xml:space="preserve">
     <value>Suavizado de la Posición del Puntero:</value>
   </data>
   <data name="PointerPositionRadius" xml:space="preserve">
     <value>Radio de posición del puntero:</value>
-  </data>
-  <data name="TestConfigHeader" xml:space="preserve">
-    <value>Configuración de Prueba</value>
   </data>
   <data name="TestDeltaAccel" xml:space="preserve">
     <value>Habilita Aceleración Delta de Prueba:</value>
@@ -241,10 +235,7 @@
     <value>Margen de Calibración Y:</value>
   </data>
   <data name="TestLightgunOneeuroMincutoff" xml:space="preserve">
-    <value>Recorte mínimo de One Euro de pistola de luz:</value>
-  </data>
-  <data name="TestLightgunOneeuroBeta" xml:space="preserve">
-    <value>Beta de One Euro de pistola de luz:</value>
+    <value>Corte mínimo del filtro de suavizado</value>
   </data>
   <data name="FpsmouseDeadzone" xml:space="preserve">
     <value>Zona muerta del ratón FPS:</value>
@@ -1076,5 +1067,203 @@ Deberá disparar varias veces a cada objetivo</value>
   </data>
   <data name="cbShowHelp" xml:space="preserve">
     <value>Mostrar Video de Ayuda de Primeros Pasos</value>
+  </data>
+  <data name="cbWiimoterotation" xml:space="preserve">
+    <value>Rotación del Wiimote</value>
+  </data>
+  <data name="KeyMapClone" xml:space="preserve">
+    <value>Clonar</value>
+  </data>
+  <data name="Tip_pairOnStart" xml:space="preserve">
+    <value>Empareja automáticamente los Wiimotes al iniciar Gunmote</value>
+  </data>
+  <data name="Tip_connectOnStart" xml:space="preserve">
+    <value>Conecta automáticamente los Wiimotes ya emparejados</value>
+  </data>
+  <data name="Tip_minimizeOnStart" xml:space="preserve">
+    <value>Inicia Gunmote minimizado</value>
+  </data>
+  <data name="Tip_minimizeToTray" xml:space="preserve">
+    <value>Minimiza Gunmote a la bandeja del sistema</value>
+  </data>
+  <data name="Tip_notifications_enabled" xml:space="preserve">
+    <value>Activa las notificaciones del sistema</value>
+  </data>
+  <data name="Tip_pointer_sensorBarPos" xml:space="preserve">
+    <value>Posición de la barra ("arriba" o "abajo")</value>
+  </data>
+  <data name="Tip_pointer_sensorBarPosCompensation" xml:space="preserve">
+    <value>Offset vertical según la posición de la barra</value>
+  </data>
+  <data name="Tip_pointer_cursorSize" xml:space="preserve">
+    <value>Tamaño del cursor de lightgun</value>
+  </data>
+  <data name="Tip_pointer_marginsTopBottom" xml:space="preserve">
+    <value>Márgenes superior/inferior para el mapeo del puntero</value>
+  </data>
+  <data name="Tip_pointer_marginsLeftRight" xml:space="preserve">
+    <value>Márgenes izquierda/derecha para el mapeo del puntero</value>
+  </data>
+  <data name="Tip_pointer_4IRMode" xml:space="preserve">
+    <value>Cómo se interpretan 4 LEDs IR (diamond/square/none)</value>
+  </data>
+  <data name="Tip_fpsmouse_deadzone" xml:space="preserve">
+    <value>Zona muerta alrededor del centro en modo FPS</value>
+  </data>
+  <data name="Tip_fpsmouse_speed" xml:space="preserve">
+    <value>Velocidad base de rotación de cámara FPS</value>
+  </data>
+  <data name="Tip_test_fpsmouseOffset" xml:space="preserve">
+    <value>Offset mínimo para reducir micro-jitter en FPS</value>
+  </data>
+  <data name="Tip_test_deltaAccel" xml:space="preserve">
+    <value>Activa aceleración dinámica para ratón FPS</value>
+  </data>
+  <data name="Tip_test_deltaAccelMulti" xml:space="preserve">
+    <value>Multiplicador máximo de aceleración</value>
+  </data>
+  <data name="Tip_test_deltaAccelMinTravel" xml:space="preserve">
+    <value>Movimiento mínimo para activar aceleración</value>
+  </data>
+  <data name="Tip_test_deltaAccelMaxTravel" xml:space="preserve">
+    <value>Distancia considerada como "aceleración máxima"</value>
+  </data>
+  <data name="Tip_test_deltaAccelEasingDuration" xml:space="preserve">
+    <value>Tiempo de suavizado de cambios de aceleración (segundos)</value>
+  </data>
+  <data name="Tip_wiimoteRotation" xml:space="preserve">
+    <value>Compensa la rotación física del Wiimote (0/90/-90/180)</value>
+  </data>
+  <data name="Tip_shake_threshold" xml:space="preserve">
+    <value>Umbral de sensibilidad para detectar sacudida</value>
+  </data>
+  <data name="Tip_ShootsPerTarget" xml:space="preserve">
+    <value>Número de disparos necesarios para calibrar</value>
+  </data>
+  <data name="Tip_pairedOnce" xml:space="preserve">
+    <value>Marca interna: indica que se han emparejado Wiimotes al menos una vez</value>
+  </data>
+  <data name="Tip_isHelpPanelOpen" xml:space="preserve">
+    <value>Recuerda si el panel de ayuda está abierto</value>
+  </data>
+  <data name="Tip_primaryMonitor" xml:space="preserve">
+    <value>Monitor principal para cursor/lightgun</value>
+  </data>
+  <data name="Tip_completelyDisconnect" xml:space="preserve">
+    <value>Desconecta completamente los Wiimotes (limpieza más agresiva)</value>
+  </data>
+  <data name="Tip_autoDisconnectTimeout" xml:space="preserve">
+    <value>Tiempo (ms) antes de desconectar automáticamente por inactividad</value>
+  </data>
+  <data name="Tip_defaultContinousScale" xml:space="preserve">
+    <value>Escala por defecto para entradas continuas/analógicas</value>
+  </data>
+  <data name="Tip_defaultContinousPressThreshold" xml:space="preserve">
+    <value>Umbral por defecto para tratar un valor analógico como "pulsado"</value>
+  </data>
+  <data name="Tip_defaultContinousDeadzone" xml:space="preserve">
+    <value>Zona muerta por defecto para evitar deriva</value>
+  </data>
+  <data name="Tip_disconnectWiimotesOnDolphin" xml:space="preserve">
+    <value>Desconecta los Wiimotes al iniciar Dolphin</value>
+  </data>
+  <data name="Tip_dolphin_path" xml:space="preserve">
+    <value>Ruta al ejecutable de Dolphin (para autodetección)</value>
+  </data>
+  <data name="Tip_keymaps_path" xml:space="preserve">
+    <value>Carpeta donde se guardan los perfiles de keymap</value>
+  </data>
+  <data name="Tip_noTopmost" xml:space="preserve">
+    <value>Desactiva "siempre encima"</value>
+  </data>
+  <data name="Tip_keymaps_config" xml:space="preserve">
+    <value>Nombre del archivo de configuración de keymaps</value>
+  </data>
+  <data name="Tip_pointer_FPS" xml:space="preserve">
+    <value>Tasa objetivo de actualización del puntero (FPS)</value>
+  </data>
+  <data name="Tip_test_regionEasingXDuration" xml:space="preserve">
+    <value>Tiempo extra de easing cerca del máximo en X</value>
+  </data>
+  <data name="Tip_test_regionEasingXOffset" xml:space="preserve">
+    <value>Controla cómo escala el easing cerca del límite (X)</value>
+  </data>
+  <data name="Tip_test_smoothingWeight" xml:space="preserve">
+    <value>Peso de suavizado (más = más suave pero más latencia)</value>
+  </data>
+  <data name="Tip_CalibrationMarginX" xml:space="preserve">
+    <value>Margen horizontal de calibración (corrección de offset)</value>
+  </data>
+  <data name="Tip_CalibrationMarginY" xml:space="preserve">
+    <value>Margen vertical de calibración (corrección de offset)</value>
+  </data>
+  <data name="Tip_pointer_positionSmoothing" xml:space="preserve">
+    <value>Modo/nivel de suavizado del puntero</value>
+  </data>
+  <data name="Tip_pointer_positionRadius" xml:space="preserve">
+    <value>Radio usado por la lógica de suavizado/precisión del puntero</value>
+  </data>
+  <data name="Tip_shake_count" xml:space="preserve">
+    <value>Número de sacudidas necesarias para activar</value>
+  </data>
+  <data name="Tip_shake_maxTimeInBetween" xml:space="preserve">
+    <value>Tiempo máximo (ms) entre sacudidas</value>
+  </data>
+  <data name="Tip_shake_pressedTime" xml:space="preserve">
+    <value>Tiempo (ms) que la acción se considera "pulsada"</value>
+  </data>
+  <data name="Tip_xinput_rumbleThreshold_big" xml:space="preserve">
+    <value>Umbral de vibración motor grande (XInput)</value>
+  </data>
+  <data name="Tip_xinput_rumbleThreshold_small" xml:space="preserve">
+    <value>Umbral de vibración motor pequeño (XInput)</value>
+  </data>
+  <data name="Tip_wiimode_rumbleTime_short" xml:space="preserve">
+    <value>Duración corta de vibración (ms)</value>
+  </data>
+  <data name="Tip_wiimode_rumbleTime_long" xml:space="preserve">
+    <value>Duración larga de vibración (ms)</value>
+  </data>
+  <data name="Tip_wiimode_rumbleTime_alternatingOn" xml:space="preserve">
+    <value>Tiempo ON de vibración alterna (ms)</value>
+  </data>
+  <data name="Tip_wiimode_rumbleTime_alternatingOff" xml:space="preserve">
+    <value>Tiempo OFF de vibración alterna (ms)</value>
+  </data>
+  <data name="Tip_wiimode_loopSoundTime" xml:space="preserve">
+    <value>Intervalo del sonido en bucle (ms)</value>
+  </data>
+  <data name="Tip_Color_ID1" xml:space="preserve">
+    <value>Color RGB para identificar Jugador 1</value>
+  </data>
+  <data name="Tip_Color_ID2" xml:space="preserve">
+    <value>Color RGB para identificar Jugador 2</value>
+  </data>
+  <data name="Tip_Color_ID3" xml:space="preserve">
+    <value>Color RGB para identificar Jugador 3</value>
+  </data>
+  <data name="Tip_Color_ID4" xml:space="preserve">
+    <value>Color RGB para identificar Jugador 4</value>
+  </data>
+  <data name="Tip_DefaultLanguage" xml:space="preserve">
+    <value>Idioma por defecto (vacío = automático)</value>
+  </data>
+  <data name="Tip_Debug" xml:space="preserve">
+    <value>Activa logs de depuración</value>
+  </data>
+  <data name="TestConfigHeader" xml:space="preserve">
+    <value>Configuración ratón FPS</value>
+  </data>
+  <data name="TestLightgunOneeuroBeta" xml:space="preserve">
+    <value>Filtro de suavizado en movimientos rápidos</value>
+  </data>
+  <data name="Tip_test_lightgun_oneeuro_beta" xml:space="preserve">
+    <value>Coeficiente de velocidad (mayor = sigue mejor los movimientos rápidos, menor = más constante, mayor potencial de retraso)</value>
+  </data>
+  <data name="Tip_test_lightgun_oneeuro_mincutoff" xml:space="preserve">
+    <value>Frecuencia de corte mínima (más alta = menos suavizado, más sensible, más baja = más suavizado pero más retraso)</value>
+  </data>
+  <data name="PointerFPS" xml:space="preserve">
+    <value>Fotogramas del puntero por segundo (FPS)</value>
   </data>
 </root>

@@ -156,6 +156,9 @@ namespace WiiTUIO.Provider
 
         public WiiKeyMap ActiveKeyMap => KeyMap;
 
+        private bool irTrackingEnabled = true;   // “cámara” ON/OFF
+        private bool irToggleLatch = false;      // evita toggles repetidos
+
         public WiiKeyMapper(Wiimote wiimote, int wiimoteID, HandlerFactory handlerFactory, string serial = null)
         {
             this.WiimoteID = wiimoteID;
@@ -223,7 +226,7 @@ namespace WiiTUIO.Provider
             {
                 this.SendConfigChangedEvt();
             }
-        } 
+        }
         private JObject loadApplicationsJSON()
         {
             JObject result = null;
@@ -342,6 +345,15 @@ namespace WiiTUIO.Provider
             if (isButtonPressed(ButtonFlag.Minus) && !OverlayWindow.Current.OverlayIsOn()) //Prevent calibration overlay from loading if on keymap overlay
             {
                 CalibrationOverlay.Current.StartCalibration(this);
+            }
+            else if (isButtonPressed(ButtonFlag.Plus) && !CalibrationOverlay.Current.OverlayIsOn()) // NEW: toggle IR when holding HOME+PLUS
+            {
+                // latch: si sigues manteniendo HOME+PLUS, no vuelvas a alternar cada tick
+                if (!irToggleLatch)
+                {
+                    irToggleLatch = true;
+                    ToggleIRTracking();
+                }
             }
             else if (isButtonPressed(ButtonFlag.Home) && !CalibrationOverlay.Current.OverlayIsOn()) //Prevent keymap overlay from loading if on calibration overlay
             {
@@ -503,9 +515,13 @@ namespace WiiTUIO.Provider
 
             this.CurrentWiimoteState = wiimoteState;
 
-            cursorPos = this.screenPositionCalculator.CalculateCursorPos(wiimoteState);
+            if (irTrackingEnabled)
+            {
+                cursorPos = this.screenPositionCalculator.CalculateCursorPos(wiimoteState);
+                this.KeyMap.updateCursorPosition(cursorPos);
+            }
 
-            this.KeyMap.updateCursorPosition(cursorPos);
+            //this.KeyMap.updateCursorPosition(cursorPos);
             this.KeyMap.updateAccelerometer(wiimoteState.AccelState);
 
             if (wiimoteState.Extension)
@@ -668,6 +684,7 @@ namespace WiiTUIO.Provider
                 {
                     Console.WriteLine("home up");
                     this.homeButtonTimer.Stop();
+                    irToggleLatch = false;
 
                     if (this.hideOverlayOnUp)
                     {
@@ -729,6 +746,13 @@ namespace WiiTUIO.Provider
                 ws.ExtensionType = lastExtension;
                 this.processWiimoteState(ws);
             }
+        }
+        private void ToggleIRTracking()
+        {
+            irTrackingEnabled = !irTrackingEnabled;
+            OnRumble?.Invoke(true);
+            Task.Delay(200).ContinueWith(_ => OnRumble?.Invoke(false));
+
         }
     }
 }

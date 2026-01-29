@@ -62,8 +62,9 @@
                     <StackPanel Margin="4">
                         <Grid>
                             <TextBox HorizontalAlignment="Left" Name="tbKeymapTitle" Tag="{loc:Localization tbKeymapTitle}" FontFamily="Segoe UI Semilight" FontSize="14" Padding="2,1" Margin="6" Width="223"></TextBox>
-                            <TextBlock Name="tbDelete" Cursor="Hand" MouseUp="tbDelete_MouseUp" Foreground="Red" FontFamily="Segoe UI Semilight" FontSize="12" Margin="349,10,6,10" TextAlignment="Center" TextDecorations="Underline" Text="{loc:Localization KeyMapDel}"/>
-                        </Grid>
+                            <TextBlock Name="tbDelete" Cursor="Hand" MouseUp="tbDelete_MouseUp" Foreground="Red" FontFamily="Segoe UI Semilight" FontSize="12" Margin="385,10,33,10" TextAlignment="Center" TextDecorations="Underline" Text="{loc:Localization KeyMapDel}"/>
+                            <TextBlock x:Name="tbClone" Cursor="Hand" FontFamily="Segoe UI Semilight" FontSize="12" Margin="329,10,83,10" TextAlignment="Center" Foreground="{DynamicResource AccentColorBrush}"  MouseUp="tbClone_MouseUp" Text="{loc:Localization KeyMapClone}" />
+                       </Grid>
                         <CheckBox Name="cbLayoutChooser" FontFamily="Segoe UI Semilight" Margin="6">
                             <Run Text="{loc:Localization cbLayoutChooser}"/>
                         </CheckBox>
