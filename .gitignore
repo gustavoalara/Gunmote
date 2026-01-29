@@ -351,3 +351,6 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+/WiiTUIO/Input/WiiProvider/Pointer/MultiWiiPointerProvider - copia.cs.bak
+/WiiTUIO/Input/WiiProvider/Pointer/ScreenPositionCalculator.giro
+/WiiTUIO/Output/Handlers/MouseHandler - copia.cs
