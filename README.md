@@ -22,6 +22,8 @@ At least:
 1x Nintendo Wii Remote<br />
 1x Wireless Wii Sensor Bar<br />
 1x Bluetooth enabled computer with Windows 8/10/11
+Visual C++ Runtimes
+.Net 4.x
 
 Bug reports
 ==============
