@@ -20,10 +20,10 @@ Prerequisites
 At least:
 
 1x Nintendo Wii Remote<br />
-1x Wireless Wii Sensor Bar<br />
-1x Bluetooth enabled computer with Windows 8/10/11
-Visual C++ Runtimes
-.Net 4.8
+1x Wireless Wii Sensor Bar or 4 IR LEDs in diamond or square arrangement<br />
+1x Bluetooth ( 4.x or lower) enabled computer with Windows 8/10/11<br />
+Visual C++ Runtimes<br />
+.Net 4.8<br />
 
 Bug reports
 ==============
