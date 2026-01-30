@@ -23,7 +23,7 @@ At least:
 1x Wireless Wii Sensor Bar<br />
 1x Bluetooth enabled computer with Windows 8/10/11
 Visual C++ Runtimes
-.Net 4.x
+.Net 4.8
 
 Bug reports
 ==============
