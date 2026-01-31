@@ -1264,4 +1264,10 @@ Hauràs de disparar diverses vegades a cada objectiu.</value>
   <data name="PointerFPS" xml:space="preserve">
     <value>Fotogrames de punter per segon (FPS)</value>
   </data>
+  <data name="cbDebug" xml:space="preserve">
+    <value>Mostra la finestra de depuració dels LED</value>
+  </data>
+  <data name="Tip_WindowsStart" xml:space="preserve">
+    <value>Afegiu Gunmote al Programador de tasques per iniciar-lo amb l'inici de sessió de l'usuari</value>
+  </data>
 </root>

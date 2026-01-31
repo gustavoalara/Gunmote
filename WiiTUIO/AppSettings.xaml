@@ -8,6 +8,22 @@
              mc:Ignorable="d" d:DesignWidth="419">
     <UserControl.Resources>
         <ResourceDictionary>
+            <Style TargetType="ToolTip">
+                <Setter Property="Background" Value="Yellow" />
+                <Setter Property="Foreground" Value="Black" />
+                <Setter Property="FontSize" Value="12" />
+                <Setter Property="Padding" Value="8,4" />
+                <Setter Property="BorderThickness" Value="1" />
+                <Setter Property="BorderBrush" Value="Gold" />
+            </Style>
+            <Style x:Key="RedToolTip" TargetType="ToolTip">
+                <Setter Property="Background" Value="Red" />
+                <Setter Property="Foreground" Value="Black" />
+                <Setter Property="FontSize" Value="12" />
+                <Setter Property="Padding" Value="8,4" />
+                <Setter Property="BorderThickness" Value="1" />
+                <Setter Property="BorderBrush" Value="Red" />
+            </Style>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colors.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
@@ -27,15 +43,25 @@
 
             </Button>
 
-            <CheckBox x:Name="cbWindowsStart" Content="{loc:Localization WindowsStart}" Canvas.Left="125" Canvas.Top="87" FontFamily="Segoe UI Semilight" Checked="cbWindowsStart_Checked" Unchecked="cbWindowsStart_Unchecked"/>
+            <CheckBox x:Name="cbWindowsStart" Content="{loc:Localization WindowsStart}" Canvas.Left="125" Canvas.Top="87" FontFamily="Segoe UI Semilight" Checked="cbWindowsStart_Checked" Unchecked="cbWindowsStart_Unchecked"
+                              ToolTip="{loc:Localization Tip_WindowsStart}" />
             <!--Button Name="btnConfigDone" Content="Hecho" Canvas.Left="236" Canvas.Top="126" Width="44" Background="#FFECECEC" BorderBrush="Gainsboro" Height="25"/-->
             <Label Content="{loc:Localization AppSettings}" Canvas.Left="71" Canvas.Top="36" FontFamily="Segoe UI Light" FontSize="18"/>
-            <CheckBox x:Name="cbPairOnStart" Content="{loc:Localization pairOnStart}" Canvas.Left="125" Canvas.Top="109" FontFamily="Segoe UI Semilight" Checked="cbPairOnStart_Checked" Unchecked="cbPairOnStart_Unchecked" />
-            <CheckBox x:Name="cbDisconnectOnExit" Content="{loc:Localization DisconnectOnExit}" Canvas.Left="125" Canvas.Top="131" FontFamily="Segoe UI Semilight" Checked="cbDisconnectOnExit_Checked" Unchecked="cbDisconnectOnExit_Unchecked" />
-            <CheckBox x:Name="cbMinimizeToTray" Content="{loc:Localization MinimizeToTray}" Canvas.Left="125" Canvas.Top="154" FontFamily="Segoe UI Semilight" Checked="cbMinimizeToTray_Checked" Unchecked="cbMinimizeToTray_Unchecked" />
-            <CheckBox x:Name="cbMinimizeOnStart" Content="{loc:Localization MinimizeOnStart}" Canvas.Left="125" Canvas.Top="177" FontFamily="Segoe UI Semilight" Checked="cbMinimizeOnStart_Checked" Unchecked="cbMinimizeOnStart_Unchecked" />
+            <CheckBox x:Name="cbPairOnStart" Content="{loc:Localization pairOnStart}" Canvas.Left="125" Canvas.Top="109" FontFamily="Segoe UI Semilight" Checked="cbPairOnStart_Checked" Unchecked="cbPairOnStart_Unchecked" 
+                              ToolTip="{loc:Localization Tip_pairOnStart}" />
+            <CheckBox x:Name="cbDisconnectOnExit" Content="{loc:Localization DisconnectOnExit}" Canvas.Left="125" Canvas.Top="131" FontFamily="Segoe UI Semilight" Checked="cbDisconnectOnExit_Checked" Unchecked="cbDisconnectOnExit_Unchecked" 
+                              ToolTip="{loc:Localization Tip_completelyDisconnect}" />
+            <CheckBox x:Name="cbMinimizeToTray" Content="{loc:Localization MinimizeToTray}" Canvas.Left="125" Canvas.Top="154" FontFamily="Segoe UI Semilight" Checked="cbMinimizeToTray_Checked" Unchecked="cbMinimizeToTray_Unchecked" 
+                              ToolTip="{loc:Localization Tip_minimizeToTray}" />
+            <CheckBox x:Name="cbMinimizeOnStart" Content="{loc:Localization MinimizeOnStart}" Canvas.Left="125" Canvas.Top="177" FontFamily="Segoe UI Semilight" Checked="cbMinimizeOnStart_Checked" Unchecked="cbMinimizeOnStart_Unchecked"
+                              ToolTip="{loc:Localization Tip_minimizeOnStart}" />
             <Button x:Name="btnEditKeymaps" Content="{loc:Localization EditKeymaps}" Canvas.Left="125" Canvas.Top="204" Width="160" Click="btnEditKeymaps_Click" Height="30" HorizontalAlignment="Left" VerticalAlignment="Center"></Button>
-            <Button Name="btnAppSettings" Width="40" Height="40" Click="btnAdvConfig_Click" HorizontalAlignment="Left" Canvas.Left="371" VerticalAlignment="Center" Canvas.Top="10" Style="{DynamicResource MetroCircleButtonStyle}" ToolTip="{loc:Localization AdvConfigTitle}">
+            <Button Name="btnAppSettings" Width="40" Height="40" Click="btnAdvConfig_Click" HorizontalAlignment="Left" Canvas.Left="371" VerticalAlignment="Center" Canvas.Top="10" Style="{DynamicResource MetroCircleButtonStyle}">
+                <Button.ToolTip>
+                    <ToolTip Style="{StaticResource RedToolTip}">
+                        <TextBlock Text="{loc:Localization AdvConfigTitle}" Foreground="White"/>
+                    </ToolTip>
+                </Button.ToolTip>
                 <Rectangle Width="14" Height="14" Fill="Black" Opacity="0.8">
                     <Rectangle.OpacityMask>
                         <VisualBrush Visual="{StaticResource appbar_warning}" Stretch="Fill" />

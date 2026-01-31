@@ -1262,4 +1262,10 @@ Helburu bakoitzari hainbat aldiz tiro egin beharko duzu.</value>
   <data name="PointerFPS" xml:space="preserve">
     <value>Erakusleen fotograma segundoko (FPS)</value>
   </data>
+  <data name="cbDebug" xml:space="preserve">
+    <value>LEDen arazketa-leihoa erakusten du</value>
+  </data>
+  <data name="Tip_WindowsStart" xml:space="preserve">
+    <value>Gehitu Gunmote Task Scheduler-era erabiltzailearen saioarekin abiarazteko</value>
+  </data>
 </root>

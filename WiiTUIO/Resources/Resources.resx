@@ -1262,4 +1262,10 @@ You’ll need to shoot each target several times.</value>
   <data name="Tip_Debug" xml:space="preserve">
     <value>Enable debug logging/traces</value>
   </data>
+  <data name="cbDebug" xml:space="preserve">
+    <value>Shows LEDs Debug Window</value>
+  </data>
+  <data name="Tip_WindowsStart" xml:space="preserve">
+    <value>Add Gunmote to Task Scheduler to launch with the user's login</value>
+  </data>
 </root>

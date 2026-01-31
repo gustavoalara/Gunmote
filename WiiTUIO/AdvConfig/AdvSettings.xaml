@@ -9,11 +9,20 @@
                       mc:Ignorable="d" 
                       Title="{loc:Localization AdvConfigTitle}"
                       MinHeight="600" MinWidth="600"
-                      Height="800" Width="600"
+                      Height="800" Width="713"
                       WindowStartupLocation="CenterScreen">
     <Controls:MetroWindow.Resources>
         <ResourceDictionary>
+            <Style TargetType="ToolTip">
+                <Setter Property="Background" Value="Yellow" />
+                <Setter Property="Foreground" Value="Black" />
+                <Setter Property="FontSize" Value="12" />
+                <Setter Property="Padding" Value="8,4" />
+                <Setter Property="BorderThickness" Value="1" />
+                <Setter Property="BorderBrush" Value="Gold" />
+            </Style>
             <ResourceDictionary.MergedDictionaries>
+
                 <!-- MahApps.Metro resource dictionaries -->
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colors.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
@@ -24,7 +33,7 @@
         </ResourceDictionary>
     </Controls:MetroWindow.Resources>
 
-    <ScrollViewer VerticalScrollBarVisibility="Auto">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="0,0,10,0">
         <StackPanel Margin="10">
             <!-- Botones de acción (revertidos a la posición original en el StackPanel) -->
             <Grid Margin="0,0,0,10">
@@ -45,7 +54,7 @@
                 </Button>
                 <!-- Save & Restart Button -->
                 <Button x:Name="btnSaveAndRestart" Grid.Column="2" Content="{loc:Localization SaveAndReboot}" Click="BtnSaveAndRestart_Click" Height="30" Margin="0,5,0,5"/>
-                
+
             </Grid>
 
             <Label Content="{loc:Localization AdvConfigTitle}" 
@@ -54,31 +63,56 @@
 
             <!-- General Settings -->
             <GroupBox Header="{loc:Localization GlobalConf}" Margin="0,10,0,0"
-                      Style="{DynamicResource MahApps.Metro.Styles.GroupBox}">
+                      Style="{DynamicResource MahApps.Metro.Styles.GroupBox}" Height="456">
                 <StackPanel Margin="5">
                     <CheckBox x:Name="cbConnectOnStart" Content="{loc:Localization ConnectOnStart}" 
                               IsChecked="{Binding connectOnStart, UpdateSourceTrigger=PropertyChanged}"
-                              Style="{DynamicResource MahApps.Metro.Styles.CheckBox}"/>
+                              Style="{DynamicResource MahApps.Metro.Styles.CheckBox}"
+                              ToolTip="{loc:Localization Tip_connectOnStart}" />
                     <CheckBox x:Name="cbNotificationsEnabled" Content="{loc:Localization NotificationsEnabled}" 
                               IsChecked="{Binding notifications_enabled, UpdateSourceTrigger=PropertyChanged}"
-                              Style="{DynamicResource MahApps.Metro.Styles.CheckBox}"/>
+                              Style="{DynamicResource MahApps.Metro.Styles.CheckBox}"
+                              ToolTip="{loc:Localization Tip_notifications_enabled}" />
                     <CheckBox x:Name="cbDisconnectWiimotesOnDolphin" Content="{loc:Localization DisconnectWiimotesOnDolphin}" 
                               IsChecked="{Binding disconnectWiimotesOnDolphin, UpdateSourceTrigger=PropertyChanged}"
-                              Style="{DynamicResource MahApps.Metro.Styles.CheckBox}"/>
+                              Style="{DynamicResource MahApps.Metro.Styles.CheckBox}"
+                              ToolTip="{loc:Localization Tip_disconnectWiimotesOnDolphin}" />
                     <CheckBox x:Name="cbNoTopmost" Content="{loc:Localization NoTopmost}" 
                               IsChecked="{Binding noTopmost, UpdateSourceTrigger=PropertyChanged}"
-                              Style="{DynamicResource MahApps.Metro.Styles.CheckBox}"/>
+                              Style="{DynamicResource MahApps.Metro.Styles.CheckBox}"
+                              ToolTip="{loc:Localization Tip_noTopmost}" />
                     <CheckBox x:Name="cbisHelpPanelOpen" Content="{loc:Localization cbShowHelp}" 
                               IsChecked="{Binding isHelpPanelOpen, UpdateSourceTrigger=PropertyChanged}"
-                              Style="{DynamicResource MahApps.Metro.Styles.CheckBox}"/>
-
-                    <Grid Margin="0,5,0,0">
+                              Style="{DynamicResource MahApps.Metro.Styles.CheckBox}"
+                              ToolTip="{loc:Localization Tip_isHelpPanelOpen}" />
+                    <CheckBox x:Name="cbDebug" Content="{loc:Localization cbDebug}" 
+                              IsChecked="{Binding Debug, UpdateSourceTrigger=PropertyChanged}"
+                              Style="{DynamicResource MahApps.Metro.Styles.CheckBox}"
+                              ToolTip="{loc:Localization Tip_isHelpPanelOpen}" />
+                    <Grid Margin="0,10,0,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
 
-                        <Label Grid.Column="0" Content="{loc:Localization PrimaryMonitor}" VerticalAlignment="Center"/>
+                        <Label Grid.Column="0" Content="{loc:Localization cbWiimoterotation}"
+                              ToolTip="{loc:Localization Tip_wiimoteRotation}" />
+                        <ComboBox Grid.Column="1"
+              SelectedValue="{Binding wiimoteRotation, UpdateSourceTrigger=PropertyChanged}"
+              SelectedValuePath="Tag">
+                            <ComboBoxItem Content="0° (default)" Tag="0"/>
+                            <ComboBoxItem Content="90°" Tag="90"/>
+                            <ComboBoxItem Content="-90°" Tag="-90"/>
+                        </ComboBox>
+                    </Grid>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Label Grid.Column="0" Content="{loc:Localization PrimaryMonitor}" VerticalAlignment="Center"
+                              ToolTip="{loc:Localization Tip_primaryMonitor}" />
 
                         <ComboBox x:Name="MonitorComboBox" Grid.Column="1"
               SelectionChanged="MonitorComboBox_SelectionChanged">
@@ -103,7 +137,8 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="{loc:Localization DolphinPath}"/>
+                        <Label Grid.Column="0" Content="{loc:Localization DolphinPath}"
+                              ToolTip="{loc:Localization Tip_dolphin_path}" />
                         <TextBox Grid.Column="1" Text="{Binding dolphin_path, UpdateSourceTrigger=PropertyChanged}"
                                  Style="{DynamicResource MahApps.Metro.Styles.TextBox}" Margin="5,0,0,0"/>
                         <Button Grid.Column="2" Content="..." Width="30" Height="30" Margin="5,0,0,0"
@@ -116,7 +151,8 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="{loc:Localization KeymapsPath}"/>
+                        <Label Grid.Column="0" Content="{loc:Localization KeymapsPath}"
+                              ToolTip="{loc:Localization Tip_keymaps_path}" />
                         <TextBox x:Name="KeymapsPathTextBox" Grid.Column="1" Text="{Binding keymaps_path, UpdateSourceTrigger=PropertyChanged}"
                                  Style="{DynamicResource MahApps.Metro.Styles.TextBox}"/>
                         <Button Grid.Column="2" Content="..." Width="30" Height="30" Margin="5,0,0,0"
@@ -129,7 +165,8 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="{loc:Localization KeymapsConfig}"/>
+                        <Label Grid.Column="0" Content="{loc:Localization KeymapsConfig}"
+                              ToolTip="{loc:Localization Tip_keymaps_config}" />
                         <TextBox Grid.Column="1" Text="{Binding keymaps_config, UpdateSourceTrigger=PropertyChanged}"
                                  Style="{DynamicResource MahApps.Metro.Styles.TextBox}"/>
                         <!-- Botón para buscar el archivo Keymaps.json -->
@@ -143,7 +180,8 @@
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="{loc:Localization AutoDisconnectTimeout}"/>
+                        <Label Grid.Column="0" Content="{loc:Localization AutoDisconnectTimeout}"
+                              ToolTip="{loc:Localization Tip_autoDisconnectTimeout}" />
                         <TextBox Grid.Column="1" Text="{Binding autoDisconnectTimeout, StringFormat={}{0:N0}, UpdateSourceTrigger=PropertyChanged}" PreviewTextInput="NumericTextBox_PreviewTextInput"
                                  Style="{DynamicResource MahApps.Metro.Styles.TextBox}"/>
                     </Grid>
@@ -152,9 +190,10 @@
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="{loc:Localization DefaultContinousScale}"/>
+                        <Label Grid.Column="0" Content="{loc:Localization DefaultContinousScale}"
+                              ToolTip="{loc:Localization Tip_defaultContinousScale}" />
                         <Slider Grid.Column="1" Value="{Binding defaultContinousScale, UpdateSourceTrigger=PropertyChanged}" Minimum="0.0" Maximum="2.0" SmallChange="0.01" LargeChange="0.1" TickPlacement="BottomRight" IsSnapToTickEnabled="False"
-                                Style="{DynamicResource MahApps.Metro.Styles.Slider}"/>
+                                Style="{DynamicResource MahApps.Metro.Styles.Slider}" Margin="0,0,55,0"/>
                         <TextBox Grid.Column="1" Text="{Binding defaultContinousScale, StringFormat={}{0:F2}, UpdateSourceTrigger=PropertyChanged}" Width="50" HorizontalAlignment="Right" PreviewTextInput="DoubleTextBox_PreviewTextInput"
                                  Style="{DynamicResource MahApps.Metro.Styles.TextBox}"/>
                     </Grid>
@@ -163,9 +202,10 @@
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="{loc:Localization DefaultContinousPressThreshold}"/>
+                        <Label Grid.Column="0" Content="{loc:Localization DefaultContinousPressThreshold}"
+                              ToolTip="{loc:Localization Tip_defaultContinousPressThreshold}" />
                         <Slider Grid.Column="1" Value="{Binding defaultContinousPressThreshold, UpdateSourceTrigger=PropertyChanged}" Minimum="0.0" Maximum="1.0" SmallChange="0.01" LargeChange="0.1" TickPlacement="BottomRight" IsSnapToTickEnabled="False"
-                                Style="{DynamicResource MahApps.Metro.Styles.Slider}"/>
+                                Style="{DynamicResource MahApps.Metro.Styles.Slider}" Margin="0,0,55,0"/>
                         <TextBox Grid.Column="1" Text="{Binding defaultContinousPressThreshold, StringFormat={}{0:F2}, UpdateSourceTrigger=PropertyChanged}" Width="50" HorizontalAlignment="Right" PreviewTextInput="DoubleTextBox_PreviewTextInput"
                                  Style="{DynamicResource MahApps.Metro.Styles.TextBox}"/>
                     </Grid>
@@ -174,22 +214,48 @@
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="{loc:Localization DefaultContinousDeadzone}"/>
+                        <Label Grid.Column="0" Content="{loc:Localization DefaultContinousDeadzone}"
+                              ToolTip="{loc:Localization Tip_defaultContinousDeadzone}" />
                         <Slider Grid.Column="1" Value="{Binding defaultContinousDeadzone, UpdateSourceTrigger=PropertyChanged}" Minimum="0.0" Maximum="0.1" SmallChange="0.001" LargeChange="0.01" TickPlacement="BottomRight" IsSnapToTickEnabled="False"
-                                Style="{DynamicResource MahApps.Metro.Styles.Slider}"/>
+                                Style="{DynamicResource MahApps.Metro.Styles.Slider}" Margin="0,0,55,0"/>
                         <TextBox Grid.Column="1" Text="{Binding defaultContinousDeadzone, StringFormat={}{0:F3}, UpdateSourceTrigger=PropertyChanged}" Width="50" HorizontalAlignment="Right" PreviewTextInput="DoubleTextBox_PreviewTextInput"
                                  Style="{DynamicResource MahApps.Metro.Styles.TextBox}"/>
                     </Grid>
                     <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <Label Grid.Column="0" Content="{loc:Localization ShootsPerTarget}"/>
-                        <Slider Grid.Column="1" Value="{Binding ShootsPerTarget, UpdateSourceTrigger=PropertyChanged}" Minimum="0.0" Maximum="10" SmallChange="1" LargeChange="1" TickPlacement="BottomRight" IsSnapToTickEnabled="False"
-                                 Style="{DynamicResource MahApps.Metro.Styles.Slider}"/>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Column="0" Content="{loc:Localization ShootsPerTarget}"
+                              ToolTip="{loc:Localization Tip_ShootsPerTarget}" />
+                        <Slider Value="{Binding ShootsPerTarget, UpdateSourceTrigger=PropertyChanged}" Minimum="0.0" Maximum="10" SmallChange="1" LargeChange="1" TickPlacement="BottomRight" IsSnapToTickEnabled="False"
+                                 Style="{DynamicResource MahApps.Metro.Styles.Slider}" Grid.ColumnSpan="2" Margin="111,0,55,0"/>
                         <TextBox Grid.Column="1" Text="{Binding ShootsPerTarget, StringFormat={}{0:F3}, UpdateSourceTrigger=PropertyChanged}" Width="50" HorizontalAlignment="Right" PreviewTextInput="DoubleTextBox_PreviewTextInput"
                                 Style="{DynamicResource MahApps.Metro.Styles.TextBox}"/>
+                    </Grid>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Column="0" Content="{loc:Localization CalibrationMarginX}"
+                              ToolTip="{loc:Localization Tip_CalibrationMarginX}" />
+                        <Slider Value="{Binding CalibrationMarginX, UpdateSourceTrigger=PropertyChanged}" Minimum="0.0" Maximum="1.0" SmallChange="0.01" LargeChange="0.1"
+            Style="{DynamicResource MahApps.Metro.Styles.Slider}" Grid.ColumnSpan="2" Margin="143,0,55,0"/>
+                        <TextBox Grid.Column="1" Text="{Binding CalibrationMarginX, StringFormat={}{0:F2}, UpdateSourceTrigger=PropertyChanged}" Width="50" HorizontalAlignment="Right" PreviewTextInput="DoubleTextBox_PreviewTextInput"
+             Style="{DynamicResource MahApps.Metro.Styles.TextBox}"/>
+                    </Grid>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Column="0" Content="{loc:Localization CalibrationMarginY}"
+                              ToolTip="{loc:Localization Tip_CalibrationMarginY}" />
+                        <Slider Grid.Column="1" Value="{Binding CalibrationMarginY, UpdateSourceTrigger=PropertyChanged}" Minimum="0.0" Maximum="1.0" SmallChange="0.01" LargeChange="0.1"
+            Style="{DynamicResource MahApps.Metro.Styles.Slider}" Margin="0,0,55,0"/>
+                        <TextBox Grid.Column="1" Text="{Binding CalibrationMarginY, StringFormat={}{0:F2}, UpdateSourceTrigger=PropertyChanged}" Width="50" HorizontalAlignment="Right" PreviewTextInput="DoubleTextBox_PreviewTextInput"
+             Style="{DynamicResource MahApps.Metro.Styles.TextBox}"/>
                     </Grid>
                 </StackPanel>
             </GroupBox>
@@ -203,9 +269,10 @@
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="{loc:Localization PointerSensorBarPosCompensation}"/>
+                        <Label Grid.Column="0" Content="{loc:Localization PointerSensorBarPosCompensation}"
+                              ToolTip="{loc:Localization Tip_pointer_sensorBarPosCompensation}" />
                         <Slider Grid.Column="1" Value="{Binding pointer_sensorBarPosCompensation, UpdateSourceTrigger=PropertyChanged}" Minimum="0.0" Maximum="1.0" SmallChange="0.01" LargeChange="0.1"
-                                Style="{DynamicResource MahApps.Metro.Styles.Slider}"/>
+                                Style="{DynamicResource MahApps.Metro.Styles.Slider}" Margin="0,0,55,0"/>
                         <TextBox Grid.Column="1" Text="{Binding pointer_sensorBarPosCompensation, StringFormat={}{0:F2}, UpdateSourceTrigger=PropertyChanged}" Width="50" HorizontalAlignment="Right" PreviewTextInput="DoubleTextBox_PreviewTextInput"
                                  Style="{DynamicResource MahApps.Metro.Styles.TextBox}"/>
                     </Grid>
@@ -214,9 +281,10 @@
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="{loc:Localization PointerCursorSize}"/>
+                        <Label Grid.Column="0" Content="{loc:Localization PointerCursorSize}"
+                              ToolTip="{loc:Localization Tip_pointer_cursorSize}" />
                         <Slider Grid.Column="1" Value="{Binding pointer_cursorSize, UpdateSourceTrigger=PropertyChanged}" Minimum="0.01" Maximum="0.1" SmallChange="0.001" LargeChange="0.01"
-                                Style="{DynamicResource MahApps.Metro.Styles.Slider}"/>
+                                Style="{DynamicResource MahApps.Metro.Styles.Slider}" Margin="0,0,55,0"/>
                         <TextBox Grid.Column="1" Text="{Binding pointer_cursorSize, StringFormat={}{0:F3}, UpdateSourceTrigger=PropertyChanged}" Width="50" HorizontalAlignment="Right" PreviewTextInput="DoubleTextBox_PreviewTextInput"
                                  Style="{DynamicResource MahApps.Metro.Styles.TextBox}"/>
                     </Grid>
@@ -225,9 +293,10 @@
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="{loc:Localization PointerMarginsTopBottom}"/>
+                        <Label Grid.Column="0" Content="{loc:Localization PointerMarginsTopBottom}"
+                              ToolTip="{loc:Localization Tip_pointer_marginsTopBottom}" />
                         <Slider Grid.Column="1" Value="{Binding pointer_marginsTopBottom, UpdateSourceTrigger=PropertyChanged}" Minimum="0.0" Maximum="1.0" SmallChange="0.01" LargeChange="0.1"
-                                Style="{DynamicResource MahApps.Metro.Styles.Slider}"/>
+                                Style="{DynamicResource MahApps.Metro.Styles.Slider}" Margin="0,0,55,0"/>
                         <TextBox Grid.Column="1" Text="{Binding pointer_marginsTopBottom, StringFormat={}{0:F2}, UpdateSourceTrigger=PropertyChanged}" Width="50" HorizontalAlignment="Right" PreviewTextInput="DoubleTextBox_PreviewTextInput"
                                  Style="{DynamicResource MahApps.Metro.Styles.TextBox}"/>
                     </Grid>
@@ -236,9 +305,10 @@
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="{loc:Localization PointerMarginsLeftRight}"/>
+                        <Label Grid.Column="0" Content="{loc:Localization PointerMarginsLeftRight}"
+                              ToolTip="{loc:Localization Tip_pointer_marginsLeftRight}" />
                         <Slider Grid.Column="1" Value="{Binding pointer_marginsLeftRight, UpdateSourceTrigger=PropertyChanged}" Minimum="0.0" Maximum="1.0" SmallChange="0.01" LargeChange="0.1"
-                                Style="{DynamicResource MahApps.Metro.Styles.Slider}"/>
+                                Style="{DynamicResource MahApps.Metro.Styles.Slider}" Margin="0,0,55,0"/>
                         <TextBox Grid.Column="1" Text="{Binding pointer_marginsLeftRight, StringFormat={}{0:F2}, UpdateSourceTrigger=PropertyChanged}" Width="50" HorizontalAlignment="Right" PreviewTextInput="DoubleTextBox_PreviewTextInput"
                                  Style="{DynamicResource MahApps.Metro.Styles.TextBox}"/>
                     </Grid>
@@ -247,9 +317,10 @@
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="{loc:Localization PointerFPS}"/>
-                        <Slider Grid.Column="1" Value="{Binding pointer_FPS, UpdateSourceTrigger=PropertyChanged}" Minimum="1" Maximum="200" SmallChange="1" LargeChange="10"
-                                Style="{DynamicResource MahApps.Metro.Styles.Slider}"/>
+                        <Label Grid.Column="0" Content="{loc:Localization PointerFPS}"
+                              ToolTip="{loc:Localization Tip_pointer_FPS}" />
+                        <Slider Value="{Binding pointer_FPS, UpdateSourceTrigger=PropertyChanged}" Minimum="1" Maximum="200" SmallChange="1" LargeChange="10"
+                                Style="{DynamicResource MahApps.Metro.Styles.Slider}" Grid.ColumnSpan="2" Margin="238,0,55,0"/>
                         <TextBox Grid.Column="1" Text="{Binding pointer_FPS, StringFormat={}{0:N0}, UpdateSourceTrigger=PropertyChanged}" Width="50" HorizontalAlignment="Right" PreviewTextInput="NumericTextBox_PreviewTextInput"
                                  Style="{DynamicResource MahApps.Metro.Styles.TextBox}"/>
                     </Grid>
@@ -258,9 +329,10 @@
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="{loc:Localization PointerPositionSmoothing}"/>
+                        <Label Grid.Column="0" Content="{loc:Localization PointerPositionSmoothing}"
+                              ToolTip="{loc:Localization Tip_pointer_positionSmoothing}" />
                         <Slider Grid.Column="1" Value="{Binding pointer_positionSmoothing, UpdateSourceTrigger=PropertyChanged}" Minimum="0" Maximum="10" SmallChange="1" LargeChange="1"
-                                Style="{DynamicResource MahApps.Metro.Styles.Slider}"/>
+                                Style="{DynamicResource MahApps.Metro.Styles.Slider}" Margin="0,0,55,0"/>
                         <TextBox Grid.Column="1" Text="{Binding pointer_positionSmoothing, StringFormat={}{0:N0}, UpdateSourceTrigger=PropertyChanged}" Width="50" HorizontalAlignment="Right" PreviewTextInput="NumericTextBox_PreviewTextInput"
                                  Style="{DynamicResource MahApps.Metro.Styles.TextBox}"/>
                     </Grid>
@@ -269,11 +341,36 @@
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="{loc:Localization PointerPositionRadius}"/>
-                        <Slider Grid.Column="1" Value="{Binding pointer_positionRadius, UpdateSourceTrigger=PropertyChanged}" Minimum="0.0" Maximum="0.01" SmallChange="0.0001" LargeChange="0.001"
-                                Style="{DynamicResource MahApps.Metro.Styles.Slider}"/>
+                        <Label Grid.Column="0" Content="{loc:Localization PointerPositionRadius}"
+                              ToolTip="{loc:Localization Tip_pointer_positionRadius}" />
+                        <Slider Value="{Binding pointer_positionRadius, UpdateSourceTrigger=PropertyChanged}" Minimum="0.0" Maximum="0.01" SmallChange="0.0001" LargeChange="0.001"
+                                Style="{DynamicResource MahApps.Metro.Styles.Slider}" Grid.ColumnSpan="2" Margin="172,0,55,0"/>
                         <TextBox Grid.Column="1" Text="{Binding pointer_positionRadius, StringFormat={}{0:F4}, UpdateSourceTrigger=PropertyChanged}" Width="50" HorizontalAlignment="Right" PreviewTextInput="DoubleTextBox_PreviewTextInput"
                                  Style="{DynamicResource MahApps.Metro.Styles.TextBox}"/>
+                    </Grid>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Column="0" Content="{loc:Localization TestLightgunOneeuroMincutoff}"
+                            ToolTip="{loc:Localization Tip_test_lightgun_oneeuro_mincutoff}" />
+                        <Slider Value="{Binding test_lightgun_oneeuro_mincutoff, UpdateSourceTrigger=PropertyChanged}" Minimum="0.0" Maximum="10.0" SmallChange="0.1" LargeChange="1.0"
+            Style="{DynamicResource MahApps.Metro.Styles.Slider}" Grid.ColumnSpan="2" Margin="202,0,55,0"/>
+                        <TextBox Grid.Column="1" Text="{Binding test_lightgun_oneeuro_mincutoff, StringFormat={}{0:F1}, UpdateSourceTrigger=PropertyChanged}" Width="50" HorizontalAlignment="Right" PreviewTextInput="DoubleTextBox_PreviewTextInput"
+             Style="{DynamicResource MahApps.Metro.Styles.TextBox}"/>
+                    </Grid>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Column="0" Content="{loc:Localization TestLightgunOneeuroBeta}"
+                               ToolTip="{loc:Localization Tip_test_lightgun_oneeuro_beta}"/>
+                        <Slider Value="{Binding test_lightgun_oneeuro_beta, UpdateSourceTrigger=PropertyChanged}" Minimum="0.0" Maximum="1.0" SmallChange="0.01" LargeChange="0.1"
+            Style="{DynamicResource MahApps.Metro.Styles.Slider}" Grid.ColumnSpan="2" Margin="240,0,55,0"/>
+                        <TextBox Grid.Column="1" Text="{Binding test_lightgun_oneeuro_beta, StringFormat={}{0:F2}, UpdateSourceTrigger=PropertyChanged}" Width="50" HorizontalAlignment="Right" PreviewTextInput="DoubleTextBox_PreviewTextInput"
+             Style="{DynamicResource MahApps.Metro.Styles.TextBox}"/>
                     </Grid>
                 </StackPanel>
             </GroupBox>
@@ -284,15 +381,17 @@
                 <StackPanel Margin="5">
                     <CheckBox x:Name="cbTestDeltaAccel" Content="{loc:Localization TestDeltaAccel}" 
                               IsChecked="{Binding test_deltaAccel, UpdateSourceTrigger=PropertyChanged}"
-                              Style="{DynamicResource MahApps.Metro.Styles.CheckBox}"/>
+                              Style="{DynamicResource MahApps.Metro.Styles.CheckBox}"
+                              ToolTip="{loc:Localization Tip_test_deltaAccel}" />
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="{loc:Localization TestDeltaAccelMulti}"/>
-                        <Slider Grid.Column="1" Value="{Binding test_deltaAccelMulti, UpdateSourceTrigger=PropertyChanged}" Minimum="0.0" Maximum="10.0" SmallChange="0.1" LargeChange="1.0"
-                                Style="{DynamicResource MahApps.Metro.Styles.Slider}"/>
+                        <Label Grid.Column="0" Content="{loc:Localization TestDeltaAccelMulti}"
+                              ToolTip="{loc:Localization Tip_test_deltaAccelMulti}" />
+                        <Slider Value="{Binding test_deltaAccelMulti, UpdateSourceTrigger=PropertyChanged}" Minimum="0.0" Maximum="10.0" SmallChange="0.1" LargeChange="1.0"
+                                Style="{DynamicResource MahApps.Metro.Styles.Slider}" Grid.ColumnSpan="2" Margin="249,0,55,0"/>
                         <TextBox Grid.Column="1" Text="{Binding test_deltaAccelMulti, StringFormat={}{0:F1}, UpdateSourceTrigger=PropertyChanged}" Width="50" HorizontalAlignment="Right" PreviewTextInput="DoubleTextBox_PreviewTextInput"
                                  Style="{DynamicResource MahApps.Metro.Styles.TextBox}"/>
                     </Grid>
@@ -301,42 +400,23 @@
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="{loc:Localization TestDeltaAccelMinTravel}"/>
+                        <Label Grid.Column="0" Content="{loc:Localization TestDeltaAccelMinTravel}"
+                              ToolTip="{loc:Localization Tip_test_deltaAccelMinTravel}" />
                         <Slider Grid.Column="1" Value="{Binding test_deltaAccelMinTravel, UpdateSourceTrigger=PropertyChanged}" Minimum="0.0" Maximum="0.1" SmallChange="0.001" LargeChange="0.01"
-                                Style="{DynamicResource MahApps.Metro.Styles.Slider}"/>
+                                Style="{DynamicResource MahApps.Metro.Styles.Slider}" Margin="0,0,55,0"/>
                         <TextBox Grid.Column="1" Text="{Binding test_deltaAccelMinTravel, StringFormat={}{0:F3}, UpdateSourceTrigger=PropertyChanged}" Width="50" HorizontalAlignment="Right" PreviewTextInput="DoubleTextBox_PreviewTextInput"
                                  Style="{DynamicResource MahApps.Metro.Styles.TextBox}"/>
                     </Grid>
+
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="{loc:Localization TestDeltaAccelEasingDuration}"/>
-                        <Slider Grid.Column="1" Value="{Binding test_deltaAccelEasingDuration, UpdateSourceTrigger=PropertyChanged}" Minimum="0.0" Maximum="1.0" SmallChange="0.01" LargeChange="0.1"
-                                Style="{DynamicResource MahApps.Metro.Styles.Slider}"/>
-                        <TextBox Grid.Column="1" Text="{Binding test_deltaAccelEasingDuration, StringFormat={}{0:F2}, UpdateSourceTrigger=PropertyChanged}" Width="50" HorizontalAlignment="Right" PreviewTextInput="DoubleTextBox_PreviewTextInput"
-                                 Style="{DynamicResource MahApps.Metro.Styles.TextBox}"/>
-                    </Grid>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="{loc:Localization TestRegionEasingXDuration}"/>
-                        <Slider Grid.Column="1" Value="{Binding test_regionEasingXDuration, UpdateSourceTrigger=PropertyChanged}" Minimum="0.0" Maximum="1.0" SmallChange="0.01" LargeChange="0.1"
-                                Style="{DynamicResource MahApps.Metro.Styles.Slider}"/>
-                        <TextBox Grid.Column="1" Text="{Binding test_regionEasingXDuration, StringFormat={}{0:F2}, UpdateSourceTrigger=PropertyChanged}" Width="50" HorizontalAlignment="Right" PreviewTextInput="DoubleTextBox_PreviewTextInput"
-                                 Style="{DynamicResource MahApps.Metro.Styles.TextBox}"/>
-                    </Grid>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="{loc:Localization TestDeltaAccelMaxTravel}"/>
-                        <Slider Grid.Column="1" Value="{Binding test_deltaAccelMaxTravel, UpdateSourceTrigger=PropertyChanged}" Minimum="0.0" Maximum="1.0" SmallChange="0.001" LargeChange="0.01"
-                                Style="{DynamicResource MahApps.Metro.Styles.Slider}"/>
+                        <Label Grid.Column="0" Content="{loc:Localization TestDeltaAccelMaxTravel}"
+                              ToolTip="{loc:Localization Tip_test_deltaAccelMaxTravel}" />
+                        <Slider Grid.Column="1" Value="{Binding test_deltaAccelMaxTravel, UpdateSourceTrigger=PropertyChanged}" Minimum="0.0" Maximum="0.1" SmallChange="0.001" LargeChange="0.01"
+                                Style="{DynamicResource MahApps.Metro.Styles.Slider}" Margin="0,0,55,0"/>
                         <TextBox Grid.Column="1" Text="{Binding test_deltaAccelMaxTravel, StringFormat={}{0:F3}, UpdateSourceTrigger=PropertyChanged}" Width="50" HorizontalAlignment="Right" PreviewTextInput="DoubleTextBox_PreviewTextInput"
                                  Style="{DynamicResource MahApps.Metro.Styles.TextBox}"/>
                     </Grid>
@@ -345,9 +425,34 @@
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="{loc:Localization TestRegionEasingXOffset}"/>
-                        <Slider Grid.Column="1" Value="{Binding test_regionEasingXOffset, UpdateSourceTrigger=PropertyChanged}" Minimum="0.0" Maximum="1.0" SmallChange="0.01" LargeChange="0.1"
-                                Style="{DynamicResource MahApps.Metro.Styles.Slider}"/>
+                        <Label Grid.Column="0" Content="{loc:Localization TestDeltaAccelEasingDuration}"
+                              ToolTip="{loc:Localization Tip_test_deltaAccelEasingDuration}" />
+                        <Slider Value="{Binding test_deltaAccelEasingDuration, UpdateSourceTrigger=PropertyChanged}" Minimum="0.0" Maximum="1.0" SmallChange="0.01" LargeChange="0.1"
+                                Style="{DynamicResource MahApps.Metro.Styles.Slider}" Grid.ColumnSpan="2" Margin="299,0,55,0"/>
+                        <TextBox Grid.Column="1" Text="{Binding test_deltaAccelEasingDuration, StringFormat={}{0:F2}, UpdateSourceTrigger=PropertyChanged}" Width="50" HorizontalAlignment="Left" PreviewTextInput="DoubleTextBox_PreviewTextInput"
+                                 Style="{DynamicResource MahApps.Metro.Styles.TextBox}" Margin="300,0,0,0"/>
+                    </Grid>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Column="0" Content="{loc:Localization TestRegionEasingXDuration}"
+                              ToolTip="{loc:Localization Tip_test_regionEasingXDuration}" />
+                        <Slider Value="{Binding test_regionEasingXDuration, UpdateSourceTrigger=PropertyChanged}" Minimum="0.0" Maximum="1.0" SmallChange="0.01" LargeChange="0.1"
+                                Style="{DynamicResource MahApps.Metro.Styles.Slider}" Grid.ColumnSpan="2" Margin="254,0,55,0"/>
+                        <TextBox Grid.Column="1" Text="{Binding test_regionEasingXDuration, StringFormat={}{0:F2}, UpdateSourceTrigger=PropertyChanged}" Width="50" HorizontalAlignment="Right" PreviewTextInput="DoubleTextBox_PreviewTextInput"
+                                 Style="{DynamicResource MahApps.Metro.Styles.TextBox}"/>
+                    </Grid>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Column="0" Content="{loc:Localization TestRegionEasingXOffset}"
+                              ToolTip="{loc:Localization Tip_test_regionEasingXOffset}" />
+                        <Slider Value="{Binding test_regionEasingXOffset, UpdateSourceTrigger=PropertyChanged}" Minimum="0.0" Maximum="1.0" SmallChange="0.01" LargeChange="0.1"
+                                Style="{DynamicResource MahApps.Metro.Styles.Slider}" Grid.ColumnSpan="2" Margin="219,0,55,0"/>
                         <TextBox Grid.Column="1" Text="{Binding test_regionEasingXOffset, StringFormat={}{0:F2}, UpdateSourceTrigger=PropertyChanged}" Width="50" HorizontalAlignment="Right" PreviewTextInput="DoubleTextBox_PreviewTextInput"
                                  Style="{DynamicResource MahApps.Metro.Styles.TextBox}"/>
                     </Grid>
@@ -356,9 +461,10 @@
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="{loc:Localization TestSmoothingWeight}"/>
+                        <Label Grid.Column="0" Content="{loc:Localization TestSmoothingWeight}"
+                              ToolTip="{loc:Localization Tip_test_smoothingWeight}" />
                         <Slider Grid.Column="1" Value="{Binding test_smoothingWeight, UpdateSourceTrigger=PropertyChanged}" Minimum="0.0" Maximum="1.0" SmallChange="0.01" LargeChange="0.1"
-                                Style="{DynamicResource MahApps.Metro.Styles.Slider}"/>
+                                Style="{DynamicResource MahApps.Metro.Styles.Slider}" Margin="0,0,55,0"/>
                         <TextBox Grid.Column="1" Text="{Binding test_smoothingWeight, StringFormat={}{0:F2}, UpdateSourceTrigger=PropertyChanged}" Width="50" HorizontalAlignment="Right" PreviewTextInput="DoubleTextBox_PreviewTextInput"
                                  Style="{DynamicResource MahApps.Metro.Styles.TextBox}"/>
                     </Grid>
@@ -367,64 +473,24 @@
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="{loc:Localization TestFpsmouseOffset}"/>
+                        <Label Grid.Column="0" Content="{loc:Localization TestFpsmouseOffset}"
+                              ToolTip="{loc:Localization Tip_test_fpsmouseOffset}" />
                         <Slider Grid.Column="1" Value="{Binding test_fpsmouseOffset, UpdateSourceTrigger=PropertyChanged}" Minimum="0.0" Maximum="1.0" SmallChange="0.01" LargeChange="0.1"
-                                Style="{DynamicResource MahApps.Metro.Styles.Slider}"/>
+                                Style="{DynamicResource MahApps.Metro.Styles.Slider}" Margin="0,0,55,0"/>
                         <TextBox Grid.Column="1" Text="{Binding test_fpsmouseOffset, StringFormat={}{0:F2}, UpdateSourceTrigger=PropertyChanged}" Width="50" HorizontalAlignment="Right" PreviewTextInput="DoubleTextBox_PreviewTextInput"
                                  Style="{DynamicResource MahApps.Metro.Styles.TextBox}"/>
                     </Grid>
+
+
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="{loc:Localization CalibrationMarginX}"/>
-                        <Slider Grid.Column="1" Value="{Binding CalibrationMarginX, UpdateSourceTrigger=PropertyChanged}" Minimum="0.0" Maximum="1.0" SmallChange="0.01" LargeChange="0.1"
-                                Style="{DynamicResource MahApps.Metro.Styles.Slider}"/>
-                        <TextBox Grid.Column="1" Text="{Binding CalibrationMarginX, StringFormat={}{0:F2}, UpdateSourceTrigger=PropertyChanged}" Width="50" HorizontalAlignment="Right" PreviewTextInput="DoubleTextBox_PreviewTextInput"
-                                 Style="{DynamicResource MahApps.Metro.Styles.TextBox}"/>
-                    </Grid>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="{loc:Localization CalibrationMarginY}"/>
-                        <Slider Grid.Column="1" Value="{Binding CalibrationMarginY, UpdateSourceTrigger=PropertyChanged}" Minimum="0.0" Maximum="1.0" SmallChange="0.01" LargeChange="0.1"
-                                Style="{DynamicResource MahApps.Metro.Styles.Slider}"/>
-                        <TextBox Grid.Column="1" Text="{Binding CalibrationMarginY, StringFormat={}{0:F2}, UpdateSourceTrigger=PropertyChanged}" Width="50" HorizontalAlignment="Right" PreviewTextInput="DoubleTextBox_PreviewTextInput"
-                                 Style="{DynamicResource MahApps.Metro.Styles.TextBox}"/>
-                    </Grid>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="{loc:Localization TestLightgunOneeuroMincutoff}"/>
-                        <Slider Grid.Column="1" Value="{Binding test_lightgun_oneeuro_mincutoff, UpdateSourceTrigger=PropertyChanged}" Minimum="0.0" Maximum="10.0" SmallChange="0.1" LargeChange="1.0"
-                                Style="{DynamicResource MahApps.Metro.Styles.Slider}"/>
-                        <TextBox Grid.Column="1" Text="{Binding test_lightgun_oneeuro_mincutoff, StringFormat={}{0:F1}, UpdateSourceTrigger=PropertyChanged}" Width="50" HorizontalAlignment="Right" PreviewTextInput="DoubleTextBox_PreviewTextInput"
-                                 Style="{DynamicResource MahApps.Metro.Styles.TextBox}"/>
-                    </Grid>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="{loc:Localization TestLightgunOneeuroBeta}"/>
-                        <Slider Grid.Column="1" Value="{Binding test_lightgun_oneeuro_beta, UpdateSourceTrigger=PropertyChanged}" Minimum="0.0" Maximum="1.0" SmallChange="0.01" LargeChange="0.1"
-                                Style="{DynamicResource MahApps.Metro.Styles.Slider}"/>
-                        <TextBox Grid.Column="1" Text="{Binding test_lightgun_oneeuro_beta, StringFormat={}{0:F2}, UpdateSourceTrigger=PropertyChanged}" Width="50" HorizontalAlignment="Right" PreviewTextInput="DoubleTextBox_PreviewTextInput"
-                                 Style="{DynamicResource MahApps.Metro.Styles.TextBox}"/>
-                    </Grid>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="{loc:Localization FpsmouseDeadzone}"/>
+                        <Label Grid.Column="0" Content="{loc:Localization FpsmouseDeadzone}"
+                              ToolTip="{loc:Localization Tip_fpsmouse_deadzone}" />
                         <Slider Grid.Column="1" Value="{Binding fpsmouse_deadzone, UpdateSourceTrigger=PropertyChanged}" Minimum="0.0" Maximum="0.1" SmallChange="0.001" LargeChange="0.01"
-                                Style="{DynamicResource MahApps.Metro.Styles.Slider}"/>
+                                Style="{DynamicResource MahApps.Metro.Styles.Slider}" Margin="0,0,55,0"/>
                         <TextBox Grid.Column="1" Text="{Binding fpsmouse_deadzone, StringFormat={}{0:F3}, UpdateSourceTrigger=PropertyChanged}" Width="50" HorizontalAlignment="Right" PreviewTextInput="DoubleTextBox_PreviewTextInput"
                                  Style="{DynamicResource MahApps.Metro.Styles.TextBox}"/>
                     </Grid>
@@ -433,9 +499,10 @@
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="{loc:Localization FpsmouseSpeed}"/>
-                        <Slider Grid.Column="1" Value="{Binding fpsmouse_speed, UpdateSourceTrigger=PropertyChanged}" Minimum="1" Maximum="100" SmallChange="1" LargeChange="10"
-                                Style="{DynamicResource MahApps.Metro.Styles.Slider}"/>
+                        <Label Grid.Column="0" Content="{loc:Localization FpsmouseSpeed}"
+                              ToolTip="{loc:Localization Tip_fpsmouse_speed}" />
+                        <Slider Value="{Binding fpsmouse_speed, UpdateSourceTrigger=PropertyChanged}" Minimum="1" Maximum="100" SmallChange="1" LargeChange="10"
+                                Style="{DynamicResource MahApps.Metro.Styles.Slider}" Grid.ColumnSpan="2" Margin="137,0,55,0"/>
                         <TextBox Grid.Column="1" Text="{Binding fpsmouse_speed, StringFormat={}{0:N0}, UpdateSourceTrigger=PropertyChanged}" Width="50" HorizontalAlignment="Right" PreviewTextInput="NumericTextBox_PreviewTextInput"
                                  Style="{DynamicResource MahApps.Metro.Styles.TextBox}"/>
                     </Grid>
@@ -451,9 +518,10 @@
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="{loc:Localization ShakeThreshold}"/>
-                        <Slider Grid.Column="1" Value="{Binding shake_threshold, UpdateSourceTrigger=PropertyChanged}" Minimum="0.0" Maximum="1.0" SmallChange="0.01" LargeChange="0.1"
-                                Style="{DynamicResource MahApps.Metro.Styles.Slider}"/>
+                        <Label Grid.Column="0" Content="{loc:Localization ShakeThreshold}"
+                              ToolTip="{loc:Localization Tip_shake_threshold}" />
+                        <Slider Value="{Binding shake_threshold, UpdateSourceTrigger=PropertyChanged}" Minimum="0.0" Maximum="1.0" SmallChange="0.01" LargeChange="0.1"
+                                Style="{DynamicResource MahApps.Metro.Styles.Slider}" Grid.ColumnSpan="2" Margin="121,0,55,0"/>
                         <TextBox Grid.Column="1" Text="{Binding shake_threshold, StringFormat={}{0:F2}, UpdateSourceTrigger=PropertyChanged}" Width="50" HorizontalAlignment="Right" PreviewTextInput="DoubleTextBox_PreviewTextInput"
                                  Style="{DynamicResource MahApps.Metro.Styles.TextBox}"/>
                     </Grid>
@@ -462,9 +530,10 @@
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="{loc:Localization ShakeCount}"/>
-                        <Slider Grid.Column="1" Value="{Binding shake_count, UpdateSourceTrigger=PropertyChanged}" Minimum="1" Maximum="10" SmallChange="1" LargeChange="1"
-                                Style="{DynamicResource MahApps.Metro.Styles.Slider}"/>
+                        <Label Grid.Column="0" Content="{loc:Localization ShakeCount}"
+                              ToolTip="{loc:Localization Tip_shake_count}" />
+                        <Slider Value="{Binding shake_count, UpdateSourceTrigger=PropertyChanged}" Minimum="1" Maximum="10" SmallChange="1" LargeChange="1"
+                                Style="{DynamicResource MahApps.Metro.Styles.Slider}" Grid.ColumnSpan="2" Margin="121,0,55,0"/>
                         <TextBox Grid.Column="1" Text="{Binding shake_count, StringFormat={}{0:N0}, UpdateSourceTrigger=PropertyChanged}" Width="50" HorizontalAlignment="Right" PreviewTextInput="NumericTextBox_PreviewTextInput"
                                  Style="{DynamicResource MahApps.Metro.Styles.TextBox}"/>
                     </Grid>
@@ -473,9 +542,10 @@
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="{loc:Localization ShakeMaxTimeInBetween}"/>
-                        <Slider Grid.Column="1" Value="{Binding shake_maxTimeInBetween, UpdateSourceTrigger=PropertyChanged}" Minimum="0" Maximum="1000" SmallChange="10" LargeChange="100"
-                                Style="{DynamicResource MahApps.Metro.Styles.Slider}"/>
+                        <Label Grid.Column="0" Content="{loc:Localization ShakeMaxTimeInBetween}"
+                              ToolTip="{loc:Localization Tip_shake_maxTimeInBetween}" />
+                        <Slider Value="{Binding shake_maxTimeInBetween, UpdateSourceTrigger=PropertyChanged}" Minimum="0" Maximum="1000" SmallChange="10" LargeChange="100"
+                                Style="{DynamicResource MahApps.Metro.Styles.Slider}" Grid.ColumnSpan="2" Margin="218,0,55,0"/>
                         <TextBox Grid.Column="1" Text="{Binding shake_maxTimeInBetween, StringFormat={}{0:N0}, UpdateSourceTrigger=PropertyChanged}" Width="50" HorizontalAlignment="Right" PreviewTextInput="NumericTextBox_PreviewTextInput"
                                  Style="{DynamicResource MahApps.Metro.Styles.TextBox}"/>
                     </Grid>
@@ -484,9 +554,10 @@
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="{loc:Localization ShakePressedTime}"/>
-                        <Slider Grid.Column="1" Value="{Binding shake_pressedTime, UpdateSourceTrigger=PropertyChanged}" Minimum="0" Maximum="1000" SmallChange="10" LargeChange="100"
-                                Style="{DynamicResource MahApps.Metro.Styles.Slider}"/>
+                        <Label Grid.Column="0" Content="{loc:Localization ShakePressedTime}"
+                              ToolTip="{loc:Localization Tip_shake_pressedTime}" />
+                        <Slider Value="{Binding shake_pressedTime, UpdateSourceTrigger=PropertyChanged}" Minimum="0" Maximum="1000" SmallChange="10" LargeChange="100"
+                                Style="{DynamicResource MahApps.Metro.Styles.Slider}" Grid.ColumnSpan="2" Margin="217,0,55,0"/>
                         <TextBox Grid.Column="1" Text="{Binding shake_pressedTime, StringFormat={}{0:N0}, UpdateSourceTrigger=PropertyChanged}" Width="50" HorizontalAlignment="Right" PreviewTextInput="NumericTextBox_PreviewTextInput"
                                  Style="{DynamicResource MahApps.Metro.Styles.TextBox}"/>
                     </Grid>
@@ -502,9 +573,10 @@
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="{loc:Localization XinputRumbleThresholdBig}"/>
+                        <Label Grid.Column="0" Content="{loc:Localization XinputRumbleThresholdBig}"
+                              ToolTip="{loc:Localization Tip_xinput_rumbleThreshold_big}" />
                         <Slider Grid.Column="1" Value="{Binding xinput_rumbleThreshold_big, UpdateSourceTrigger=PropertyChanged}" Minimum="0" Maximum="255" SmallChange="1" LargeChange="10"
-                                Style="{DynamicResource MahApps.Metro.Styles.Slider}"/>
+                                Style="{DynamicResource MahApps.Metro.Styles.Slider}" Margin="0,0,55,0"/>
                         <TextBox Grid.Column="1" Text="{Binding xinput_rumbleThreshold_big, StringFormat={}{0:N0}, UpdateSourceTrigger=PropertyChanged}" Width="50" HorizontalAlignment="Right" PreviewTextInput="NumericTextBox_PreviewTextInput"
                                  Style="{DynamicResource MahApps.Metro.Styles.TextBox}"/>
                     </Grid>
@@ -513,9 +585,10 @@
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="{loc:Localization XinputRumbleThresholdSmall}"/>
-                        <Slider Grid.Column="1" Value="{Binding xinput_rumbleThreshold_small, UpdateSourceTrigger=PropertyChanged}" Minimum="0" Maximum="255" SmallChange="1" LargeChange="10"
-                                Style="{DynamicResource MahApps.Metro.Styles.Slider}"/>
+                        <Label Grid.Column="0" Content="{loc:Localization XinputRumbleThresholdSmall}"
+                              ToolTip="{loc:Localization Tip_xinput_rumbleThreshold_small}" />
+                        <Slider Value="{Binding xinput_rumbleThreshold_small, UpdateSourceTrigger=PropertyChanged}" Minimum="0" Maximum="255" SmallChange="1" LargeChange="10"
+                                Style="{DynamicResource MahApps.Metro.Styles.Slider}" Grid.ColumnSpan="2" Margin="207,0,55,0"/>
                         <TextBox Grid.Column="1" Text="{Binding xinput_rumbleThreshold_small, StringFormat={}{0:N0}, UpdateSourceTrigger=PropertyChanged}" Width="50" HorizontalAlignment="Right" PreviewTextInput="NumericTextBox_PreviewTextInput"
                                  Style="{DynamicResource MahApps.Metro.Styles.TextBox}"/>
                     </Grid>
@@ -531,9 +604,10 @@
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="{loc:Localization WiimoteRumbleTimeShort}"/>
+                        <Label Grid.Column="0" Content="{loc:Localization WiimoteRumbleTimeShort}"
+                              ToolTip="{loc:Localization Tip_wiimode_rumbleTime_short}" />
                         <Slider Grid.Column="1" Value="{Binding wiimode_rumbleTime_short, UpdateSourceTrigger=PropertyChanged}" Minimum="0" Maximum="1000" SmallChange="10" LargeChange="100"
-                                Style="{DynamicResource MahApps.Metro.Styles.Slider}"/>
+                                Style="{DynamicResource MahApps.Metro.Styles.Slider}" Margin="0,0,55,0"/>
                         <TextBox Grid.Column="1" Text="{Binding wiimode_rumbleTime_short, StringFormat={}{0:N0}, UpdateSourceTrigger=PropertyChanged}" Width="50" HorizontalAlignment="Right" PreviewTextInput="NumericTextBox_PreviewTextInput"
                                  Style="{DynamicResource MahApps.Metro.Styles.TextBox}"/>
                     </Grid>
@@ -542,9 +616,10 @@
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="{loc:Localization WiimoteRumbleTimeLong}"/>
-                        <Slider Grid.Column="1" Value="{Binding wiimode_rumbleTime_long, UpdateSourceTrigger=PropertyChanged}" Minimum="0" Maximum="1000" SmallChange="10" LargeChange="100"
-                                Style="{DynamicResource MahApps.Metro.Styles.Slider}"/>
+                        <Label Grid.Column="0" Content="{loc:Localization WiimoteRumbleTimeLong}"
+                              ToolTip="{loc:Localization Tip_wiimode_rumbleTime_long}" />
+                        <Slider Value="{Binding wiimode_rumbleTime_long, UpdateSourceTrigger=PropertyChanged}" Minimum="0" Maximum="1000" SmallChange="10" LargeChange="100"
+                                Style="{DynamicResource MahApps.Metro.Styles.Slider}" Grid.ColumnSpan="2" Margin="176,0,55,0"/>
                         <TextBox Grid.Column="1" Text="{Binding wiimode_rumbleTime_long, StringFormat={}{0:N0}, UpdateSourceTrigger=PropertyChanged}" Width="50" HorizontalAlignment="Right" PreviewTextInput="NumericTextBox_PreviewTextInput"
                                  Style="{DynamicResource MahApps.Metro.Styles.TextBox}"/>
                     </Grid>
@@ -553,9 +628,10 @@
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="{loc:Localization WiimodeRumbleTimeAlternatingOn}"/>
+                        <Label Grid.Column="0" Content="{loc:Localization WiimodeRumbleTimeAlternatingOn}"
+                              ToolTip="{loc:Localization Tip_wiimode_rumbleTime_alternatingOn}" />
                         <Slider Grid.Column="1" Value="{Binding wiimode_rumbleTime_alternatingOn, UpdateSourceTrigger=PropertyChanged}" Minimum="0" Maximum="500" SmallChange="10" LargeChange="50"
-                                Style="{DynamicResource MahApps.Metro.Styles.Slider}"/>
+                                Style="{DynamicResource MahApps.Metro.Styles.Slider}" Margin="0,0,55,0"/>
                         <TextBox Grid.Column="1" Text="{Binding wiimode_rumbleTime_alternatingOn, StringFormat={}{0:N0}, UpdateSourceTrigger=PropertyChanged}" Width="50" HorizontalAlignment="Right" PreviewTextInput="NumericTextBox_PreviewTextInput"
                                  Style="{DynamicResource MahApps.Metro.Styles.TextBox}"/>
                     </Grid>
@@ -564,9 +640,10 @@
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="{loc:Localization WiimodeRumbleTimeAlternatingOff}"/>
+                        <Label Grid.Column="0" Content="{loc:Localization WiimodeRumbleTimeAlternatingOff}"
+                              ToolTip="{loc:Localization Tip_wiimode_rumbleTime_alternatingOff}" />
                         <Slider Grid.Column="1" Value="{Binding wiimode_rumbleTime_alternatingOff, UpdateSourceTrigger=PropertyChanged}" Minimum="0" Maximum="500" SmallChange="10" LargeChange="50"
-                                Style="{DynamicResource MahApps.Metro.Styles.Slider}"/>
+                                Style="{DynamicResource MahApps.Metro.Styles.Slider}" Margin="0,0,55,0"/>
                         <TextBox Grid.Column="1" Text="{Binding wiimode_rumbleTime_alternatingOff, StringFormat={}{0:N0}, UpdateSourceTrigger=PropertyChanged}" Width="50" HorizontalAlignment="Right" PreviewTextInput="NumericTextBox_PreviewTextInput"
                                  Style="{DynamicResource MahApps.Metro.Styles.TextBox}"/>
                     </Grid>
@@ -575,9 +652,10 @@
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="{loc:Localization WiimodeLoopSoundTime}"/>
+                        <Label Grid.Column="0" Content="{loc:Localization WiimodeLoopSoundTime}"
+                              ToolTip="{loc:Localization Tip_wiimode_loopSoundTime}" />
                         <Slider Grid.Column="1" Value="{Binding wiimode_loopSoundTime, UpdateSourceTrigger=PropertyChanged}" Minimum="0" Maximum="1000" SmallChange="10" LargeChange="100"
-                                Style="{DynamicResource MahApps.Metro.Styles.Slider}"/>
+                                Style="{DynamicResource MahApps.Metro.Styles.Slider}" Margin="0,0,55,0"/>
                         <TextBox Grid.Column="1" Text="{Binding wiimode_loopSoundTime, StringFormat={}{0:N0}, UpdateSourceTrigger=PropertyChanged}" Width="50" HorizontalAlignment="Right" PreviewTextInput="NumericTextBox_PreviewTextInput"
                                  Style="{DynamicResource MahApps.Metro.Styles.TextBox}"/>
                     </Grid>
@@ -588,7 +666,8 @@
             <GroupBox Header="{loc:Localization IDTitle}" Margin="0,10,0,0"
                       Style="{DynamicResource MahApps.Metro.Styles.GroupBox}">
                 <StackPanel Margin="5">
-                    <Label Content="{loc:Localization ColorID1}" Style="{DynamicResource MahApps.Metro.Styles.Label}" FontWeight="Normal"/>
+                    <Label Content="{loc:Localization ColorID1}" Style="{DynamicResource MahApps.Metro.Styles.Label}" FontWeight="Normal"
+                              ToolTip="{loc:Localization Tip_Color_ID1}" />
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
@@ -602,7 +681,8 @@
                         <TextBox Grid.Column="2" Text="{Binding Color_ID1[2], UpdateSourceTrigger=PropertyChanged}" LostFocus="ColorTextBox_LostFocus" Tag="ColorID1_2" PreviewTextInput="NumericTextBox_PreviewTextInput"
                                  Style="{DynamicResource MahApps.Metro.Styles.TextBox}"/>
                     </Grid>
-                    <Label Content="{loc:Localization ColorID2}" Style="{DynamicResource MahApps.Metro.Styles.Label}" FontWeight="Normal"/>
+                    <Label Content="{loc:Localization ColorID2}" Style="{DynamicResource MahApps.Metro.Styles.Label}" FontWeight="Normal"
+                              ToolTip="{loc:Localization Tip_Color_ID2}" />
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
@@ -616,7 +696,8 @@
                         <TextBox Grid.Column="2" Text="{Binding Color_ID2[2], UpdateSourceTrigger=PropertyChanged}" LostFocus="ColorTextBox_LostFocus" Tag="ColorID2_2" PreviewTextInput="NumericTextBox_PreviewTextInput"
                                  Style="{DynamicResource MahApps.Metro.Styles.TextBox}"/>
                     </Grid>
-                    <Label Content="{loc:Localization ColorID3}" Style="{DynamicResource MahApps.Metro.Styles.Label}" FontWeight="Normal"/>
+                    <Label Content="{loc:Localization ColorID3}" Style="{DynamicResource MahApps.Metro.Styles.Label}" FontWeight="Normal"
+                              ToolTip="{loc:Localization Tip_Color_ID3}" />
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
@@ -630,7 +711,8 @@
                         <TextBox Grid.Column="2" Text="{Binding Color_ID3[2], UpdateSourceTrigger=PropertyChanged}" LostFocus="ColorTextBox_LostFocus" Tag="ColorID3_2" PreviewTextInput="NumericTextBox_PreviewTextInput"
                                  Style="{DynamicResource MahApps.Metro.Styles.TextBox}"/>
                     </Grid>
-                    <Label Content="{loc:Localization ColorID4}" Style="{DynamicResource MahApps.Metro.Styles.Label}" FontWeight="Normal"/>
+                    <Label Content="{loc:Localization ColorID4}" Style="{DynamicResource MahApps.Metro.Styles.Label}" FontWeight="Normal"
+                              ToolTip="{loc:Localization Tip_Color_ID4}" />
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>

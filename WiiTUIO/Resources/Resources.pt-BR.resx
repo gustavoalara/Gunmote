@@ -1262,4 +1262,10 @@ Você precisará atirar em cada alvo várias vezes.</value>
   <data name="PointerFPS" xml:space="preserve">
     <value>Quadros de ponteiro por segundo (FPS)</value>
   </data>
+  <data name="cbDebug" xml:space="preserve">
+    <value>Mostra a janela de depuração de LEDs</value>
+  </data>
+  <data name="Tip_WindowsStart" xml:space="preserve">
+    <value>Adicione Gunmote ao Agendador de Tarefas para iniciar com o login do usuário</value>
+  </data>
 </root>

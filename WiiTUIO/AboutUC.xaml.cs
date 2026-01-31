@@ -57,7 +57,7 @@ namespace WiiTUIO
 
                 // Formatea la versión como "vX.Y.Z"
                 // Puedes ajustar el formato si solo quieres Major.Minor, etc.
-                return $"v{version.Major}.{version.Minor}.{version.Build}";
+                return $"v{version.Major}.{version.Minor}.{version.Build}.{version.Revision}";
             }
         }
     }

@@ -1264,4 +1264,10 @@ Du musst mehrmals auf jedes Ziel schießen.</value>
   <data name="PointerFPS" xml:space="preserve">
     <value>Zeigerbilder pro Sekunde (FPS)</value>
   </data>
+  <data name="cbDebug" xml:space="preserve">
+    <value>Zeigt das LED-Debug-Fenster an</value>
+  </data>
+  <data name="Tip_WindowsStart" xml:space="preserve">
+    <value>Fügen Sie Gunmote zum Taskplaner hinzu, um ihn mit der Anmeldung des Benutzers zu starten</value>
+  </data>
 </root>

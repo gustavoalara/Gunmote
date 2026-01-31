@@ -91,6 +91,16 @@ namespace WiiTUIO.Properties
                 OnPropertyChanged("isHelpPanelOpen");
             }
         }
+        private int _wiimoteRotation = 0;
+        public int wiimoteRotation
+        {
+            get { return _wiimoteRotation; }
+            set
+            {
+                _wiimoteRotation = value;
+                OnPropertyChanged("wiimoteRotation");
+            }
+        }
 
         private string _primaryMonitor = "";
         public string primaryMonitor

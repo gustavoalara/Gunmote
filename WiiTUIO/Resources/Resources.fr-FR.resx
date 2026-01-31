@@ -1265,4 +1265,10 @@ Vous devrez tirer plusieurs fois sur chaque cible.</value>
   <data name="PointerFPS" xml:space="preserve">
     <value>Images de pointeur par seconde (FPS)</value>
   </data>
+  <data name="cbDebug" xml:space="preserve">
+    <value>Affiche la fenêtre de débogage des LED</value>
+  </data>
+  <data name="Tip_WindowsStart" xml:space="preserve">
+    <value>Ajoutez Gunmote au Planificateur de tâches pour le lancer avec la connexion de l'utilisateur</value>
+  </data>
 </root>
