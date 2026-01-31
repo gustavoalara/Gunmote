@@ -20,8 +20,10 @@ Prerequisites
 At least:
 
 1x Nintendo Wii Remote<br />
-1x Wireless Wii Sensor Bar<br />
-1x Bluetooth enabled computer with Windows 8/10/11
+1x Wireless Wii Sensor Bar or 4 IR LEDs in diamond or square arrangement<br />
+1x Bluetooth ( 4.x or lower) enabled computer with Windows 8/10/11<br />
+Visual C++ Runtimes<br />
+.Net 4.8<br />
 
 Bug reports
 ==============
@@ -65,6 +67,16 @@ If you would like to help translate into new languages, there are some Excel fil
 
 Release History
 ==============
+
+**v1.1.0.5**<br />
+- Experimental Calibration: Added experimental calibration for 0°, 90°, and -90° rotation (configurable in Advanced Settings).
+- FPS Mouse Mode: Fully functional FPS Mouse Mode (parameters available in Advanced Settings).
+- UI Improvements: Reorganized the "Advanced" section and renamed certain parameters for better clarity. Added tooltips that appear when hovering over settings.
+- Audio Enhancements: Integrated WiimoteLib improvements for sound (though don't expect Hi-Fi quality). Including ffmpeg in Gunmote folder for sound conversion on-the-fly
+- Debug Box: Moved the debug box 50px to the right and 50px down.
+- New Profile: Added FPS Mouse Profile.
+- Hotkey Toggle: Pressing HOME + PLUS now toggles cursor movement with the lightgun (the controller will vibrate to confirm the change).
+
 **v1.1.0.4**<br />
 - Fix issue with XInput D-Pad asignation to Nunchuk/Classic Stick
 
